@@ -18,9 +18,9 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
             Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime? ModifiedOn { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
         public virtual ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; }
 

@@ -2,17 +2,12 @@
 
 namespace NorthwindTradeSuite.Domain.Abstraction
 {
-    public class BaseEntity : IBaseEntity<string>, IAuditInfo
+    public abstract class BaseEntity<TKey> : IBaseEntity<TKey>, IAuditInfo where TKey : IEquatable<TKey>
     {
-        public BaseEntity()
-        {
-            Id = Guid.NewGuid().ToString().Substring(0, 7);
-        }
+        public TKey Id { get; set; }
 
-        public string Id { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime? ModifiedOn { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

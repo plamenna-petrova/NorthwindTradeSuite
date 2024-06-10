@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Order : BaseEntity
+    public class Order : BaseEntity<string>
     {
         public Order()
         {

@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Region : BaseEntity
+    public class Region : BaseEntity<string>
     {
         public Region()
         {

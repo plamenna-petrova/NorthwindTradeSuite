@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Territory : BaseEntity
+    public class Territory : BaseEntity<string>
     {
         public Territory()
         {

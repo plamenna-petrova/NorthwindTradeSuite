@@ -26,8 +26,4 @@
     <ProjectReference Include="..\NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EntityTypeConfigurations\" />
-  </ItemGroup>
-
 </Project>

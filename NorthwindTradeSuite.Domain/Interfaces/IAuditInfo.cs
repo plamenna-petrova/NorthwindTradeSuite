@@ -8,8 +8,8 @@ namespace NorthwindTradeSuite.Domain.Interfaces
 {
     public interface IAuditInfo
     {
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime? ModifiedOn { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

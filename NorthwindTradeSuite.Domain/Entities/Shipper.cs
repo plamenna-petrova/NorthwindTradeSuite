@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Shipper : BaseEntity
+    public class Shipper : BaseEntity<string>
     {
         public Shipper()
         {

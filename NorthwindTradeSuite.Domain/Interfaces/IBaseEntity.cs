@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Domain.Interfaces
 {
-    public interface IBaseEntity<TKey>
+    public interface IBaseEntity<TKey> where TKey : IEquatable<TKey>
     {
         [Key]
         TKey Id { get; set; }

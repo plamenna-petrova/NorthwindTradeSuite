@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
+using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using NorthwindTradeSuite.Domain.Interfaces;
@@ -98,17 +100,50 @@ namespace NorthwindTradeSuite.Persistence
 
         private void ApplyEntityChanges()
         {
-            List<EntityEntry<IAuditInfo>> auditableEntityChangeTrackerEntries = ChangeTracker.Entries<IAuditInfo>().ToList();
+            List<EntityEntry<BaseEntity<string>>> changeTrackerEntityEntriesWithStringId = ChangeTracker.Entries<BaseEntity<string>>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .ToList();
 
-            foreach (var auditableEntityChangeTrackerEntry in auditableEntityChangeTrackerEntries)
+            List<EntityEntry<BaseEntity<Guid>>> changeTrackerEntityEntriesWithGuidId = ChangeTracker.Entries<BaseEntity<Guid>>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .ToList();
+
+            SequentialGuidValueGenerator sequentialGuidValueGenerator = new();
+
+            foreach (var changeTrackerEntityEntryWithStringId in changeTrackerEntityEntriesWithStringId)
             {
-                switch (auditableEntityChangeTrackerEntry.State)
+                switch (changeTrackerEntityEntryWithStringId.State)
                 {
                     case EntityState.Added:
-                        auditableEntityChangeTrackerEntry.Entity.CreatedOn = DateTime.UtcNow;
+                        if (string.IsNullOrWhiteSpace(changeTrackerEntityEntryWithStringId.Entity.Id))
+                        {
+                            changeTrackerEntityEntryWithStringId.Entity.Id = sequentialGuidValueGenerator
+                                .Next(changeTrackerEntityEntryWithStringId)
+                                .ToString()[..7];
+                        }
+
+                        changeTrackerEntityEntryWithStringId.Entity.CreatedAt = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
-                        auditableEntityChangeTrackerEntry.Entity.ModifiedOn = DateTime.UtcNow;
+                        changeTrackerEntityEntryWithStringId.Entity.ModifiedAt = DateTime.UtcNow;
+                        break;
+                }
+            }
+
+            foreach (var changeTrackerEntityEntryWithGuidId in changeTrackerEntityEntriesWithGuidId)
+            {
+                switch (changeTrackerEntityEntryWithGuidId.State)
+                {
+                    case EntityState.Added:
+                        if (changeTrackerEntityEntryWithGuidId.Entity.Id == default)
+                        {
+                            changeTrackerEntityEntryWithGuidId.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntryWithGuidId);
+                        }
+
+                        changeTrackerEntityEntryWithGuidId.Entity.CreatedAt = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        changeTrackerEntityEntryWithGuidId.Entity.ModifiedAt = DateTime.UtcNow;
                         break;
                 }
             }
