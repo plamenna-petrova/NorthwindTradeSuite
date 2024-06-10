@@ -10,6 +10,6 @@ namespace NorthwindTradeSuite.Domain.Interfaces
     public interface IBaseEntity<TKey>
     {
         [Key]
-        TKey ID { get; set; }
+        TKey Id { get; set; }
     }
 }

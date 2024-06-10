@@ -6,10 +6,10 @@ namespace NorthwindTradeSuite.Domain.Abstraction
     {
         public BaseEntity()
         {
-            ID = Guid.NewGuid().ToString().Substring(0, 7);
+            Id = Guid.NewGuid().ToString().Substring(0, 7);
         }
 
-        public string ID { get; set; }
+        public string Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

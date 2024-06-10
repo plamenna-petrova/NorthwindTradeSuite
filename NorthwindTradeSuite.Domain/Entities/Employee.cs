@@ -45,7 +45,7 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public string Notes { get; set; }
 
-        public string ReportsToID { get; set; }
+        public string ReportsToId { get; set; }
 
         public virtual Employee ReportsTo { get; set; }
 

@@ -8,11 +8,11 @@ namespace NorthwindTradeSuite.Domain.Entities
 {
     public class EmployeeTerritory
     {
-        public string EmployeeID { get; set; }
+        public string EmployeeId { get; set; }
 
         public virtual Employee Employee { get; set; }
 
-        public string TerritoryID { get; set; }
+        public string TerritoryId { get; set; }
 
         public virtual Territory Territory { get; set; }
     }

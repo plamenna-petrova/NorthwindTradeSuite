@@ -9,11 +9,11 @@ namespace NorthwindTradeSuite.Domain.Entities
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        public string CustomerID { get; set; }
+        public string CustomerId { get; set; }
 
         public virtual Customer Customer { get; set; }
 
-        public string EmployeeID { get; set; }
+        public string EmployeeId { get; set; }
 
         public virtual Employee Employee { get; set; }
 
@@ -21,7 +21,7 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public DateTime? RequiredDate { get; set; }
 
-        public string ShipperID { get; set; }
+        public string ShipperId { get; set; }
 
         public virtual Shipper Shipper { get; set; }
 

@@ -16,7 +16,7 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public string Description { get; set; }
 
-        public string RegionID { get; set; }
+        public string RegionId { get; set; }
 
         public virtual Region Region { get; set; }  
 

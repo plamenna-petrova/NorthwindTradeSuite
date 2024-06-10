@@ -16,11 +16,11 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public string Name { get; set; }
 
-        public string SupplierID { get; set; }
+        public string SupplierId { get; set; }
 
         public virtual Supplier Supplier { get; set; }
 
-        public string CategoryID { get; set; }
+        public string CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
 

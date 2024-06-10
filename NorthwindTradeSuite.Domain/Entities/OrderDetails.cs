@@ -9,11 +9,11 @@ namespace NorthwindTradeSuite.Domain.Entities
 {
     public class OrderDetails : BaseEntity
     {
-        public string OrderID { get; set; }
+        public string OrderId { get; set; }
 
         public virtual Order Order { get; set; }
 
-        public string ProductID { get; set; }
+        public string ProductId { get; set; }
 
         public virtual Product Product { get; set; }
 
