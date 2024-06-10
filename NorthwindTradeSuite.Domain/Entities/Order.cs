@@ -1,14 +1,14 @@
 ﻿using NorthwindTradeSuite.Domain.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
     public class Order : BaseEntity
     {
+        public Order()
+        {
+            OrderDetails = new HashSet<OrderDetails>();
+        }
+
         public string CustomerID { get; set; }
 
         public virtual Customer Customer { get; set; }
@@ -21,9 +21,11 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public DateTime? RequiredDate { get; set; }
 
-        public DateTime? ShippedDate { get; set; }
+        public string ShipperID { get; set; }
 
-        public int? ShippedVia { get; set; }
+        public virtual Shipper Shipper { get; set; }
+
+        public DateTime? ShippedDate { get; set; }
 
         public decimal? Freight { get; set; }
 
@@ -38,5 +40,7 @@ namespace NorthwindTradeSuite.Domain.Entities
         public string ShipPostalCode { get; set; }
 
         public string ShipCountry { get; set; }
+
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }
