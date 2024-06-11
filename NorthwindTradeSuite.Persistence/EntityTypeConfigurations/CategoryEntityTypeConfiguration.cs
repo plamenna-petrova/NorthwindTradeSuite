@@ -21,8 +21,6 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(cat => cat.Name)
                 .HasColumnName(CATEGORY_NAME_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(CATEGORY_NAME_MAX_LENGTH);
 
             entityTypeBuilder
@@ -30,8 +28,6 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnName(CATEGORY_DESCRIPTION_COLUMN)
                 .HasColumnType(NTEXT_COLUMN_TYPE)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(CATEGORY_DESCRIPTION_MAX_LENGTH);
 
             entityTypeBuilder

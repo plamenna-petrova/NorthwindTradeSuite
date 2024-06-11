@@ -22,32 +22,24 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(emp => emp.LastName)
                 .HasColumnName(EMPLOYEE_LAST_NAME_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_LAST_NAME_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.FirstName)
                 .HasColumnName(EMPLOYEE_FIRST_NAME_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_FIRST_NAME_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.Title)
                 .HasColumnName(EMPLOYEE_TITLE_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_TITLE_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.TitleOfCourtesy)
                 .HasColumnName(EMPLOYEE_TITLE_OF_COURTESY_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_TITLE_OF_COURTESY_MAX_LENGTH);
 
             entityTypeBuilder
@@ -66,23 +58,17 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(emp => emp.Address)
                 .HasColumnName(EMPLOYEE_ADDRESS_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_ADDRESS_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.City)
                 .HasColumnName(EMPLOYEE_CITY_COLUMN)
                 .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_CITY_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.Region)
                 .HasColumnName(EMPLOYEE_REGION_COLUMN)
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_REGION_MAX_LENGTH);
 
             entityTypeBuilder
@@ -105,16 +91,12 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(emp => emp.HomePhone)
                 .HasColumnName(EMPLOYEE_HOME_PHONE_COLUMN)
                 .IsRequired(false)
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_HOME_PHONE_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.Extension)
                 .HasColumnName(EMPLOYEE_EXTENSION_COLUMN)
                 .IsRequired(false)
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_EXTENSION_MAX_LENGTH);
 
             entityTypeBuilder
@@ -128,16 +110,12 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnName(EMPLOYEE_NOTES_COLUMN)
                 .HasColumnType(NTEXT_COLUMN_TYPE)
                 .IsRequired(false)
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_NOTES_MAX_LENGTH);
 
             entityTypeBuilder
                 .Property(emp => emp.PhotoPath)
                 .HasColumnName(EMPLOYEE_PHOTO_PATH_COLUMN)
                 .IsRequired(false)
-                .HasConversion<string>()
-                .IsUnicode(false)
                 .HasMaxLength(EMPLOYEE_PHOTO_PATH_MAX_LENGTH);
 
             entityTypeBuilder
@@ -145,6 +123,12 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(emp => emp.DirectReports)
                 .HasForeignKey(emp => emp.ReportsTo)
                 .HasConstraintName(EMPLOYEE_REPORTS_CONSTRAINT_NAME)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired(false);
+
+            entityTypeBuilder
+                .HasMany(emp => emp.Orders)
+                .WithOne(o => o.Employee)
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired(false);
 
