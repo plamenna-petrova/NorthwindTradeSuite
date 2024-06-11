@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Domain.Interfaces;
+using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
 {
-    public class BaseEntityConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
+    public class BaseEntityTypeConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
         where TEntity : BaseEntity<TKey>
         where TKey : IEquatable<TKey>
     {
@@ -24,9 +25,16 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
                              .IsRequired(false);
 
             entityTypeBuilder.HasCheckConstraint(
-               string.Format(string.Empty, string.Empty),
+               string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn()),
                $"{nameof(IAuditInfo.ModifiedAt)} >= {nameof(IAuditInfo.CreatedAt)}"
-           );
+            );
+        }
+
+        private string GetCheckConstraintTableColumn()
+        {
+            string[] checkConstraintTokens = new string[] { typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt) };
+            string checkConstraintTableColumn = string.Join("_", checkConstraintTokens);
+            return checkConstraintTableColumn;
         }
     }
 }

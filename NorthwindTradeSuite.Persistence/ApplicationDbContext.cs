@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Entities.Identity;
-using NorthwindTradeSuite.Domain.Interfaces;
+using static NorthwindTradeSuite.Common.GlobalConstants.ConnectionConstants;
 
 namespace NorthwindTradeSuite.Persistence
 {
@@ -58,15 +58,17 @@ namespace NorthwindTradeSuite.Persistence
 
             if (!dbContextOptionsBuilder.IsConfigured)
             {
-                string secretsJSONFileFullPath = string.Empty;
+                string secretsJSONFileFullPath = DATABASE_CONNECTION_STRING;
 
                 _configurationBuilder = new ConfigurationBuilder()
                    .SetBasePath(Path.Join(secretsJSONFileFullPath))
-                   .AddJsonFile(string.Empty);
+                   .AddJsonFile(SECRETS_JSON_FILE_NAME);
 
                 _configurationRoot = _configurationBuilder.Build();
 
-                dbContextOptionsBuilder.UseSqlServer(_configurationRoot.GetSection(string.Empty).Value);
+                string secretsJSONConnectionStringSectionValue = _configurationRoot.GetSection(SECRETS_JSON_CONNECTION_STRING_SECTION).Value;
+
+                dbContextOptionsBuilder.UseSqlServer(secretsJSONConnectionStringSectionValue);
             }
         }
 
@@ -110,41 +112,48 @@ namespace NorthwindTradeSuite.Persistence
 
             SequentialGuidValueGenerator sequentialGuidValueGenerator = new();
 
-            foreach (var changeTrackerEntityEntryWithStringId in changeTrackerEntityEntriesWithStringId)
+            if (changeTrackerEntityEntriesWithStringId.Any())
             {
-                switch (changeTrackerEntityEntryWithStringId.State)
+                foreach (var changeTrackerEntityEntryWithStringId in changeTrackerEntityEntriesWithStringId)
                 {
-                    case EntityState.Added:
-                        if (string.IsNullOrWhiteSpace(changeTrackerEntityEntryWithStringId.Entity.Id))
-                        {
-                            changeTrackerEntityEntryWithStringId.Entity.Id = sequentialGuidValueGenerator
-                                .Next(changeTrackerEntityEntryWithStringId)
-                                .ToString()[..7];
-                        }
+                    switch (changeTrackerEntityEntryWithStringId.State)
+                    {
+                        case EntityState.Added:
+                            if (string.IsNullOrWhiteSpace(changeTrackerEntityEntryWithStringId.Entity.Id))
+                            {
+                                changeTrackerEntityEntryWithStringId.Entity.Id = sequentialGuidValueGenerator
+                                    .Next(changeTrackerEntityEntryWithStringId)
+                                    .ToString()[..7];
+                            }
 
-                        changeTrackerEntityEntryWithStringId.Entity.CreatedAt = DateTime.UtcNow;
-                        break;
-                    case EntityState.Modified:
-                        changeTrackerEntityEntryWithStringId.Entity.ModifiedAt = DateTime.UtcNow;
-                        break;
+                            changeTrackerEntityEntryWithStringId.Entity.CreatedAt = DateTime.UtcNow;
+                            break;
+                        case EntityState.Modified:
+                            changeTrackerEntityEntryWithStringId.Entity.ModifiedAt = DateTime.UtcNow;
+                            break;
+                    }
                 }
             }
 
-            foreach (var changeTrackerEntityEntryWithGuidId in changeTrackerEntityEntriesWithGuidId)
+            if (changeTrackerEntityEntriesWithGuidId.Any())
             {
-                switch (changeTrackerEntityEntryWithGuidId.State)
-                {
-                    case EntityState.Added:
-                        if (changeTrackerEntityEntryWithGuidId.Entity.Id == default)
-                        {
-                            changeTrackerEntityEntryWithGuidId.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntryWithGuidId);
-                        }
 
-                        changeTrackerEntityEntryWithGuidId.Entity.CreatedAt = DateTime.UtcNow;
-                        break;
-                    case EntityState.Modified:
-                        changeTrackerEntityEntryWithGuidId.Entity.ModifiedAt = DateTime.UtcNow;
-                        break;
+                foreach (var changeTrackerEntityEntryWithGuidId in changeTrackerEntityEntriesWithGuidId)
+                {
+                    switch (changeTrackerEntityEntryWithGuidId.State)
+                    {
+                        case EntityState.Added:
+                            if (changeTrackerEntityEntryWithGuidId.Entity.Id == default)
+                            {
+                                changeTrackerEntityEntryWithGuidId.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntryWithGuidId);
+                            }
+
+                            changeTrackerEntityEntryWithGuidId.Entity.CreatedAt = DateTime.UtcNow;
+                            break;
+                        case EntityState.Modified:
+                            changeTrackerEntityEntryWithGuidId.Entity.ModifiedAt = DateTime.UtcNow;
+                            break;
+                    }
                 }
             }
         }
