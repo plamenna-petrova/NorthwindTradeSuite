@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.API", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Domain", "NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj", "{D2CA2F01-E13E-4559-9B6B-68E56F3ADB38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTradeSuite.Persistence", "NorthwindTradeSuite.Persistence\NorthwindTradeSuite.Persistence.csproj", "{CF32E4B6-FEB6-4733-8D5F-99BF78C61C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Persistence", "NorthwindTradeSuite.Persistence\NorthwindTradeSuite.Persistence.csproj", "{CF32E4B6-FEB6-4733-8D5F-99BF78C61C8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTradeSuite.Common", "NorthwindTradeSuite.Common\NorthwindTradeSuite.Common.csproj", "{AA7C45AC-1131-4434-B414-81859236DBBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{CF32E4B6-FEB6-4733-8D5F-99BF78C61C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF32E4B6-FEB6-4733-8D5F-99BF78C61C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF32E4B6-FEB6-4733-8D5F-99BF78C61C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7C45AC-1131-4434-B414-81859236DBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7C45AC-1131-4434-B414-81859236DBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7C45AC-1131-4434-B414-81859236DBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7C45AC-1131-4434-B414-81859236DBBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

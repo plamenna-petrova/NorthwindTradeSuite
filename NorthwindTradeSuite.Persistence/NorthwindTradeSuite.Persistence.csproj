@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>75c217db-d7af-42bf-b0a3-6a83dd3aa27a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NorthwindTradeSuite.Common\NorthwindTradeSuite.Common.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj" />
   </ItemGroup>
 
