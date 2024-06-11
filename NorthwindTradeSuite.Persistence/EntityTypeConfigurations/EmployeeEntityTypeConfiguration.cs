@@ -123,14 +123,13 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(emp => emp.DirectReports)
                 .HasForeignKey(emp => emp.ReportsTo)
                 .HasConstraintName(EMPLOYEE_REPORTS_CONSTRAINT_NAME)
-                .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired(false);
+                .OnDelete(DeleteBehavior.NoAction);
 
             entityTypeBuilder
                 .HasMany(emp => emp.Orders)
                 .WithOne(o => o.Employee)
-                .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired(false);
+                .HasForeignKey(o => o.EmployeeId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             entityTypeBuilder.HasCheckConstraint(
                 string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn(nameof(Employee), nameof(Employee.BirthDate))),

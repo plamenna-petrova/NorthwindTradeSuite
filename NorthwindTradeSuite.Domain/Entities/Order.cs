@@ -21,11 +21,11 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public DateTime? RequiredDate { get; set; }
 
+        public DateTime? ShippedDate { get; set; }
+
         public string ShipperId { get; set; }
 
         public virtual Shipper Shipper { get; set; }
-
-        public DateTime? ShippedDate { get; set; }
 
         public decimal? Freight { get; set; }
 

@@ -79,8 +79,8 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
             entityTypeBuilder
                 .HasMany(cust => cust.Orders)
                 .WithOne(o => o.Customer)
-                .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired(false);
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

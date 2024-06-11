@@ -39,8 +39,8 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
             entityTypeBuilder
                 .HasMany(cat => cat.Products)
                 .WithOne(p => p.Category)
-                .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired(false);
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -23,5 +23,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
         public const string IMAGE_COLUMN_TYPE = "image";
 
         public const string DATETIME_COLUMN_TYPE = "datetime";
+
+        public const string MONEY_COLUMN_TYPE = "money";
     }
 }
