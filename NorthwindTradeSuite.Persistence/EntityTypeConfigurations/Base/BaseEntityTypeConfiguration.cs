@@ -32,7 +32,7 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
             );
         }
 
-        public virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens)
+        protected virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens)
         {
             string checkConstraintTableColumn = string.Join("_", checkConstraintTokens);
             return checkConstraintTableColumn;

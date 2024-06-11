@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base;
 using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstants;
+using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
@@ -13,11 +14,11 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
             base.Configure(entityTypeBuilder);
 
             entityTypeBuilder
-                .Property(c => c.Id)
+                .Property(cat => cat.Id)
                 .HasColumnName(CATEGORY_ID_COLUMN);
 
             entityTypeBuilder
-                .Property(c => c.Name)
+                .Property(cat => cat.Name)
                 .HasColumnName(CATEGORY_NAME_COLUMN)
                 .IsRequired()
                 .HasConversion<string>()
@@ -25,22 +26,22 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasMaxLength(CATEGORY_NAME_MAX_LENGTH);
 
             entityTypeBuilder
-                .Property(c => c.Description)
+                .Property(cat => cat.Description)
                 .HasColumnName(CATEGORY_DESCRIPTION_COLUMN)
-                .HasColumnType("ntext")
+                .HasColumnType(NTEXT_COLUMN_TYPE)
                 .IsRequired()
                 .HasConversion<string>()
                 .IsUnicode(false)
                 .HasMaxLength(CATEGORY_DESCRIPTION_MAX_LENGTH);
 
             entityTypeBuilder
-                .Property(c => c.Picture)
+                .Property(cat => cat.Picture)
                 .HasColumnName(CATEGORY_PICTURE_COLUMN)
-                .HasColumnType("image")
+                .HasColumnType(IMAGE_COLUMN_TYPE)
                 .IsRequired();
 
             entityTypeBuilder
-                .HasMany(c => c.Products)
+                .HasMany(cat => cat.Products)
                 .WithOne(p => p.Category)
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired(false);

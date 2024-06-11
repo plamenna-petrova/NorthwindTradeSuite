@@ -12,6 +12,7 @@ namespace NorthwindTradeSuite.Domain.Entities
         public Employee()
         {
             EmployeeTerritories = new HashSet<EmployeeTerritory>();
+            DirectReports = new HashSet<Employee>();
             Orders = new HashSet<Order>();
         }
 
@@ -45,13 +46,15 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public string Notes { get; set; }
 
-        public string ReportsToId { get; set; }
+        public string ReportsTo { get; set; }
 
-        public virtual Employee ReportsTo { get; set; }
+        public virtual Employee Manager { get; set; }
 
         public string PhotoPath { get; set; }
 
         public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; }
+
+        public virtual ICollection<Employee> DirectReports { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
