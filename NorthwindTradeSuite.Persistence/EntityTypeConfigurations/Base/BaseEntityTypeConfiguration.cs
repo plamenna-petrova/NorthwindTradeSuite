@@ -15,24 +15,25 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
         {
             entityTypeBuilder.HasKey(e => e.Id);
 
-            entityTypeBuilder.Property(e => e.CreatedAt)
-                             .IsRequired()
-                             .ValueGeneratedOnAdd()
-                             .Metadata
-                             .SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            entityTypeBuilder
+                .Property(e => e.CreatedAt)
+                .IsRequired()
+                .ValueGeneratedOnAdd()
+                .Metadata
+                .SetAfterSaveBehavior(PropertySaveBehavior.Throw);
 
-            entityTypeBuilder.Property(e => e.ModifiedAt)
-                             .IsRequired(false);
+            entityTypeBuilder
+                .Property(e => e.ModifiedAt)
+                .IsRequired(false);
 
             entityTypeBuilder.HasCheckConstraint(
-               string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn()),
-               $"{nameof(IAuditInfo.ModifiedAt)} >= {nameof(IAuditInfo.CreatedAt)}"
+                string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt))),
+                $"{nameof(IAuditInfo.ModifiedAt)} >= {nameof(IAuditInfo.CreatedAt)}"
             );
         }
 
-        private string GetCheckConstraintTableColumn()
+        public virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens)
         {
-            string[] checkConstraintTokens = new string[] { typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt) };
             string checkConstraintTableColumn = string.Join("_", checkConstraintTokens);
             return checkConstraintTableColumn;
         }
