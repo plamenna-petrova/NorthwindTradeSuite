@@ -28,6 +28,8 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 
         public const string PRODUCT_DISCONTINUED_COLUMN = "Discontinued";
 
+        public const string PRODUCT_SUPPLIER_CONSTAINT_NAME = "FK_Products_Supplier";
+
         public const int PRODUCT_NAME_MAX_LENGTH = 40;
 
         public const int PRODUCT_QUANTITY_PER_UNIT_MAX_LENGTH = 20;

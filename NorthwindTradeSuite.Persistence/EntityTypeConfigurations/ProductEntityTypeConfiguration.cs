@@ -66,6 +66,13 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(p => p.Discontinued)
                 .HasColumnName(PRODUCT_DISCONTINUED_COLUMN)
                 .IsRequired(true);
+
+            entityTypeBuilder
+                .HasOne(p => p.Supplier)
+                .WithMany(sup => sup.Products)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName(PRODUCT_SUPPLIER_CONSTAINT_NAME);
         }
     }
 }

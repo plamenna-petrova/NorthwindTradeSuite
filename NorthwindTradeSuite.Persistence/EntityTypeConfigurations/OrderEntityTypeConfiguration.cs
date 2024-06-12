@@ -94,7 +94,7 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(s => s.Orders)
                 .HasForeignKey(o => o.ShipperId)
                 .HasConstraintName(ORDER_SHIPPERS_CONSTAINT_NAME)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }
