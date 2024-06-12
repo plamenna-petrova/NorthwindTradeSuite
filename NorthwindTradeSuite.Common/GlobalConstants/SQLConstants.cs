@@ -25,5 +25,9 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
         public const string DATETIME_COLUMN_TYPE = "datetime";
 
         public const string MONEY_COLUMN_TYPE = "money";
+
+        public const string SQL_ZERO_DEFAULT_VALUE = "((0))";
+
+        public const string SQL_ONE_DEFAULT_VALUE = "((1))";
     }
 }

@@ -49,7 +49,5 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
         public const int ORDER_SHIP_POSTAL_CODE_MAX_LENGTH = 10;
 
         public const int ORDER_SHIP_COUNTRY_MAX_LENGTH = 15;
-
-        public const string ORDER_FREIGHT_SQL_DEFAULT_VALUE = "((0))";
     }
 }

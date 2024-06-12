@@ -20,8 +20,6 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 
         public const string ORDER_DETAILS_DISCOUNT_COLUMN = "Discount";
 
-        public const string ORDER_DETAILS_QUANTITY_SQL_DEFAULT_VALUE = "((1))";
-
         public const string ORDERS_CONSTAINT_NAME = "FK_Order_Details_Orders";
 
         public const string PRODUCTS_CONSTAINT_NAME = "FK_Order_Details_Products";

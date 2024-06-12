@@ -34,7 +34,7 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(od => od.Quantity)
                 .HasColumnName(ORDER_DETAILS_QUANTITY_COLUMN)
                 .IsRequired()
-                .HasDefaultValueSql(ORDER_DETAILS_QUANTITY_SQL_DEFAULT_VALUE);
+                .HasDefaultValueSql(SQL_ONE_DEFAULT_VALUE);
 
             entityTypeBuilder
                 .Property(od => od.Discount)

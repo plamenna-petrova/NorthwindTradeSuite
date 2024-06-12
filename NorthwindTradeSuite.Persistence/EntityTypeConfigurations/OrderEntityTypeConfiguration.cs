@@ -51,7 +51,7 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .Property(o => o.Freight)
                 .HasColumnName(ORDER_FREIGHT_COLUMN)
                 .HasColumnType(MONEY_COLUMN_TYPE)
-                .HasDefaultValueSql(ORDER_FREIGHT_SQL_DEFAULT_VALUE);
+                .HasDefaultValueSql(SQL_ZERO_DEFAULT_VALUE);
 
             entityTypeBuilder
                 .Property(o => o.ShipName)
