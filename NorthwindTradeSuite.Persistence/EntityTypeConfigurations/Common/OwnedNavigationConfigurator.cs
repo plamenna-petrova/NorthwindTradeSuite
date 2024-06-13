@@ -29,7 +29,7 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common
                 .Property(pd => pd.ContactTitle)
                 .HasColumnName(professionalDataColumns[2])
                 .IsRequired()
-                .HasMaxLength(professionalDataPropertiesMaxLengthConstraints[3]);
+                .HasMaxLength(professionalDataPropertiesMaxLengthConstraints[2]);
         }
 
         internal static void ConfigureLocationData<TEntity>(

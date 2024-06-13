@@ -8,10 +8,10 @@ namespace NorthwindTradeSuite.Domain.Entities.OwnedEntities
 {
     public class ProfessionalData
     {
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = null!;
 
-        public string ContactName { get; set; }
+        public string ContactName { get; set; } = null!;
 
-        public string ContactTitle { get; set; }
+        public string ContactTitle { get; set; } = null!;
     }
 }

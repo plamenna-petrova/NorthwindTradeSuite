@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NorthwindTradeSuite.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Domain.Entities.Identity
 {
@@ -12,10 +7,10 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
     {
         public ApplicationRole(string name) : base(name)
         {
-            Id = Guid.NewGuid().ToString().Substring(0, 7);
+            Id = Guid.NewGuid().ToString()[..7];
         }
 
-        public ApplicationRole() : this(null)
+        public ApplicationRole() : this(null!)
         {
             ApplicationUserRoles = new HashSet<ApplicationUserRole>();
         }
@@ -24,6 +19,6 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
 
         public DateTime? ModifiedAt { get; set; }
 
-        public virtual ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; }
+        public virtual ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; } = null!;
     }
 }

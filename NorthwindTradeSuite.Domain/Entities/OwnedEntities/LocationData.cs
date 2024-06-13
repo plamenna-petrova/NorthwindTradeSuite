@@ -8,14 +8,14 @@ namespace NorthwindTradeSuite.Domain.Entities.OwnedEntities
 {
     public class LocationData
     {
-        public string Address { get; set; }
+        public string Address { get; set; } = null!;
 
-        public string City { get; set; }
+        public string City { get; set; } = null!;
 
-        public string Region { get; set; }
+        public string Region { get; set; } = null!;
 
-        public string PostalCode { get; set; }
+        public string PostalCode { get; set; } = null!;
 
-        public string Country { get; set; }
+        public string Country { get; set; } = null!;
     }
 }

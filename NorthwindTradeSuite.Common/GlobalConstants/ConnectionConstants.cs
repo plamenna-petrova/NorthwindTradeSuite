@@ -12,6 +12,6 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
 
         public const string SECRETS_JSON_FILE_NAME = "secrets.json";
 
-        public const string SECRETS_JSON_CONNECTION_STRING_SECTION = "DefaultConnection:ConnectionString";
+        public const string SECRETS_JSON_CONNECTION_STRING_SECTION = "ConnectionStrings:DefaultConnection";
     }
 }

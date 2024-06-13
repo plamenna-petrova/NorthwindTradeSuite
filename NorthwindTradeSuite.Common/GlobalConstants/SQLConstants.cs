@@ -29,5 +29,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
         public const string SQL_ZERO_DEFAULT_VALUE = "((0))";
 
         public const string SQL_ONE_DEFAULT_VALUE = "((1))";
+
+        public const decimal SQL_ZERO_DECIMAL_DEFAULT_VALUE = 0m;
     }
 }

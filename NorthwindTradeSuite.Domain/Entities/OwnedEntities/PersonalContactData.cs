@@ -8,8 +8,8 @@ namespace NorthwindTradeSuite.Domain.Entities.OwnedEntities
 {
     public class PersonalContactData
     {
-        public string Phone { get; set; }
+        public string Phone { get; set; } = null!;
 
-        public string Fax { get; set; }
+        public string Fax { get; set; } = null!;
     }
 }

@@ -66,6 +66,8 @@ namespace NorthwindTradeSuite.Persistence
 
                 _configurationRoot = _configurationBuilder.Build();
 
+                var section = _configurationRoot.GetSection(SECRETS_JSON_CONNECTION_STRING_SECTION);
+
                 string secretsJSONConnectionStringSectionValue = _configurationRoot.GetSection(SECRETS_JSON_CONNECTION_STRING_SECTION).Value;
 
                 dbContextOptionsBuilder.UseSqlServer(secretsJSONConnectionStringSectionValue);
@@ -160,7 +162,7 @@ namespace NorthwindTradeSuite.Persistence
 
         private void ConfigureEntityRelations(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }

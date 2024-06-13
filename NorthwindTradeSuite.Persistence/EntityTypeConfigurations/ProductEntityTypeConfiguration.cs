@@ -42,25 +42,25 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnName(PRODUCT_UNIT_PRICE_COLUMN)
                 .HasColumnType(MONEY_COLUMN_TYPE)
                 .IsRequired(false)
-                .HasDefaultValue(SQL_ZERO_DEFAULT_VALUE);
+                .HasDefaultValue(null);
 
             entityTypeBuilder
                 .Property(p => p.UnitsInStock)
                 .HasColumnName(PRODUCT_UNITS_IN_STOCK_COLUMN)
                 .IsRequired(false)
-                .HasDefaultValue(SQL_ZERO_DEFAULT_VALUE);
+                .HasDefaultValue(null);
 
             entityTypeBuilder
                 .Property(p => p.UnitsInOrder)
                 .HasColumnName(PRODUCT_UNITS_IN_ORDER_COLUMN)
                 .IsRequired(false)
-                .HasDefaultValue(SQL_ZERO_DEFAULT_VALUE);
+                .HasDefaultValue(null);
 
             entityTypeBuilder
                 .Property(p => p.ReorderLevel)
                 .HasColumnName(PRODUCT_REORDER_LEVEL_COLUMN)
                 .IsRequired(false)
-                .HasDefaultValue(SQL_ZERO_DEFAULT_VALUE);
+                .HasDefaultValue(null);
 
             entityTypeBuilder
                 .Property(p => p.Discontinued)
