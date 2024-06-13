@@ -2,13 +2,32 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base;
+using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common;
 using static NorthwindTradeSuite.Common.GlobalConstants.Entities.OrderConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order, string>
+    public sealed class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order, string>
     {
+        private static readonly string[] OrderShipLocationDataColumns =
+        {
+            ORDER_SHIP_ADDRESS_COLUMN,
+            ORDER_SHIP_CITY_COLUMN,
+            ORDER_SHIP_REGION_COLUMN,
+            ORDER_SHIP_POSTAL_CODE_COLUMN,
+            ORDER_SHIP_COUNTRY_COLUMN
+        };
+
+        private static readonly int[] OrderShipLocationDataMaxLengthConstraints =
+        {
+            ORDER_SHIP_ADDRESS_MAX_LENGTH,
+            ORDER_SHIP_CITY_MAX_LENGTH,
+            ORDER_SHIP_REGION_MAX_LENGTH,
+            ORDER_SHIP_POSTAL_CODE_MAX_LENGTH,
+            ORDER_SHIP_COUNTRY_MAX_LENGTH
+        };
+
         public override void Configure(EntityTypeBuilder<Order> entityTypeBuilder)
         {
             base.Configure(entityTypeBuilder);
@@ -59,35 +78,14 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .IsRequired()
                 .HasMaxLength(ORDER_SHIP_NAME_MAX_LENGTH);
 
-            entityTypeBuilder
-                .Property(o => o.ShipAddress)
-                .HasColumnName(ORDER_SHIP_ADDRESS_COLUMN)
-                .IsRequired()
-                .HasMaxLength(ORDER_SHIP_ADDRESS_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(o => o.ShipCity)
-                .HasColumnName(ORDER_SHIP_CITY_COLUMN)
-                .IsRequired()
-                .HasMaxLength(ORDER_SHIP_CITY_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(o => o.ShipRegion)
-                .HasColumnName(ORDER_SHIP_REGION_COLUMN)
-                .IsRequired()
-                .HasMaxLength(ORDER_SHIP_REGION_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(o => o.ShipPostalCode)
-                .HasColumnName(ORDER_SHIP_POSTAL_CODE_COLUMN)
-                .IsRequired()
-                .HasMaxLength(ORDER_SHIP_POSTAL_CODE_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(o => o.ShipCountry)
-                .HasColumnName(ORDER_SHIP_COUNTRY_COLUMN)
-                .IsRequired()
-                .HasMaxLength(ORDER_SHIP_COUNTRY_MAX_LENGTH);
+            entityTypeBuilder.OwnsOne(
+                o => o.LocationData,
+                ownedNavigationBuilder => OwnedNavigationConfigurator.ConfigureLocationData(
+                    ownedNavigationBuilder,
+                    OrderShipLocationDataColumns,
+                    OrderShipLocationDataMaxLengthConstraints
+                )
+            );
 
             entityTypeBuilder
                 .HasOne(o => o.Customer)

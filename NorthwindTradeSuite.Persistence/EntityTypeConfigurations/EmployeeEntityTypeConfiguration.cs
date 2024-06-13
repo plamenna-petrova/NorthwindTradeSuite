@@ -3,13 +3,32 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Interfaces;
 using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base;
+using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common;
 using static NorthwindTradeSuite.Common.GlobalConstants.Entities.EmployeeConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class EmployeeEntityTypeConfiguration : BaseEntityTypeConfiguration<Employee, string>
+    public sealed class EmployeeEntityTypeConfiguration : BaseEntityTypeConfiguration<Employee, string>
     {
+        private static readonly string[] EmployeeLocationDataColumns =
+        {
+            EMPLOYEE_ADDRESS_COLUMN,
+            EMPLOYEE_CITY_COLUMN,
+            EMPLOYEE_REGION_COLUMN,
+            EMPLOYEE_POSTAL_CODE_COLUMN,
+            EMPLOYEE_COUNTRY_COLUMN
+        };
+
+        private static readonly int[] EmployeeLocationDataMaxLengthConstraints =
+        {
+            EMPLOYEE_ADDRESS_MAX_LENGTH,
+            EMPLOYEE_CITY_MAX_LENGTH,
+            EMPLOYEE_REGION_MAX_LENGTH,
+            EMPLOYEE_POSTAL_CODE_MAX_LENGTH,
+            EMPLOYEE_COUNTRY_MAX_LENGTH
+        };
+
         public override void Configure(EntityTypeBuilder<Employee> entityTypeBuilder)
         {
             base.Configure(entityTypeBuilder);
@@ -54,38 +73,14 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnType(DATETIME_COLUMN_TYPE)
                 .IsRequired(false);
 
-            entityTypeBuilder
-                .Property(emp => emp.Address)
-                .HasColumnName(EMPLOYEE_ADDRESS_COLUMN)
-                .IsRequired()
-                .HasMaxLength(EMPLOYEE_ADDRESS_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(emp => emp.City)
-                .HasColumnName(EMPLOYEE_CITY_COLUMN)
-                .IsRequired()
-                .HasMaxLength(EMPLOYEE_CITY_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(emp => emp.Region)
-                .HasColumnName(EMPLOYEE_REGION_COLUMN)
-                .HasMaxLength(EMPLOYEE_REGION_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(emp => emp.PostalCode)
-                .HasColumnName(EMPLOYEE_POSTAL_CODE_COLUMN)
-                .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
-                .HasMaxLength(EMPLOYEE_POSTAL_CODE_MAX_LENGTH);
-
-            entityTypeBuilder
-                .Property(emp => emp.Country)
-                .HasColumnName(EMPLOYEE_COUNTRY_COLUMN)
-                .IsRequired()
-                .HasConversion<string>()
-                .IsUnicode(false)
-                .HasMaxLength(EMPLOYEE_COUNTRY_MAX_LENGTH);
+            entityTypeBuilder.OwnsOne(
+                emp => emp.LocationData,
+                ownedNavigationBuilder => OwnedNavigationConfigurator.ConfigureLocationData(
+                    ownedNavigationBuilder,
+                    EmployeeLocationDataColumns,
+                    EmployeeLocationDataMaxLengthConstraints
+                )
+            );
 
             entityTypeBuilder
                 .Property(emp => emp.HomePhone)

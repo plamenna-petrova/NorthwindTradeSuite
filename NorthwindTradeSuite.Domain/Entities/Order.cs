@@ -1,4 +1,5 @@
 ﻿using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
@@ -9,13 +10,13 @@ namespace NorthwindTradeSuite.Domain.Entities
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        public string CustomerId { get; set; }
+        public string CustomerId { get; set; } = null!;
 
-        public virtual Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; } = null!;
 
-        public string EmployeeId { get; set; }
+        public string EmployeeId { get; set; } = null!;
 
-        public virtual Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; } = null!;
 
         public DateTime? OrderDate { get; set; }
 
@@ -23,23 +24,15 @@ namespace NorthwindTradeSuite.Domain.Entities
 
         public DateTime? ShippedDate { get; set; }
 
-        public string ShipperId { get; set; }
+        public string ShipperId { get; set; } = null!;
 
-        public virtual Shipper Shipper { get; set; }
+        public virtual Shipper Shipper { get; set; } = null!;
 
         public decimal? Freight { get; set; }
 
-        public string ShipName { get; set; }
+        public string ShipName { get; set; } = null!;
 
-        public string ShipAddress { get; set; }
-
-        public string ShipCity { get; set; }
-
-        public string ShipRegion { get; set; }
-
-        public string ShipPostalCode { get; set; }
-
-        public string ShipCountry { get; set; }
+        public LocationData LocationData { get; set; } = new();
 
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }

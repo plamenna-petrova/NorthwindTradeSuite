@@ -6,7 +6,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.TerritoryConsta
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class TerritoryEntityTypeConfiguration : BaseEntityTypeConfiguration<Territory, string>
+    public sealed class TerritoryEntityTypeConfiguration : BaseEntityTypeConfiguration<Territory, string>
     {
         public override void Configure(EntityTypeBuilder<Territory> entityTypeBuilder)
         {

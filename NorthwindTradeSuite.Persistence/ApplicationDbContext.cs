@@ -15,9 +15,9 @@ namespace NorthwindTradeSuite.Persistence
         ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>, ApplicationUserRole, 
         IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
-        private IConfigurationBuilder _configurationBuilder;
+        private IConfigurationBuilder _configurationBuilder = null!;
 
-        private IConfigurationRoot _configurationRoot;
+        private IConfigurationRoot _configurationRoot = null!;
 
         public ApplicationDbContext()
         {
@@ -30,27 +30,27 @@ namespace NorthwindTradeSuite.Persistence
 
         }
 
-        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; } = null!;
 
-        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; } = null!;
 
-        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; } = null!;
 
-        public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
+        public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; } = null!;
 
-        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Order> Orders { get; set; } = null!;
 
-        public virtual DbSet<OrderDetails> OrderDetails { get; set; }
+        public virtual DbSet<OrderDetails> OrderDetails { get; set; } = null!;
 
-        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; } = null!;
 
-        public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Region> Regions { get; set; } = null!;
 
-        public virtual DbSet<Shipper> Shippers { get; set; }
+        public virtual DbSet<Shipper> Shippers { get; set; } = null!;
 
-        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
 
-        public virtual DbSet<Territory> Territories { get; set; }
+        public virtual DbSet<Territory> Territories { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {

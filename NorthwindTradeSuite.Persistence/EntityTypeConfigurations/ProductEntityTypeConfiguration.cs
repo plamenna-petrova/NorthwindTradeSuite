@@ -7,7 +7,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class ProductEntityTypeConfiguration : BaseEntityTypeConfiguration<Product, string>
+    public sealed class ProductEntityTypeConfiguration : BaseEntityTypeConfiguration<Product, string>
     {
         public override void Configure(EntityTypeBuilder<Product> entityTypeBuilder)
         {

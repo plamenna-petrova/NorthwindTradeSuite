@@ -6,7 +6,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class OrderDetailsEntityTypeConfiguration : IEntityTypeConfiguration<OrderDetails>
+    public sealed class OrderDetailsEntityTypeConfiguration : IEntityTypeConfiguration<OrderDetails>
     {
         public void Configure(EntityTypeBuilder<OrderDetails> entityTypeBuilder)
         {

@@ -5,7 +5,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.EmployeeTerrito
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class EmployeeTerritoryEntityTypeConfiguration : IEntityTypeConfiguration<EmployeeTerritory>
+    public sealed class EmployeeTerritoryEntityTypeConfiguration : IEntityTypeConfiguration<EmployeeTerritory>
     {
         public void Configure(EntityTypeBuilder<EmployeeTerritory> entityTypeBuilder)
         {

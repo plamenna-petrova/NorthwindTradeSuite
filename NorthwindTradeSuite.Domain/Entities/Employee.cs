@@ -1,4 +1,5 @@
 ﻿using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
@@ -11,41 +12,33 @@ namespace NorthwindTradeSuite.Domain.Entities
             Orders = new HashSet<Order>();
         }
 
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = null!;
 
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
 
-        public string TitleOfCourtesy { get; set; }
+        public string TitleOfCourtesy { get; set; } = null!;
 
         public DateTime? BirthDate { get; set; }
 
         public DateTime? HireDate { get; set; }
 
-        public string Address { get; set; }
+        public LocationData LocationData { get; set; } = new();
 
-        public string City { get; set; }
+        public string HomePhone { get; set; } = null!;
 
-        public string Region { get; set; }
+        public string Extension { get; set; } = null!;
 
-        public string PostalCode { get; set; }
+        public byte[] Photo { get; set; } = null!;
 
-        public string Country { get; set; }
+        public string Notes { get; set; } = null!;
 
-        public string HomePhone { get; set; }
+        public string ReportsTo { get; set; } = null!;
 
-        public string Extension { get; set; }
+        public virtual Employee Manager { get; set; } = null!;
 
-        public byte[] Photo { get; set; }
-
-        public string Notes { get; set; }
-
-        public string ReportsTo { get; set; }
-
-        public virtual Employee Manager { get; set; }
-
-        public string PhotoPath { get; set; }
+        public string PhotoPath { get; set; } = null!;
 
         public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; }
 

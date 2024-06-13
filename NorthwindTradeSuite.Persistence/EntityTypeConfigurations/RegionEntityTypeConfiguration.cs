@@ -6,7 +6,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.RegionConstants
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public class RegionEntityTypeConfiguration : BaseEntityTypeConfiguration<Region, string>
+    public sealed class RegionEntityTypeConfiguration : BaseEntityTypeConfiguration<Region, string>
     {
         public override void Configure(EntityTypeBuilder<Region> entityTypeBuilder)
         {

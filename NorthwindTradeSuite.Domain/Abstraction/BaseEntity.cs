@@ -1,5 +1,4 @@
 ﻿using NorthwindTradeSuite.Domain.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace NorthwindTradeSuite.Domain.Abstraction
 {

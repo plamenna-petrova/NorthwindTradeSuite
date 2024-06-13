@@ -9,17 +9,17 @@ namespace NorthwindTradeSuite.Domain.Entities
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string SupplierId { get; set; }
+        public string SupplierId { get; set; } = null!;
 
-        public virtual Supplier Supplier { get; set; }
+        public virtual Supplier Supplier { get; set; } = null!;
 
-        public string CategoryId { get; set; }
+        public string CategoryId { get; set; } = null!;
 
-        public virtual Category Category { get; set; }
+        public virtual Category Category { get; set; } = null!;
 
-        public string QuantityPerUnit { get; set; }
+        public string QuantityPerUnit { get; set; } = null!;
 
         public decimal? UnitPrice { get; set; }
 

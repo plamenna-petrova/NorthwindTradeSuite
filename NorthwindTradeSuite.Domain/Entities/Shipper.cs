@@ -9,9 +9,9 @@ namespace NorthwindTradeSuite.Domain.Entities
             Orders = new HashSet<Order>();
         }
 
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = null!;
 
-        public string Phone { get; set; }
+        public string Phone { get; set; } = null!;
 
         public virtual ICollection<Order> Orders { get; set; }
     }
