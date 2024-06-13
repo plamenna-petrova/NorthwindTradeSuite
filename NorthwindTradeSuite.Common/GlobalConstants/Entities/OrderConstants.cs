@@ -36,7 +36,11 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 
         public const string ORDER_SHIP_COUNTRY_COLUMN = "ShipCountry";
 
-        public const string ORDER_SHIPPERS_CONSTAINT_NAME = "FK_Orders_Shippers";
+        public const string ORDER_CUSTOMER_CONSTAINT_NAME = "FK_Orders_Customer";
+
+        public const string ORDER_EMPLOYEE_CONSTAINT_NAME = "FK_Orders_Employee";
+
+        public const string ORDER_SHIPPER_CONSTAINT_NAME = "FK_Orders_Shipper";
 
         public const int ORDER_SHIP_NAME_MAX_LENGTH = 40;
 

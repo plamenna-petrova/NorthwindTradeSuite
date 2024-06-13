@@ -75,12 +75,6 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnName(CUSTOMER_FAX_COLUMN)
                 .IsRequired(false)
                 .HasMaxLength(CUSTOMER_FAX_MAX_LENGTH);
-
-            entityTypeBuilder
-                .HasMany(cust => cust.Orders)
-                .WithOne(o => o.Customer)
-                .HasForeignKey(o => o.CustomerId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

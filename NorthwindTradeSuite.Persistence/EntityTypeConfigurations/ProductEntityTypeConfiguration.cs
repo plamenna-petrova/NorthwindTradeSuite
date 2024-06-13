@@ -71,8 +71,15 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasOne(p => p.Supplier)
                 .WithMany(sup => sup.Products)
                 .HasForeignKey(p => p.SupplierId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName(PRODUCT_SUPPLIER_CONSTAINT_NAME);
+                .HasConstraintName(PRODUCT_SUPPLIER_CONSTAINT_NAME)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entityTypeBuilder
+                .HasOne(p => p.Category)
+                .WithMany(cat => cat.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .HasConstraintName(PRODUCT_CATEGORY_CONSTRAINT_NAME)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

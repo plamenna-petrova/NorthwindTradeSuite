@@ -35,12 +35,6 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasColumnName(CATEGORY_PICTURE_COLUMN)
                 .HasColumnType(IMAGE_COLUMN_TYPE)
                 .IsRequired();
-
-            entityTypeBuilder
-                .HasMany(cat => cat.Products)
-                .WithOne(p => p.Category)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

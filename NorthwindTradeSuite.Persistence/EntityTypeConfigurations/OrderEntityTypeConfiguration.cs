@@ -90,10 +90,24 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasMaxLength(ORDER_SHIP_COUNTRY_MAX_LENGTH);
 
             entityTypeBuilder
+                .HasOne(o => o.Customer)
+                .WithMany(cust => cust.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .HasConstraintName(ORDER_CUSTOMER_CONSTAINT_NAME)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entityTypeBuilder
+                .HasOne(o => o.Employee)
+                .WithMany(emp => emp.Orders)
+                .HasForeignKey(o => o.EmployeeId)
+                .HasConstraintName(ORDER_EMPLOYEE_CONSTAINT_NAME)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entityTypeBuilder
                 .HasOne(o => o.Shipper)
                 .WithMany(s => s.Orders)
                 .HasForeignKey(o => o.ShipperId)
-                .HasConstraintName(ORDER_SHIPPERS_CONSTAINT_NAME)
+                .HasConstraintName(ORDER_SHIPPER_CONSTAINT_NAME)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
