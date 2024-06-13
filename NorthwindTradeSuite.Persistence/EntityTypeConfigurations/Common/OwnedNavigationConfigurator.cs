@@ -37,6 +37,8 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common
             string[] locationDataColumns,
             int[] locationDataPropertiesMaxLengthConstraints) where TEntity : class
         {
+            ownedNavigationBuilder.WithOwner();
+
             ownedNavigationBuilder
                 .Property(ld => ld.Address)
                 .HasColumnName(locationDataColumns[0])
@@ -73,6 +75,8 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common
             string[] personalContactDataColumns,
             int[] personalContactDataPropertiesMaxLengthConstraints) where TEntity : class
         {
+            ownedNavigationBuilder.WithOwner();
+
             ownedNavigationBuilder
                 .Property(pcd => pcd.Phone)
                 .HasColumnName(personalContactDataColumns[0])
