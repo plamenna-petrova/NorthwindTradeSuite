@@ -78,6 +78,7 @@ namespace NorthwindTradeSuite.Persistence
         {
             base.OnModelCreating(modelBuilder);
             ConfigureEntityRelations(modelBuilder);
+            EntityIndexesConfiguration.Configure(modelBuilder);
         }
 
         public override int SaveChanges()
@@ -124,7 +125,10 @@ namespace NorthwindTradeSuite.Persistence
                                     .ToString()[..7];
                             }
 
-                            changeTrackerEntityEntryWithStringId.Entity.CreatedAt = DateTime.UtcNow;
+                            if (changeTrackerEntityEntryWithStringId.Entity.CreatedAt == default)
+                            {
+                                changeTrackerEntityEntryWithStringId.Entity.CreatedAt = DateTime.UtcNow;
+                            }
                             break;
                         case EntityState.Modified:
                             changeTrackerEntityEntryWithStringId.Entity.ModifiedAt = DateTime.UtcNow;

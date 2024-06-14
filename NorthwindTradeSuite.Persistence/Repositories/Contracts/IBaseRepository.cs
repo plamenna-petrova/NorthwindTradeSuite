@@ -9,21 +9,45 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         IQueryable<TEntity> GetAllAsQueryable();
 
+        Task<List<TEntity>> GetAllAsync();
+
         IQueryable<TEntity> GetAllAsNoTracking();
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetAllAsNoTrackingAsync();
 
         IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression);
 
-        TEntity GetById(string id);
+        IQueryable<TEntity> GetAllByConditionAsNoTracking(Expression<Func<TEntity, bool>> filterExpression);
+
+        Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        Task<List<TEntity>> GetAllByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        TEntity? GetById(string id);
 
         Task<TEntity?> GetByIdAsync(string id);
 
         IQueryable<TEntity> GetByIdAsQueryable(string id);
 
+        TEntity? GetFirstOrDefaultById(string id);
+
         Task<TEntity?> GetFirstOrDefaultByIdAsync(string id);
 
+        Task<TEntity?> GetFirstOrDefaultByIdAsNoTrackingAsync(string id);
+
+        Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        Task<TEntity?> GetFirstOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        TEntity? GetSingleOrDefaultById(string id);
+
         Task<TEntity?> GetSingleOrDefaultByIdAsync(string id);
+
+        Task<TEntity?> GetSingleOrDefaultByIdAsNoTrackingAsync(string id);
+
+        Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        Task<TEntity?> GetSingleOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
 
         void Add(TEntity entityToAdd);
 
@@ -55,8 +79,14 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         void DetachLocalEntity(TEntity entityToDetach);
 
+        int GetTotalRecords();
+
+        Task<int> GetTotalRecordsAsync();
+
         int SaveChanges();
 
         Task<int> SaveChangesAsync();
+
+        IQueryable<TEntity> ExecuteRawSqlQuery(string queryString, params string[] queryParameters);
     }
 }

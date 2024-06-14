@@ -14,7 +14,9 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         IQueryable<TEntity> GetAllAsNoTrackingWithDeletedEntities();
 
-        Task<IEnumerable<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag);
+        Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag);
+
+        Task<List<TEntity>> GetAllAsNoTrackingWithOptionalDeletionFlagAsync(bool isDeletedFlag);
 
         IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag);
 

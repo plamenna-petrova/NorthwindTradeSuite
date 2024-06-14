@@ -22,25 +22,58 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public virtual IQueryable<TEntity> GetAllAsQueryable() => DbSet.AsQueryable();
 
+        public virtual async Task<List<TEntity>> GetAllAsync() => await GetAllAsQueryable().ToListAsync();
+
         public virtual IQueryable<TEntity> GetAllAsNoTracking() => DbSet.AsNoTracking();
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<List<TEntity>> GetAllAsNoTrackingAsync()
             => await GetAllAsNoTracking().ToListAsync();
 
         public virtual IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression)
-            => DbSet.Where(filterExpression);
+            => GetAllAsQueryable().Where(filterExpression);
 
-        public virtual TEntity GetById(string id) => DbSet.Find(id)!;
+        public virtual IQueryable<TEntity> GetAllByConditionAsNoTracking(Expression<Func<TEntity, bool>> filterExpression)
+            => GetAllAsQueryable().Where(filterExpression).AsNoTracking();
+
+        public virtual async Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
+            => await GetAllAsQueryable().Where(filterExpression).ToListAsync();
+
+        public virtual async Task<List<TEntity>> GetAllByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
+            => await GetAllAsQueryable().Where(filterExpression).AsNoTracking().ToListAsync();
+
+        public virtual TEntity? GetById(string id) => DbSet.Find(id);
 
         public virtual async Task<TEntity?> GetByIdAsync(string id) => await DbSet.FindAsync(id);
 
         public virtual IQueryable<TEntity> GetByIdAsQueryable(string id) => DbSet.Where(e => e.Id == id);
 
+        public virtual TEntity? GetFirstOrDefaultById(string id) => GetAll().FirstOrDefault(e => e.Id == id);
+
         public virtual async Task<TEntity?> GetFirstOrDefaultByIdAsync(string id)
-           => await GetAllAsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+           => await GetAll().FirstOrDefaultAsync(e => e.Id == id);
+
+        public virtual async Task<TEntity?> GetFirstOrDefaultByIdAsNoTrackingAsync(string id)
+            => await GetAllAsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+
+        public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
+           => await GetAll().FirstOrDefaultAsync(filterExpression);
+
+        public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
+           => await GetAllAsNoTracking().FirstOrDefaultAsync(filterExpression);
+
+        public virtual TEntity? GetSingleOrDefaultById(string id) => GetAll().SingleOrDefault(e => e.Id == id);
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByIdAsync(string id)
-           => await GetAllAsNoTracking().SingleOrDefaultAsync(e => e.Id == id);
+           => await GetAll().SingleOrDefaultAsync(e => e.Id == id);
+
+        public virtual async Task<TEntity?> GetSingleOrDefaultByIdAsNoTrackingAsync(string id)
+            => await GetAllAsNoTracking().SingleOrDefaultAsync(e => e.Id == id);
+
+        public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
+            => await GetAll().SingleOrDefaultAsync(filterExpression);
+
+        public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
+            => await GetAllAsNoTracking().SingleOrDefaultAsync(filterExpression);
 
         public virtual void Add(TEntity entityToAdd) => DbSet.Add(entityToAdd);
 
@@ -115,9 +148,16 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
             DbContext.Entry(localEntityToDetach!).State = EntityState.Modified;
         }
 
+        public int GetTotalRecords() => DbSet.Count();
+
+        public async Task<int> GetTotalRecordsAsync() => await DbSet.CountAsync();
+
         public int SaveChanges() => DbContext.SaveChanges();
 
         public Task<int> SaveChangesAsync() => DbContext.SaveChangesAsync();
+
+        public virtual IQueryable<TEntity> ExecuteRawSqlQuery(string queryString, params string[] queryParameters)
+            => DbSet.FromSqlRaw(queryString, queryParameters);
 
         public void Dispose()
         {

@@ -28,25 +28,21 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public IQueryable<TEntity> GetAllAsNoTrackingWithDeletedEntities() => base.GetAllAsNoTracking().IgnoreQueryFilters();
 
-        public async Task<IEnumerable<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false)
-            => await base.GetAll()
-                         .Where(e => e.IsDeleted == isDeletedFlag)
-                         .AsNoTracking()
-                         .ToListAsync();
+        public async Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false)
+            => await base.GetAllByConditionAsync(e => e.IsDeleted == isDeletedFlag);
+
+        public async Task<List<TEntity>> GetAllAsNoTrackingWithOptionalDeletionFlagAsync(bool isDeletedFlag = false)
+            => await base.GetAllByConditionAsNoTrackingAsync(e => e.IsDeleted == isDeletedFlag);
 
         public IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag = false)
-            => base.GetAll().Where(e => e.Id == id && e.IsDeleted == isDeletedFlag);
+            => base.GetAllByCondition(e => e.Id == id && e.IsDeleted == isDeletedFlag);
 
         public async Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false)
-            => await base.GetAll()
-                         .Where(e => e.IsDeleted == isDeletedFlag)
-                         .AsNoTracking()
+            => await base.GetAllByConditionAsNoTracking(e => e.IsDeleted == isDeletedFlag)
                          .FirstOrDefaultAsync(e => e.Id == id);
 
         public async Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false)
-            => await base.GetAll()
-                         .Where(e => e.IsDeleted == isDeletedFlag)
-                         .AsNoTracking()
+            => await base.GetAllByConditionAsNoTracking(e => e.IsDeleted == isDeletedFlag)
                          .SingleOrDefaultAsync(e => e.Id == id);
 
         public void HardDelete(TEntity entityToHardDelete) => base.Delete(entityToHardDelete);
