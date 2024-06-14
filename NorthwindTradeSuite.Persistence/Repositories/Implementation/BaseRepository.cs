@@ -156,8 +156,14 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public Task<int> SaveChangesAsync() => DbContext.SaveChangesAsync();
 
-        public virtual IQueryable<TEntity> ExecuteRawSqlQuery(string queryString, params string[] queryParameters)
+        public virtual IQueryable<TEntity> BuildQueryFromRawSql(string queryString, params object[] queryParameters)
             => DbSet.FromSqlRaw(queryString, queryParameters);
+
+        public virtual int ExecuteSqlRawQuery(string queryString, params object[] queryParameters)
+            => DbContext.Database.ExecuteSqlRaw(queryString, queryParameters);
+
+        public virtual async Task<int> ExecuteSqlRawQueryAsync(string queryString, params object[] queryParameters)
+            => await DbContext.Database.ExecuteSqlRawAsync(queryString, queryParameters);
 
         public void Dispose()
         {

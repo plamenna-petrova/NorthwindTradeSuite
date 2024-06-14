@@ -46,14 +46,16 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(od => od.OrderId)
                 .HasConstraintName(ORDERS_CONSTAINT_NAME)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .IsRequired(false);
 
             entityTypeBuilder
                 .HasOne(od => od.Product)
                 .WithMany(p => p.OrderDetails)
                 .HasForeignKey(od => od.ProductId)
                 .HasConstraintName(PRODUCTS_CONSTAINT_NAME)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .IsRequired(false);
         }
     }
 }

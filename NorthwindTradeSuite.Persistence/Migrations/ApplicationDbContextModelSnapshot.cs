@@ -123,11 +123,17 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("ntext")
                         .HasColumnName("Description");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -145,7 +151,11 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("Categories");
+
+                    b.HasCheckConstraint("CK_Category_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Category_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -160,12 +170,22 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("Customers");
+
+                    b.HasCheckConstraint("CK_Customer_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Customer_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -182,6 +202,9 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Extension")
@@ -203,6 +226,9 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .HasMaxLength(24)
                         .HasColumnType("nvarchar(24)")
                         .HasColumnName("HomePhone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -246,11 +272,15 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("ReportsTo");
 
                     b.ToTable("Employees");
 
                     b.HasCheckConstraint("CK_Employee_BirthDate", "BirthDate > CreatedAt");
+
+                    b.HasCheckConstraint("CK_Employee_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Employee_HireDate", "HireDate > BirthDate");
 
@@ -410,6 +440,9 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("CustomerID");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
@@ -418,6 +451,9 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     b.Property<decimal?>("Freight")
                         .HasColumnType("money")
                         .HasColumnName("Freight");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -451,9 +487,13 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasIndex("EmployeeId");
 
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("ShipperId");
 
                     b.ToTable("Orders");
+
+                    b.HasCheckConstraint("CK_Order_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Order_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -506,9 +546,15 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("Discontinued")
                         .HasColumnType("bit")
                         .HasColumnName("Discontinued");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -550,9 +596,13 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
+
+                    b.HasCheckConstraint("CK_Product_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Product_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -567,18 +617,28 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("RegionDescription");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("Regions");
+
+                    b.HasCheckConstraint("CK_Region_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Region_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -599,6 +659,12 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -610,7 +676,11 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("Shippers");
+
+                    b.HasCheckConstraint("CK_Shipper_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Shipper_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -625,16 +695,26 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("HomePage")
                         .HasColumnType("ntext")
                         .HasColumnName("HomePage");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("Suppliers");
+
+                    b.HasCheckConstraint("CK_Supplier_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Supplier_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -649,11 +729,17 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("TerritoryDescription");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -665,9 +751,13 @@ namespace NorthwindTradeSuite.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("RegionId");
 
                     b.ToTable("Territories");
+
+                    b.HasCheckConstraint("CK_Territory_DeletedAt", "DeletedAt >= ModifiedAt");
 
                     b.HasCheckConstraint("CK_Territory_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
@@ -881,13 +971,11 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     b.HasOne("NorthwindTradeSuite.Domain.Entities.Employee", "Employee")
                         .WithMany("EmployeeTerritories")
                         .HasForeignKey("EmployeeId")
-                        .IsRequired()
                         .HasConstraintName("FK_EmployeeTerritories_Employees");
 
                     b.HasOne("NorthwindTradeSuite.Domain.Entities.Territory", "Territory")
                         .WithMany("EmployeeTerritories")
                         .HasForeignKey("TerritoryId")
-                        .IsRequired()
                         .HasConstraintName("FK_EmployeeTerritories_Territories");
 
                     b.Navigation("Employee");
@@ -992,13 +1080,11 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     b.HasOne("NorthwindTradeSuite.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .IsRequired()
                         .HasConstraintName("FK_Order_Details_Orders");
 
                     b.HasOne("NorthwindTradeSuite.Domain.Entities.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .IsRequired()
                         .HasConstraintName("FK_Order_Details_Products");
 
                     b.Navigation("Order");

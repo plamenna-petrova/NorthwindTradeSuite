@@ -87,6 +87,10 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<int> SaveChangesAsync();
 
-        IQueryable<TEntity> ExecuteRawSqlQuery(string queryString, params string[] queryParameters);
+        IQueryable<TEntity> BuildQueryFromRawSql(string queryString, params object[] queryParameters);
+
+        int ExecuteSqlRawQuery(string queryString, params object[] queryParameters);
+
+        Task<int> ExecuteSqlRawQueryAsync(string queryString, params object[] queryParameters);
     }
 }

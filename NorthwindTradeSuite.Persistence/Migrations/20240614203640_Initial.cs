@@ -61,11 +61,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     Description = table.Column<string>(type: "ntext", maxLength: 300, nullable: false),
                     Picture = table.Column<byte[]>(type: "image", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.CheckConstraint("CK_Category_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Category_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
 
@@ -85,11 +88,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     Phone = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false),
                     Fax = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.CustomerID);
+                    table.CheckConstraint("CK_Customer_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Customer_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
 
@@ -116,12 +122,15 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     ReportsTo = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PhotoPath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeID);
                     table.CheckConstraint("CK_Employee_BirthDate", "BirthDate > CreatedAt");
+                    table.CheckConstraint("CK_Employee_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Employee_HireDate", "HireDate > BirthDate");
                     table.CheckConstraint("CK_Employee_ModifiedAt", "ModifiedAt >= CreatedAt");
                     table.ForeignKey(
@@ -138,11 +147,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     RegionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RegionDescription = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Regions", x => x.RegionID);
+                    table.CheckConstraint("CK_Region_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Region_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
 
@@ -154,11 +166,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     CompanyName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Shippers", x => x.ShipperID);
+                    table.CheckConstraint("CK_Shipper_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Shipper_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
 
@@ -179,11 +194,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     Fax = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
                     HomePage = table.Column<string>(type: "ntext", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Suppliers", x => x.SupplierID);
+                    table.CheckConstraint("CK_Supplier_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Supplier_ModifiedAt", "ModifiedAt >= CreatedAt");
                 });
 
@@ -301,11 +319,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     TerritoryDescription = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RegionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Territories", x => x.TerritoryID);
+                    table.CheckConstraint("CK_Territory_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Territory_ModifiedAt", "ModifiedAt >= CreatedAt");
                     table.ForeignKey(
                         name: "FK_Territories_Region",
@@ -333,11 +354,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     ShipPostalCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ShipCountry = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderID);
+                    table.CheckConstraint("CK_Order_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Order_ModifiedAt", "ModifiedAt >= CreatedAt");
                     table.ForeignKey(
                         name: "FK_Orders_Customer",
@@ -371,11 +395,14 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                     ReorderLevel = table.Column<short>(type: "smallint", nullable: true),
                     Discontinued = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductID);
+                    table.CheckConstraint("CK_Product_DeletedAt", "DeletedAt >= ModifiedAt");
                     table.CheckConstraint("CK_Product_ModifiedAt", "ModifiedAt >= CreatedAt");
                     table.ForeignKey(
                         name: "FK_Products_Category",
@@ -478,6 +505,21 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_IsDeleted",
+                table: "Categories",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_IsDeleted",
+                table: "Customers",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_IsDeleted",
+                table: "Employees",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_ReportsTo",
                 table: "Employees",
                 column: "ReportsTo");
@@ -503,6 +545,11 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                 column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_IsDeleted",
+                table: "Orders",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ShippedVia",
                 table: "Orders",
                 column: "ShippedVia");
@@ -513,9 +560,34 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_IsDeleted",
+                table: "Products",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_SupplierID",
                 table: "Products",
                 column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Regions_IsDeleted",
+                table: "Regions",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shippers_IsDeleted",
+                table: "Shippers",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_IsDeleted",
+                table: "Suppliers",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Territories_IsDeleted",
+                table: "Territories",
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Territories_RegionID",

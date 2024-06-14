@@ -26,14 +26,16 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(emp => emp.EmployeeTerritories)
                 .HasForeignKey(et => et.EmployeeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName(EMPLOYEES_CONSTRAINT_NAME);
+                .HasConstraintName(EMPLOYEES_CONSTRAINT_NAME)
+                .IsRequired(false);
 
             entityTypeBuilder
                 .HasOne(et => et.Territory)
                 .WithMany(t => t.EmployeeTerritories)
                 .HasForeignKey(et => et.TerritoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName(TERRITORIES_CONSTRAINT_NAME);
+                .HasConstraintName(TERRITORIES_CONSTRAINT_NAME)
+                .IsRequired(false);
         }
     }
 }
