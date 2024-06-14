@@ -16,9 +16,10 @@ namespace NorthwindTradeSuite.Infrastructure.Extensions
 
                 using var applicationDbContext = applicationServicesScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                IEnumerable<string> pendingMigrations = await applicationDbContext.Database.GetPendingMigrationsAsync();
+                IEnumerable<string> pendingMigrationsEnumerable = await applicationDbContext.Database.GetPendingMigrationsAsync();
+                List<string> listOfPendingMigrations = pendingMigrationsEnumerable.ToList();
 
-                if (pendingMigrations.Any())
+                if (listOfPendingMigrations.Any())
                 {
                     await applicationDbContext.Database.MigrateAsync();
                     logger.LogInformation($"Pending migrations applied to the database");
