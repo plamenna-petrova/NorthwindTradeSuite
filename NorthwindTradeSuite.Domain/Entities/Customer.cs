@@ -3,7 +3,7 @@ using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Customer : BaseEntity<string>
+    public class Customer : BaseDeletableEntity<string>
     {
         public Customer()
         {

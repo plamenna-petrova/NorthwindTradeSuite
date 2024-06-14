@@ -12,7 +12,7 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
     {
         public ApplicationUser()
         {
-            Id = Guid.NewGuid().ToString().Substring(0, 7);
+            Id = Guid.NewGuid().ToString()[..7];
             ApplicationUserRoles = new HashSet<ApplicationUserRole>();
             Claims = new HashSet<IdentityUserClaim<string>>();
             Logins = new HashSet<IdentityUserLogin<string>>();

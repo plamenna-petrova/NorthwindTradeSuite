@@ -8,7 +8,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
 {
     public class BaseEntityTypeConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
-        where TEntity : BaseEntity<TKey>
+        where TEntity : BaseDeletableEntity<TKey>
         where TKey : IEquatable<TKey>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> entityTypeBuilder)
@@ -27,15 +27,19 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
                 .IsRequired(false);
 
             entityTypeBuilder.HasCheckConstraint(
-                string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt))),
+                string.Format(CHECK_CONSTRAINT_TEMPLATE, 
+                GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt))),
                 $"{nameof(IAuditInfo.ModifiedAt)} >= {nameof(IAuditInfo.CreatedAt)}"
+            );
+
+            entityTypeBuilder.HasCheckConstraint(
+                string.Format(CHECK_CONSTRAINT_TEMPLATE, 
+                GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IDeletableEntity.DeletedAt))),
+                $"{nameof(IDeletableEntity.DeletedAt)} >= {nameof(IAuditInfo.ModifiedAt)}"
             );
         }
 
-        protected virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens)
-        {
-            string checkConstraintTableColumn = string.Join("_", checkConstraintTokens);
-            return checkConstraintTableColumn;
-        }
+        protected virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens) =>
+            string.Join("_", checkConstraintTokens);
     }
 }

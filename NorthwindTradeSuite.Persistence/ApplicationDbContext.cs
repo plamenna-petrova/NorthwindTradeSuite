@@ -104,11 +104,7 @@ namespace NorthwindTradeSuite.Persistence
 
         private void ApplyEntityChanges()
         {
-            List<EntityEntry<BaseEntity<string>>> changeTrackerEntityEntriesWithStringId = ChangeTracker.Entries<BaseEntity<string>>()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
-                .ToList();
-
-            List<EntityEntry<BaseEntity<Guid>>> changeTrackerEntityEntriesWithGuidId = ChangeTracker.Entries<BaseEntity<Guid>>()
+            List<EntityEntry<BaseDeletableEntity<string>>> changeTrackerEntityEntriesWithStringId = ChangeTracker.Entries<BaseDeletableEntity<string>>()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
                 .ToList();
 
@@ -132,28 +128,6 @@ namespace NorthwindTradeSuite.Persistence
                             break;
                         case EntityState.Modified:
                             changeTrackerEntityEntryWithStringId.Entity.ModifiedAt = DateTime.UtcNow;
-                            break;
-                    }
-                }
-            }
-
-            if (changeTrackerEntityEntriesWithGuidId.Any())
-            {
-
-                foreach (var changeTrackerEntityEntryWithGuidId in changeTrackerEntityEntriesWithGuidId)
-                {
-                    switch (changeTrackerEntityEntryWithGuidId.State)
-                    {
-                        case EntityState.Added:
-                            if (changeTrackerEntityEntryWithGuidId.Entity.Id == default)
-                            {
-                                changeTrackerEntityEntryWithGuidId.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntryWithGuidId);
-                            }
-
-                            changeTrackerEntityEntryWithGuidId.Entity.CreatedAt = DateTime.UtcNow;
-                            break;
-                        case EntityState.Modified:
-                            changeTrackerEntityEntryWithGuidId.Entity.ModifiedAt = DateTime.UtcNow;
                             break;
                     }
                 }

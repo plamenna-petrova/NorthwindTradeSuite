@@ -3,7 +3,7 @@ using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Supplier : BaseEntity<string>
+    public class Supplier : BaseDeletableEntity<string>
     {
         public Supplier()
         {

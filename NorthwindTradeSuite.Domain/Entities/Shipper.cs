@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Shipper : BaseEntity<string>
+    public class Shipper : BaseDeletableEntity<string>
     {
         public Shipper()
         {
