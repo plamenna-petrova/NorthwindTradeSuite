@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthwindTradeSuite.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Persistence
 {
-    internal static class EntityIndexesConfiguration
+    internal static class EntityIndexesConfigurator
     {
         internal static void Configure(ModelBuilder modelBuilder)
         {

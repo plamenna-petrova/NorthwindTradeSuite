@@ -3,10 +3,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using NorthwindTradeSuite.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace NorthwindTradeSuite.Infrastructure.Extensions
 {
-    public static class DatabaseMigrationManager
+    public static class DatabaseMigrationExtension
     {
         public static async Task MigrateDatabaseAsync<T>(this IApplicationBuilder applicationBuilder, ILogger<T> logger)
         {

@@ -23,8 +23,7 @@ namespace NorthwindTradeSuite.Persistence
         private IConfigurationRoot _configurationRoot = null!;
 
         private static readonly MethodInfo SetIsDeletedQueryFilterMethodInfo =
-            typeof(ApplicationDbContext).GetMethod(
-                nameof(SetIsDeletedQueryFilter), BindingFlags.NonPublic | BindingFlags.Static)!;
+            typeof(ApplicationDbContext).GetMethod(nameof(SetIsDeletedQueryFilter), BindingFlags.NonPublic | BindingFlags.Static)!;
 
         public ApplicationDbContext()
         {
@@ -84,7 +83,7 @@ namespace NorthwindTradeSuite.Persistence
         {
             base.OnModelCreating(modelBuilder);
             ConfigureEntityRelations(modelBuilder);
-            EntityIndexesConfiguration.Configure(modelBuilder);
+            EntityIndexesConfigurator.Configure(modelBuilder);
 
             List<IMutableEntityType> mutableEntityTypes = modelBuilder.Model.GetEntityTypes().ToList();
 
@@ -113,7 +112,8 @@ namespace NorthwindTradeSuite.Persistence
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => SaveChangesAsync(true, cancellationToken);
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) 
+            => SaveChangesAsync(true, cancellationToken);
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -158,6 +158,7 @@ namespace NorthwindTradeSuite.Persistence
             where TEntity : class, IDeletableEntity
             => modelBuilder.Entity<TEntity>().HasQueryFilter(e => !e.IsDeleted);
 
-        private void ConfigureEntityRelations(ModelBuilder modelBuilder) => modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        private void ConfigureEntityRelations(ModelBuilder modelBuilder) 
+            => modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }
