@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using NorthwindTradeSuite.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Domain.Entities.Identity
 {

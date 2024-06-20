@@ -5,23 +5,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
     public interface IBaseRepository<TEntity> : IDisposable where TEntity : BaseEntity<string>
     {
-        IQueryable<TEntity> GetAll();
+        IQueryable<TEntity> GetAll(bool asNoTracking);
 
-        IQueryable<TEntity> GetAllAsQueryable();
+        Task<List<TEntity>> GetAllAsync(bool asNoTracking);
 
-        Task<List<TEntity>> GetAllAsync();
+        IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking);
 
-        IQueryable<TEntity> GetAllAsNoTracking();
-
-        Task<List<TEntity>> GetAllAsNoTrackingAsync();
-
-        IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression);
-
-        IQueryable<TEntity> GetAllByConditionAsNoTracking(Expression<Func<TEntity, bool>> filterExpression);
-
-        Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
-
-        Task<List<TEntity>> GetAllByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
+        Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking);
 
         TEntity? GetById(string id);
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NorthwindTradeSuite.Domain.Interfaces;
+using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Persistence
 {

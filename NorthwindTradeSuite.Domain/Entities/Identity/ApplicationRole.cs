@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using NorthwindTradeSuite.Domain.Interfaces;
+using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Domain.Entities.Identity
 {

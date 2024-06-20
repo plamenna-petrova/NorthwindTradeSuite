@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.Domain.Interfaces
+namespace NorthwindTradeSuite.Domain.Contracts
 {
     public interface IDeletableEntity
     {

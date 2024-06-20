@@ -1,4 +1,4 @@
-﻿using NorthwindTradeSuite.Domain.Interfaces;
+﻿using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Domain.Abstraction
 {

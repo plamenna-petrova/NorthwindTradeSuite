@@ -6,9 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Domain.Contracts;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Entities.Identity;
-using NorthwindTradeSuite.Domain.Interfaces;
+
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.ConnectionConstants;
 

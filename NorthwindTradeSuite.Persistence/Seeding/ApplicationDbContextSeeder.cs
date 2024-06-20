@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Persistence.Seeders.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders;
-using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.CSVFileNames;
+using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.CSVFileNamesConstants;
 
 namespace NorthwindTradeSuite.Persistence.Seeding
 {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NorthwindTradeSuite.Domain.Abstraction;
-using NorthwindTradeSuite.Domain.Interfaces;
+using NorthwindTradeSuite.Domain.Contracts;
 using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base

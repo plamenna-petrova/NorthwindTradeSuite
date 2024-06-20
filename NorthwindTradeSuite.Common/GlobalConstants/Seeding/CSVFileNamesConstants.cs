@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Common.GlobalConstants.Seeding
 {
-    public class CSVFileNames
+    public class CSVFileNamesConstants
     {
         public const string CATEGORIES_CSV_FILE_NAME = "categories.csv";
 

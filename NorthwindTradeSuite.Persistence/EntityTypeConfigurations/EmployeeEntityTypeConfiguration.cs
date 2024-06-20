@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NorthwindTradeSuite.Domain.Contracts;
 using NorthwindTradeSuite.Domain.Entities;
-using NorthwindTradeSuite.Domain.Interfaces;
 using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base;
 using NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Common;
 using static NorthwindTradeSuite.Common.GlobalConstants.Entities.EmployeeConstants;

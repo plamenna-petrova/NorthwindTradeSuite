@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity<string>
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity<string>
     {
         public BaseRepository(ApplicationDbContext applicationDbContext)
         {
@@ -18,28 +18,18 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         protected DbSet<TEntity> DbSet { get; set; }
 
-        public virtual IQueryable<TEntity> GetAll() => DbSet;
+        public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false) => asNoTracking ? DbSet.AsNoTracking() : DbSet;
 
-        public virtual IQueryable<TEntity> GetAllAsQueryable() => DbSet.AsQueryable();
+        public virtual async Task<List<TEntity>> GetAllAsync(bool asNoTracking) 
+            => asNoTracking ? await GetAll(asNoTracking: true).ToListAsync() : await GetAll().ToListAsync();
 
-        public virtual async Task<List<TEntity>> GetAllAsync() => await GetAllAsQueryable().ToListAsync();
+        public virtual IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => asNoTracking ? GetAll().AsQueryable().Where(filterExpression).AsNoTracking() 
+                            : GetAll().AsQueryable().Where(filterExpression);
 
-        public virtual IQueryable<TEntity> GetAllAsNoTracking() => DbSet.AsNoTracking();
-
-        public virtual async Task<List<TEntity>> GetAllAsNoTrackingAsync()
-            => await GetAllAsNoTracking().ToListAsync();
-
-        public virtual IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression)
-            => GetAllAsQueryable().Where(filterExpression);
-
-        public virtual IQueryable<TEntity> GetAllByConditionAsNoTracking(Expression<Func<TEntity, bool>> filterExpression)
-            => GetAllAsQueryable().Where(filterExpression).AsNoTracking();
-
-        public virtual async Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
-            => await GetAllAsQueryable().Where(filterExpression).ToListAsync();
-
-        public virtual async Task<List<TEntity>> GetAllByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
-            => await GetAllAsQueryable().Where(filterExpression).AsNoTracking().ToListAsync();
+        public virtual async Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => asNoTracking ? await GetAll().AsQueryable().Where(filterExpression).AsNoTracking().ToListAsync()
+                            : await GetAll().AsQueryable().Where(filterExpression).ToListAsync();
 
         public virtual TEntity? GetById(string id) => DbSet.Find(id);
 
@@ -53,13 +43,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
            => await GetAll().FirstOrDefaultAsync(e => e.Id == id);
 
         public virtual async Task<TEntity?> GetFirstOrDefaultByIdAsNoTrackingAsync(string id)
-            => await GetAllAsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            => await GetAll(asNoTracking: true).FirstOrDefaultAsync(e => e.Id == id);
 
         public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
            => await GetAll().FirstOrDefaultAsync(filterExpression);
 
         public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
-           => await GetAllAsNoTracking().FirstOrDefaultAsync(filterExpression);
+           => await GetAll(asNoTracking: true).FirstOrDefaultAsync(filterExpression);
 
         public virtual TEntity? GetSingleOrDefaultById(string id) => GetAll().SingleOrDefault(e => e.Id == id);
 
@@ -67,13 +57,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
            => await GetAll().SingleOrDefaultAsync(e => e.Id == id);
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByIdAsNoTrackingAsync(string id)
-            => await GetAllAsNoTracking().SingleOrDefaultAsync(e => e.Id == id);
+            => await GetAll(asNoTracking: true).SingleOrDefaultAsync(e => e.Id == id);
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression)
             => await GetAll().SingleOrDefaultAsync(filterExpression);
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression)
-            => await GetAllAsNoTracking().SingleOrDefaultAsync(filterExpression);
+            => await GetAll(asNoTracking: true).SingleOrDefaultAsync(filterExpression);
 
         public virtual void Add(TEntity entityToAdd) => DbSet.Add(entityToAdd);
 

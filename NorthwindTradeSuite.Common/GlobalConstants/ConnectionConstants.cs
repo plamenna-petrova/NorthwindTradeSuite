@@ -8,7 +8,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
 {
     public class ConnectionConstants
     {
-        public const string DATABASE_CONNECTION_STRING = @"C:\Users\Plamenna Petrova\AppData\Roaming\Microsoft\UserSecrets\75c217db-d7af-42bf-b0a3-6a83dd3aa27a";
+        public const string DATABASE_CONNECTION_STRING = @"C:\Users\user\AppData\Roaming\Microsoft\UserSecrets\75c217db-d7af-42bf-b0a3-6a83dd3aa27a";
 
         public const string SECRETS_JSON_FILE_NAME = "secrets.json";
 
