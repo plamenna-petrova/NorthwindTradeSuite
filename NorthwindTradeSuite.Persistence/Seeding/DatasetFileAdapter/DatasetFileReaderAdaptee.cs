@@ -1,56 +1,69 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using NorthwindTradeSuite.Domain.Contracts;
+using NorthwindTradeSuite.Domain.Entities;
 using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
-    public class DatasetFileReaderAdaptee<TEntity> where TEntity : IDeletableEntity
+    public class DatasetFileReaderAdaptee<TEntity, TMap> 
+        where TEntity : class, new()
+        where TMap : ClassMap<TEntity>
     {
         public List<TEntity> ReadDataset(string datasetFileName)
         {
             List<TEntity> readDatasetObjects = null!;
 
-            //switch (dataSetFileType)
-            //{
-            //    case DatasetFileType.CSV:
-            //        using (var csvStreamReader = new StreamReader("path\\to\\file.csv"))
-            //        using (var csvReader = new CsvReader(csvStreamReader, CultureInfo.InvariantCulture))
-            //        { 
-            //            readDatasetObjects = csvReader.GetRecords<TEntity>().ToList();
-            //        }
-            //        break;
-            //    case DatasetFileType.JSON:
-            //        break;
-            //}
+            string datasetFileExtension = GetDatasetFileExtension(datasetFileName);
+
+            switch (datasetFileExtension.ToUpper())
+            {
+                case nameof(DatasetFileType.CSV):
+                    var csvDatasetFilePath = GetDatasetFilePath(datasetFileName, CSV_FILES_FOLDER);
+
+                    if (csvDatasetFilePath != null)
+                    {
+                        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+                        {
+                            HasHeaderRecord = true,
+                        };
+
+                        using var csvStreamReader = new StreamReader(csvDatasetFilePath);
+                        using var csvReader = new CsvReader(csvStreamReader, csvConfiguration);
+                        csvReader.Context.RegisterClassMap<TMap>();
+                        readDatasetObjects = csvReader.GetRecords<TEntity>().ToList();
+                    }
+                    break;
+                case nameof(DatasetFileType.JSON):
+                    var jsonDatasetFilePath = GetDatasetFilePath(datasetFileName, JSON_FILES_FOLDER);
+
+                    if (jsonDatasetFilePath != null)
+                    {
+                        string targetJSONFileContent = File.ReadAllText(jsonDatasetFilePath);
+                    }
+                    break;
+            }
 
             return readDatasetObjects;
         }
 
-        private string GetJSONContent(string jsonFileName)
+        private string GetDatasetFilePath(string datasetFileName, string datasetsFilesFolder)
         {
             string solutionsDirectory = GetSolutionDirectory();
-            string jsonDatasetsDirectoryPath = Path.Combine(solutionsDirectory, string.Format(DATASETS_DIRECTORY_RELATIVE_PATH, JSON_FILES_FOLDER));
-            string[] jsonDatasetsFilesForSeeding = Directory.GetFiles(jsonDatasetsDirectoryPath, "*.json", SearchOption.AllDirectories);
+            string datasetsDirectoryPath = Path.Combine(solutionsDirectory, string.Format(DATASETS_DIRECTORY_RELATIVE_PATH, datasetsFilesFolder));
+            string datasetFileExtension = GetDatasetFileExtension(datasetFileName);
+            string[] datasetsFilesForSeeding = Directory.GetFiles(datasetsDirectoryPath, $"*.{datasetFileExtension}", SearchOption.AllDirectories);
 
-            if (!jsonDatasetsFilesForSeeding.Any())
+            if (!datasetsFilesForSeeding.Any())
             {
                 return null!;
             }
 
-            string targetJSONFileForSeeding = jsonFileName + ".json";
-            var targetJSONFilePath = jsonDatasetsFilesForSeeding.SingleOrDefault(jf => jf.EndsWith(targetJSONFileForSeeding));
+            var targetDatasetFilePath = datasetsFilesForSeeding.SingleOrDefault(csvFile => csvFile.EndsWith($"{datasetFileName}"));
 
-            if (targetJSONFilePath == null)
-            {
-                return null!;
-            }
-
-            string targetJSONFileContent = File.ReadAllText(targetJSONFilePath);
-
-            return targetJSONFileContent;
+            return targetDatasetFilePath!;
         }
 
         private string GetSolutionDirectory()
@@ -72,5 +85,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
             return solutionTargetDirectoryFullName;
         }
+
+        private string GetDatasetFileExtension(string datasetFileName) => datasetFileName.Split(".").Last();
     }
 }

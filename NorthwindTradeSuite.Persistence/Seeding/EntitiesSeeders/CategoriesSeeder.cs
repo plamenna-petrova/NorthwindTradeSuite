@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CsvHelper.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
+using NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders.ClassMappings;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
 {
@@ -19,7 +21,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
         {
             var deletableEntityRepositoryForCategory = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Category>>();
 
-            IDatasetSeedingTarget<Category> datasetSeedingTarget = new DatasetSeedingAdapter<Category>(DatasetFileName);
+            IDatasetSeedingTarget<Category> datasetSeedingTarget = new DatasetSeedingAdapter<Category, CategoryMap>(DatasetFileName);
 
             var categoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
 
@@ -27,6 +29,8 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
             {
                 await deletableEntityRepositoryForCategory.AddAsync(categoryForSeeding);
             }
+
+            await deletableEntityRepositoryForCategory.SaveChangesAsync();
         }
     }
 }

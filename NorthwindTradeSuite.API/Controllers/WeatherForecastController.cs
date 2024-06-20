@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NorthwindTradeSuite.Domain.Entities;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
