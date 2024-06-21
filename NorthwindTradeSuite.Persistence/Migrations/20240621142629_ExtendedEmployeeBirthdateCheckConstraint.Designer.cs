@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NorthwindTradeSuite.Persistence;
 
@@ -11,9 +12,10 @@ using NorthwindTradeSuite.Persistence;
 namespace NorthwindTradeSuite.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240621142629_ExtendedEmployeeBirthdateCheckConstraint")]
+    partial class ExtendedEmployeeBirthdateCheckConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,6 +257,7 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .HasColumnName("PhotoPath");
 
                     b.Property<string>("ReportsTo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -913,6 +916,7 @@ namespace NorthwindTradeSuite.Persistence.Migrations
                         .WithMany("DirectReports")
                         .HasForeignKey("ReportsTo")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
                         .HasConstraintName("FK_Employees_Reports");
 
                     b.OwnsOne("NorthwindTradeSuite.Domain.Entities.OwnedEntities.LocationData", "LocationData", b1 =>

@@ -32,7 +32,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public virtual TEntity? GetById(string id) => DbSet.Find(id);
 
-        public virtual async Task<TEntity?> GetByIdAsync(string id) => await DbSet.FindAsync(id);
+        public virtual async Task<TEntity?> GetByIdAsync(string id) => await DbSet.FindAsync(id).AsTask();
 
         public virtual IQueryable<TEntity> GetByIdAsQueryable(string id) => DbSet.Where(e => e.Id == id);
 

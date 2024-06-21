@@ -9,7 +9,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
     public class DatasetFileReaderAdaptee<TSeedingDTO> where TSeedingDTO : class
     {
-        private static readonly Dictionary<DatasetFileType, string> datasetsFolders = new Dictionary<DatasetFileType, string>
+        private static readonly Dictionary<DatasetFileType, string> datasetsFolders = new()
         {
             { DatasetFileType.CSV, CSV_FILES_FOLDER },
             { DatasetFileType.JSON, JSON_FILES_FOLDER }

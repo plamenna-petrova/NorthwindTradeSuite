@@ -15,24 +15,22 @@ namespace NorthwindTradeSuite.Persistence.Seeding
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
+            using var seedersServiceScope = serviceProvider.CreateScope();
+
             ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>()!;
             ILogger logger = loggerFactory.CreateLogger(typeof(ApplicationDbContext));
 
             var seeders = new List<ISeeder>
             {
-                new CategoriesSeeder(serviceProvider, logger, CATEGORIES_CSV_FILE_NAME)
+                new CategoriesSeeder(serviceProvider, logger, CATEGORIES_CSV_FILE_NAME),
+                new CustomersSeeder(serviceProvider, logger, CUSTOMERS_CSV_FILE_NAME),
+                new EmployeesSeeder(serviceProvider, logger, EMPLOYEES_CSV_FILE_NAME)
             };
 
             foreach (var seeder in seeders)
             {
                 await seeder.SeedAsync();
             }
-        }
-
-        public static bool ShouldSeedersBeExecuted(IServiceProvider serviceProvider)
-        {
-            var applicationDbContext = serviceProvider.GetService<ApplicationDbContext>()!;
-            return !applicationDbContext.Roles.Any();
         }
     }
 }

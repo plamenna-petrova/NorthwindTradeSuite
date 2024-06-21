@@ -118,11 +118,12 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .WithMany(emp => emp.DirectReports)
                 .HasForeignKey(emp => emp.ReportsTo)
                 .HasConstraintName(EMPLOYEE_REPORTS_CONSTRAINT_NAME)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired(false);
 
             entityTypeBuilder.HasCheckConstraint(
                 string.Format(CHECK_CONSTRAINT_TEMPLATE, GetCheckConstraintTableColumn(nameof(Employee), nameof(Employee.BirthDate))),
-                $"{nameof(Employee.BirthDate)} > {nameof(IAuditInfo.CreatedAt)}"
+                $"{nameof(IAuditInfo.CreatedAt)} IS NULL OR {nameof(Employee.BirthDate)} < {nameof(IAuditInfo.CreatedAt)}"
             );
 
             entityTypeBuilder.HasCheckConstraint(
