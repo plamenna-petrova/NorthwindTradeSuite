@@ -14,6 +14,10 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Seeding
 
         public const string EMPLOYEES_RECORDS = "employees";
 
+        public const string REGIONS_RECORDS = "regions";
+
+        public const string TERRITORIES_RECORDS = "territories";
+
         public const string FOUND_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE = "Found {0} in the database. No need to trigger seeding.";
 
         public const string SUCCESSFULLY_SEEDED_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE = "Sample {0} successfully seeded in the database";

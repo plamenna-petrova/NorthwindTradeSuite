@@ -66,7 +66,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
                 return (null!, null!);
             }
 
-            var targetDatasetFilePath = datasetsFilesForSeeding.SingleOrDefault(dfs => dfs.EndsWith(datasetFileName));
+            var targetDatasetFilePath = datasetsFilesForSeeding.SingleOrDefault(dfs => dfs.Split("\\").Last().Equals(datasetFileName));
 
             if (targetDatasetFilePath == null)
             {
