@@ -13,7 +13,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         }
 
-        public override IQueryable<TEntity> GetAll(bool asNoTracking = false) => base.GetAll(asNoTracking).Where(e => !e.IsDeleted);
+        public override IQueryable<TEntity> GetAll(bool asNoTracking) => base.GetAll(asNoTracking).Where(e => !e.IsDeleted);
 
         public override void Delete(TEntity entityToDelete)
         {
@@ -22,25 +22,20 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
             base.ReattachAndUpdate(entityToDelete);
         }
 
-        public IQueryable<TEntity> GetAllWithDeletedEntities() => base.GetAll().IgnoreQueryFilters();
+        public IQueryable<TEntity> GetAllWithDeletedEntities(bool asNoTracking = false) => base.GetAll(asNoTracking).IgnoreQueryFilters();
 
-        public IQueryable<TEntity> GetAllAsNoTrackingWithDeletedEntities() => base.GetAll(asNoTracking: true).IgnoreQueryFilters();
+        public async Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false, bool asNoTracking = false)
+            => await base.GetAllByConditionAsync(e => e.IsDeleted == isDeletedFlag, asNoTracking);
 
-        public async Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false)
-            => await base.GetAllByConditionAsync(e => e.IsDeleted == isDeletedFlag);
+        public IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag = false, bool asNoTracking = false)
+            => base.GetAllByCondition(e => e.Id == id && e.IsDeleted == isDeletedFlag, asNoTracking);
 
-        public async Task<List<TEntity>> GetAllAsNoTrackingWithOptionalDeletionFlagAsync(bool isDeletedFlag = false)
-            => await base.GetAllByConditionAsync(e => e.IsDeleted == isDeletedFlag, asNoTracking: true);
-
-        public IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag = false)
-            => base.GetAllByCondition(e => e.Id == id && e.IsDeleted == isDeletedFlag);
-
-        public async Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false)
-            => await base.GetAllByCondition(e => e.IsDeleted == isDeletedFlag, asNoTracking: true)
+        public async Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false, bool asNoTracking = false)
+            => await base.GetAllByCondition(e => e.IsDeleted == isDeletedFlag, asNoTracking)
                          .FirstOrDefaultAsync(e => e.Id == id);
 
-        public async Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false)
-            => await base.GetAllByCondition(e => e.IsDeleted == isDeletedFlag, asNoTracking: true)
+        public async Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false, bool asNoTracking = false)
+            => await base.GetAllByCondition(e => e.IsDeleted == isDeletedFlag, asNoTracking)
                          .SingleOrDefaultAsync(e => e.Id == id);
 
         public void HardDelete(TEntity entityToHardDelete) => base.Delete(entityToHardDelete);

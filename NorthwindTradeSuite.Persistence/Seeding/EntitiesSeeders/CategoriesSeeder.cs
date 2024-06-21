@@ -1,8 +1,6 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
+﻿using CsvHelper.Configuration.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NorthwindTradeSuite.Common.GlobalConstants.Seeding;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
@@ -13,16 +11,16 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
     public class SeedCategoryDTO
     {
         [Name("categoryID")]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
         [Name("categoryName")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Name("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [Name("picture")]
-        public byte[] Picture { get; set; } 
+        public byte[] Picture { get; set; } = null!;
     }
 
     public class CategoriesSeeder : BaseSeeder
@@ -37,26 +35,25 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
         {
             var deletableEntityRepositoryForCategory = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Category>>();
 
-            IDatasetSeedingTarget<SeedCategoryDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedCategoryDTO>(DatasetFileName);
-
-            var categoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-            var mappedCategoriesForSeeding = categoriesForSeeding
-                .Select(cfs => new Category
-                {
-                    Id = cfs.Id,
-                    Name = cfs.Name,
-                    Description = cfs.Description,
-                    Picture = cfs.Picture
-                })
-                .ToList();
-
-            foreach (var categoryForSeeding in mappedCategoriesForSeeding)
+            if (!deletableEntityRepositoryForCategory.GetAll(asNoTracking: true).Any())
             {
-                await deletableEntityRepositoryForCategory.AddAsync(categoryForSeeding);
-            }
+                IDatasetSeedingTarget<SeedCategoryDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedCategoryDTO>(DatasetFileName);
 
-            await deletableEntityRepositoryForCategory.SaveChangesAsync();
+                var categoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
+
+                var mappedCategoriesForSeeding = categoriesForSeeding
+                    .Select(cfs => new Category
+                    {
+                        Id = cfs.Id,
+                        Name = cfs.Name,
+                        Description = cfs.Description,
+                        Picture = cfs.Picture
+                    })
+                    .ToArray();
+
+                await deletableEntityRepositoryForCategory.AddRangeAsync(mappedCategoriesForSeeding);
+                await deletableEntityRepositoryForCategory.SaveChangesAsync();
+            }
         }
     }
 }

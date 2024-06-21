@@ -5,19 +5,15 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
     public interface IDeletableEntityRepository<TEntity> : IBaseRepository<TEntity>
         where TEntity : BaseDeletableEntity<string>
     {
-        IQueryable<TEntity> GetAllWithDeletedEntities();
+        IQueryable<TEntity> GetAllWithDeletedEntities(bool asNoTracking = false);
 
-        IQueryable<TEntity> GetAllAsNoTrackingWithDeletedEntities();
+        Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag, bool asNoTracking = false);
 
-        Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag);
+        IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag, bool asNoTracking = false);
 
-        Task<List<TEntity>> GetAllAsNoTrackingWithOptionalDeletionFlagAsync(bool isDeletedFlag);
+        Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag, bool asNoTracking = false);
 
-        IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag);
-
-        Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag);
-
-        Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag);
+        Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag, bool asNoTracking = false);
 
         void HardDelete(TEntity entityToHardDelete);
 

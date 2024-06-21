@@ -5,13 +5,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
     public interface IBaseRepository<TEntity> : IDisposable where TEntity : BaseEntity<string>
     {
-        IQueryable<TEntity> GetAll(bool asNoTracking);
+        IQueryable<TEntity> GetAll(bool asNoTracking = false);
 
-        Task<List<TEntity>> GetAllAsync(bool asNoTracking);
+        Task<List<TEntity>> GetAllAsync(bool asNoTracking = false);
 
-        IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking);
+        IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
-        Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking);
+        Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         TEntity? GetById(string id);
 
@@ -19,25 +19,21 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         IQueryable<TEntity> GetByIdAsQueryable(string id);
 
-        TEntity? GetFirstOrDefaultById(string id);
+        TEntity? GetFirstOrDefaultById(string id, bool asNoTracking = false);
 
-        Task<TEntity?> GetFirstOrDefaultByIdAsync(string id);
+        Task<TEntity?> GetFirstOrDefaultByIdAsync(string id, bool asNoTracking = false);
 
-        Task<TEntity?> GetFirstOrDefaultByIdAsNoTrackingAsync(string id);
+        TEntity? GetFirstOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
-        Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
+        Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
-        Task<TEntity?> GetFirstOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
+        TEntity? GetSingleOrDefaultById(string id, bool asNoTracking = false);
 
-        TEntity? GetSingleOrDefaultById(string id);
+        Task<TEntity?> GetSingleOrDefaultByIdAsync(string id, bool asNoTracking = false);
 
-        Task<TEntity?> GetSingleOrDefaultByIdAsync(string id);
+        TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
-        Task<TEntity?> GetSingleOrDefaultByIdAsNoTrackingAsync(string id);
-
-        Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression);
-
-        Task<TEntity?> GetSingleOrDefaultByConditionAsNoTrackingAsync(Expression<Func<TEntity, bool>> filterExpression);
+        Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         void Add(TEntity entityToAdd);
 

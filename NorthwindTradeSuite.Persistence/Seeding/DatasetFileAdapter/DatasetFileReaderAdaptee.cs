@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
@@ -8,57 +9,71 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
     public class DatasetFileReaderAdaptee<TSeedingDTO> where TSeedingDTO : class
     {
+        private static readonly Dictionary<DatasetFileType, string> datasetsFolders = new Dictionary<DatasetFileType, string>
+        {
+            { DatasetFileType.CSV, CSV_FILES_FOLDER },
+            { DatasetFileType.JSON, JSON_FILES_FOLDER }
+        };
+
         public List<TSeedingDTO> ReadDataset(string datasetFileName)
         {
             List<TSeedingDTO> readDatasetObjects = null!;
 
-            string datasetFileExtension = GetDatasetFileExtension(datasetFileName);
+            var (datasetFilePath, datasetFileType) = GetDatasetFilePathAndType(datasetFileName);
 
-            switch (datasetFileExtension.ToUpper())
+            if (datasetFilePath != null && datasetFileType != null)
             {
-                case nameof(DatasetFileType.CSV):
-                    var csvDatasetFilePath = GetDatasetFilePath(datasetFileName, CSV_FILES_FOLDER);
-
-                    if (csvDatasetFilePath != null)
-                    {
+                switch (datasetFileType)
+                {
+                    case DatasetFileType.CSV:
                         var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
                         {
                             HasHeaderRecord = true,
                         };
 
-                        using var csvStreamReader = new StreamReader(csvDatasetFilePath);
-                        using var csvReader = new CsvReader(csvStreamReader, csvConfiguration);
-                        readDatasetObjects = csvReader.GetRecords<TSeedingDTO>().ToList();
-                    }
-                    break;
-                case nameof(DatasetFileType.JSON):
-                    var jsonDatasetFilePath = GetDatasetFilePath(datasetFileName, JSON_FILES_FOLDER);
-
-                    if (jsonDatasetFilePath != null)
-                    {
-                        string targetJSONFileContent = File.ReadAllText(jsonDatasetFilePath);
-                    }
-                    break;
+                        using (var csvStreamReader = new StreamReader(datasetFilePath))
+                        using (var csvReader = new CsvReader(csvStreamReader, csvConfiguration))
+                        {
+                            readDatasetObjects = csvReader.GetRecords<TSeedingDTO>().ToList();
+                        }
+                        break;
+                    case DatasetFileType.JSON:
+                        string jsonFileContentForSeeding = File.ReadAllText(datasetFilePath);
+                        readDatasetObjects = JsonConvert.DeserializeObject<List<TSeedingDTO>>(jsonFileContentForSeeding)!;
+                        break;
+                }
             }
 
             return readDatasetObjects;
         }
 
-        private string GetDatasetFilePath(string datasetFileName, string datasetsFilesFolder)
+        private (string datasetFilePath, DatasetFileType? datasetFileType) GetDatasetFilePathAndType(string datasetFileName)
         {
             string solutionsDirectory = GetSolutionDirectory();
-            string datasetsDirectoryPath = Path.Combine(solutionsDirectory, string.Format(DATASETS_DIRECTORY_RELATIVE_PATH, datasetsFilesFolder));
             string datasetFileExtension = GetDatasetFileExtension(datasetFileName);
-            string[] datasetsFilesForSeeding = Directory.GetFiles(datasetsDirectoryPath, $"*.{datasetFileExtension}", SearchOption.AllDirectories);
+
+            if (!Enum.TryParse(datasetFileExtension, true, out DatasetFileType parsedDatasetFileType))
+            {
+                throw new NotSupportedException($"Unsupported dataset file type: {datasetFileExtension}");
+            }
+
+            string formattedDatasetsSubfolderPathInAssembly = string.Format(DATASETS_DIRECTORY_RELATIVE_PATH, datasetsFolders[parsedDatasetFileType]);
+            string datasetsDirectoryFullPath = Path.Combine(solutionsDirectory, formattedDatasetsSubfolderPathInAssembly);
+            string[] datasetsFilesForSeeding = Directory.GetFiles(datasetsDirectoryFullPath, $"*.{datasetFileExtension}", SearchOption.AllDirectories);
 
             if (!datasetsFilesForSeeding.Any())
             {
-                return null!;
+                return (null!, null!);
             }
 
-            var targetDatasetFilePath = datasetsFilesForSeeding.SingleOrDefault(csvFile => csvFile.EndsWith($"{datasetFileName}"));
+            var targetDatasetFilePath = datasetsFilesForSeeding.SingleOrDefault(dfs => dfs.EndsWith(datasetFileName));
 
-            return targetDatasetFilePath!;
+            if (targetDatasetFilePath == null)
+            {
+                return (null!, null!);
+            }
+
+            return (targetDatasetFilePath!, parsedDatasetFileType);
         }
 
         private string GetSolutionDirectory()
