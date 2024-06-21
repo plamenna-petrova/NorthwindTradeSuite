@@ -1,20 +1,16 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using NorthwindTradeSuite.Domain.Contracts;
-using NorthwindTradeSuite.Domain.Entities;
 using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
-    public class DatasetFileReaderAdaptee<TEntity, TMap> 
-        where TEntity : class, new()
-        where TMap : ClassMap<TEntity>
+    public class DatasetFileReaderAdaptee<TSeedingDTO> where TSeedingDTO : class
     {
-        public List<TEntity> ReadDataset(string datasetFileName)
+        public List<TSeedingDTO> ReadDataset(string datasetFileName)
         {
-            List<TEntity> readDatasetObjects = null!;
+            List<TSeedingDTO> readDatasetObjects = null!;
 
             string datasetFileExtension = GetDatasetFileExtension(datasetFileName);
 
@@ -32,8 +28,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
                         using var csvStreamReader = new StreamReader(csvDatasetFilePath);
                         using var csvReader = new CsvReader(csvStreamReader, csvConfiguration);
-                        csvReader.Context.RegisterClassMap<TMap>();
-                        readDatasetObjects = csvReader.GetRecords<TEntity>().ToList();
+                        readDatasetObjects = csvReader.GetRecords<TSeedingDTO>().ToList();
                     }
                     break;
                 case nameof(DatasetFileType.JSON):

@@ -3,8 +3,8 @@ using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
-    public interface IDatasetSeedingTarget<TEntity> where TEntity : class, new()
+    public interface IDatasetSeedingTarget<TSeedingDTO> where TSeedingDTO : class
     {
-        List<TEntity> RetrieveDatasetObjectsForSeeding();
+        List<TSeedingDTO> RetrieveDatasetObjectsForSeeding();
     }
 }

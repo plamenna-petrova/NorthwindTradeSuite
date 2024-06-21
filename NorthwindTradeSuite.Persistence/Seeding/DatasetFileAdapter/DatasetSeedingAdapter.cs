@@ -3,11 +3,9 @@ using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
-    public class DatasetSeedingAdapter<TEntity, TMap> : IDatasetSeedingTarget<TEntity> 
-        where TEntity : class, new()
-        where TMap : ClassMap<TEntity>
+    public class DatasetSeedingAdapter<TSeedingDTO> : IDatasetSeedingTarget<TSeedingDTO> where TSeedingDTO : class
     {
-        private readonly DatasetFileReaderAdaptee<TEntity, TMap> datasetFileReaderAdaptee = new();
+        private readonly DatasetFileReaderAdaptee<TSeedingDTO> datasetFileReaderAdaptee = new();
 
         public DatasetSeedingAdapter(string datasetFileName)
         {
@@ -16,6 +14,6 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
         public string DatasetFileName { get; set; }
 
-        public List<TEntity> RetrieveDatasetObjectsForSeeding() => datasetFileReaderAdaptee.ReadDataset(DatasetFileName);
+        public List<TSeedingDTO> RetrieveDatasetObjectsForSeeding() => datasetFileReaderAdaptee.ReadDataset(DatasetFileName);
     }
 }
