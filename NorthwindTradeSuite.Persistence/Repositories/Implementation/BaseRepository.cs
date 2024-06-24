@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity<string>
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         public BaseRepository(ApplicationDbContext applicationDbContext)
         {
@@ -34,25 +34,11 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public virtual async Task<TEntity?> GetByIdAsync(string id) => await DbSet.FindAsync(id).AsTask();
 
-        public virtual IQueryable<TEntity> GetByIdAsQueryable(string id) => DbSet.Where(e => e.Id == id);
-
-        public virtual TEntity? GetFirstOrDefaultById(string id, bool asNoTracking = false)
-            => GetAll(asNoTracking).FirstOrDefault(e => e.Id == id);
-
-        public virtual async Task<TEntity?> GetFirstOrDefaultByIdAsync(string id, bool asNoTracking = false)
-            => await GetAll(asNoTracking).FirstOrDefaultAsync(e => e.Id == id);
-
         public virtual TEntity? GetFirstOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => GetAll(asNoTracking).FirstOrDefault(filterExpression);
 
         public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => await GetAll(asNoTracking).FirstOrDefaultAsync(filterExpression);
-
-        public virtual TEntity? GetSingleOrDefaultById(string id, bool asNoTracking = false)
-            => GetAll(asNoTracking).SingleOrDefault(e => e.Id == id);
-
-        public virtual async Task<TEntity?> GetSingleOrDefaultByIdAsync(string id, bool asNoTracking = false)
-            => await GetAll(asNoTracking).SingleOrDefaultAsync(e => e.Id == id);
 
         public virtual TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => GetAll(asNoTracking).SingleOrDefault(filterExpression);
@@ -120,9 +106,9 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
         public virtual async Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind)
             => await entities.AnyAsync(e => e == entityToFind);
 
-        public virtual void DetachLocalEntity(TEntity entityToDetach)
+        public virtual void DetachLocalEntity<TLocalEntity>(TLocalEntity entityToDetach) where TLocalEntity : BaseEntity<string>
         {
-            LocalView<TEntity> entitiesLocalView = DbSet.Local;
+            LocalView<TLocalEntity> entitiesLocalView = DbContext.Set<TLocalEntity>().Local;
             var localEntityToDetach = entitiesLocalView.FirstOrDefault(entry => entry.Id.Equals(entityToDetach.Id));
 
             if (localEntityToDetach != null)

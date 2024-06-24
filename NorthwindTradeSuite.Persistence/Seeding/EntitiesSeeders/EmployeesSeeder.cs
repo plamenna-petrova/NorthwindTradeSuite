@@ -21,9 +21,9 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
 
         public override async Task SeedAsync()
         {
-            var deletableEntityRepositoryForEmployee = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Employee>>();
+            var employeeDeletableRepository = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Employee>>();
 
-            if (deletableEntityRepositoryForEmployee.GetAll(asNoTracking: true).Any())
+            if (employeeDeletableRepository.GetAll(asNoTracking: true).Any())
             {
                 Logger.LogInformation(string.Format(FOUND_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, EMPLOYEES_RECORDS));
             }
@@ -59,18 +59,18 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                     })
                     .ToArray();
 
-                await deletableEntityRepositoryForEmployee.AddRangeAsync(mappedEmployeesForSeeding);
-                await deletableEntityRepositoryForEmployee.SaveChangesAsync();
+                await employeeDeletableRepository.AddRangeAsync(mappedEmployeesForSeeding);
+                await employeeDeletableRepository.SaveChangesAsync();
 
                 foreach (var mappedEmployeeForSeeding in mappedEmployeesForSeeding)
                 {
                     var employeeForSeedingReportsTo = employeesForSeeding.SingleOrDefault(emp => emp.Id == mappedEmployeeForSeeding.Id)!.ReportsTo!;
-                    var employeeManager = await deletableEntityRepositoryForEmployee.GetSingleOrDefaultByIdAsync(employeeForSeedingReportsTo);
+                    var employeeManager = await employeeDeletableRepository.GetByIdAsync(employeeForSeedingReportsTo);
                     mappedEmployeeForSeeding.Manager = employeeManager!;
                 }
 
-                deletableEntityRepositoryForEmployee.UpdateRange(mappedEmployeesForSeeding);
-                await deletableEntityRepositoryForEmployee.SaveChangesAsync();
+                employeeDeletableRepository.UpdateRange(mappedEmployeesForSeeding);
+                await employeeDeletableRepository.SaveChangesAsync();
 
                 Logger.LogInformation(string.Format(SUCCESSFULLY_SEEDED_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, EMPLOYEES_RECORDS));
             }

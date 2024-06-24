@@ -22,7 +22,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 
         public const string PRODUCT_UNITS_IN_STOCK_COLUMN = "UnitsInStock";
 
-        public const string PRODUCT_UNITS_IN_ORDER_COLUMN = "UnitsInOrder";
+        public const string PRODUCT_UNITS_ON_ORDER_COLUMN = "UnitsOnOrder";
 
         public const string PRODUCT_REORDER_LEVEL_COLUMN = "ReorderLevel";
 

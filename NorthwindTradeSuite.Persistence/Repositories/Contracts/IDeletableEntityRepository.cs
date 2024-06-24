@@ -1,9 +1,9 @@
-﻿using NorthwindTradeSuite.Domain.Abstraction;
+﻿using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
     public interface IDeletableEntityRepository<TEntity> : IBaseRepository<TEntity>
-        where TEntity : BaseDeletableEntity<string>
+        where TEntity : class, IDeletableEntity
     {
         IQueryable<TEntity> GetAllWithDeletedEntities(bool asNoTracking = false);
 

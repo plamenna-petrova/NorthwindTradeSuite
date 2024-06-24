@@ -9,7 +9,6 @@ using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Domain.Contracts;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Entities.Identity;
-
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.ConnectionConstants;
 
@@ -83,6 +82,7 @@ namespace NorthwindTradeSuite.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             ConfigureEntityRelations(modelBuilder);
             EntityIndexesConfigurator.Configure(modelBuilder);
 

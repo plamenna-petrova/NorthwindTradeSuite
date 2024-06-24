@@ -20,9 +20,9 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
 
         public override async Task SeedAsync()
         {
-            var deletableEntityRepositoryForTerritory = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Territory>>();
+            var territoryDeletableRepository = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Territory>>();
 
-            if (deletableEntityRepositoryForTerritory.GetAll(asNoTracking: true).Any())
+            if (territoryDeletableRepository.GetAll(asNoTracking: true).Any())
             {
                 Logger.LogInformation(FOUND_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, TERRITORIES_RECORDS);
             }
@@ -41,8 +41,8 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                     })
                     .ToArray();
 
-                await deletableEntityRepositoryForTerritory.AddRangeAsync(mappedTerritoriesForSeeding);
-                await deletableEntityRepositoryForTerritory.SaveChangesAsync();
+                await territoryDeletableRepository.AddRangeAsync(mappedTerritoriesForSeeding);
+                await territoryDeletableRepository.SaveChangesAsync();
 
                 Logger.LogInformation(SUCCESSFULLY_SEEDED_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, TERRITORIES_RECORDS);
             }

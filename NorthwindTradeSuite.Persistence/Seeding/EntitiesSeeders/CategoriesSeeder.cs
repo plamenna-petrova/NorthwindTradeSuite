@@ -19,9 +19,9 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
         
         public override async Task SeedAsync()
         {
-            var deletableEntityRepositoryForCategory = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Category>>();
+            var categoryDeletableRepository = ServiceProvider.GetRequiredService<IDeletableEntityRepository<Category>>();
 
-            if (deletableEntityRepositoryForCategory.GetAll(asNoTracking: true).Any())
+            if (categoryDeletableRepository.GetAll(asNoTracking: true).Any())
             {
                 Logger.LogInformation(string.Format(FOUND_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, CATEGORIES_RECORDS));
             }
@@ -41,8 +41,8 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                     })
                     .ToArray();
 
-                await deletableEntityRepositoryForCategory.AddRangeAsync(mappedCategoriesForSeeding);
-                await deletableEntityRepositoryForCategory.SaveChangesAsync();
+                await categoryDeletableRepository.AddRangeAsync(mappedCategoriesForSeeding);
+                await categoryDeletableRepository.SaveChangesAsync();
 
                 Logger.LogInformation(string.Format(SUCCESSFULLY_SEEDED_RECORDS_IN_THE_DATABASE_INFORMATION_MESSAGE, CATEGORIES_RECORDS));
             }

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
-    public interface IBaseRepository<TEntity> : IDisposable where TEntity : BaseEntity<string>
+    public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
     {
         IQueryable<TEntity> GetAll(bool asNoTracking = false);
 
@@ -17,19 +17,9 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<TEntity?> GetByIdAsync(string id);
 
-        IQueryable<TEntity> GetByIdAsQueryable(string id);
-
-        TEntity? GetFirstOrDefaultById(string id, bool asNoTracking = false);
-
-        Task<TEntity?> GetFirstOrDefaultByIdAsync(string id, bool asNoTracking = false);
-
         TEntity? GetFirstOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
-
-        TEntity? GetSingleOrDefaultById(string id, bool asNoTracking = false);
-
-        Task<TEntity?> GetSingleOrDefaultByIdAsync(string id, bool asNoTracking = false);
 
         TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
@@ -63,7 +53,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind);
 
-        void DetachLocalEntity(TEntity entityToDetach);
+        void DetachLocalEntity<TLocalEntity>(TLocalEntity entityToDetach) where TLocalEntity : BaseEntity<string>;
 
         int GetTotalRecords();
 

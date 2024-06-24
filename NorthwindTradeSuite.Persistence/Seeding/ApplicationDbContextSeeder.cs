@@ -26,7 +26,13 @@ namespace NorthwindTradeSuite.Persistence.Seeding
                 new CustomersSeeder(serviceProvider, logger, CUSTOMERS_CSV_FILE_NAME),
                 new EmployeesSeeder(serviceProvider, logger, EMPLOYEES_CSV_FILE_NAME),
                 new RegionsSeeder(serviceProvider, logger, REGIONS_CSV_FILE_NAME),
-                new TerritoriesSeeder(serviceProvider, logger, TERRITORIES_CSV_FILE_NAME)
+                new TerritoriesSeeder(serviceProvider, logger, TERRITORIES_CSV_FILE_NAME),
+                new EmployeeTerritoriesSeeder(serviceProvider, logger, EMPLOYEE_TERRITORIES_CSV_FILE_NAME),
+                new ShippersSeeder(serviceProvider, logger, SHIPPERS_CSV_FILE_NAME),
+                new SuppliersSeeder(serviceProvider, logger, SUPPLIERS_CSV_FILE_NAME),
+                new ProductsSeeder(serviceProvider, logger, PRODUCTS_CSV_FILE_NAME),
+                new OrdersSeeder(serviceProvider, logger, ORDERS_CSV_FILE_NAME),
+                new OrderDetailsSeeder(serviceProvider, logger, ORDER_DETAILS_CSV_FILE_NAME)
             };
 
             foreach (var seeder in seeders)

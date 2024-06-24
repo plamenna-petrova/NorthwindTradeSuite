@@ -1,5 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using NorthwindTradeSuite.DTOs.Seeding.SharedSeedingDTOs;
+using NorthwindTradeSuite.DTOs.Seeding.TypeConverters;
 
 namespace NorthwindTradeSuite.DTOs.Seeding
 {
@@ -21,9 +22,11 @@ namespace NorthwindTradeSuite.DTOs.Seeding
         public string TitleOfCourtesy { get; set; } = null!;
 
         [Name("birthDate")]
+        [TypeConverter(typeof(NullableDateTimeConverter))]
         public DateTime? BirthDate { get; set; }
 
         [Name("hireDate")]
+        [TypeConverter(typeof(NullableDateTimeConverter))]
         public DateTime? HireDate { get; set; }
 
         public SeedLocationDataDTO SeedLocationDTO { get; set; } = null!;

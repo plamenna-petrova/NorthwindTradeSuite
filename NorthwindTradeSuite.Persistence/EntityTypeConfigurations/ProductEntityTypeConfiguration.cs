@@ -51,8 +51,8 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
                 .HasDefaultValue(null);
 
             entityTypeBuilder
-                .Property(p => p.UnitsInOrder)
-                .HasColumnName(PRODUCT_UNITS_IN_ORDER_COLUMN)
+                .Property(p => p.UnitsOnOrder)
+                .HasColumnName(PRODUCT_UNITS_ON_ORDER_COLUMN)
                 .IsRequired(false)
                 .HasDefaultValue(null);
 
