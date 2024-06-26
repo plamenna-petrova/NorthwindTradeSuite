@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 namespace NorthwindTradeSuite.Services.Database.Abstraction
 {
     public interface IBaseService<TEntity> where TEntity : class
-    {
-        Task<TDTO> FindByIdAsync<TDTO>(string id);
+    {    
+        IQueryable<TEntity> GetAll(bool asNoTracking = false);
 
-        Task<TDTO> GetByIdAsync<TDTO>(string id, bool isDeletedFlag);
+        Task<List<TDTO>> GetAllAsync<TDTO>(bool asNoTracking = false);
+
+        Task<TDTO> GetByIdAsync<TDTO>(string id);
 
         Task<TDTO> CreateAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 
@@ -21,11 +23,5 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         Task<TDTO> DeleteAsync<TDTO>(string id, string currentUserId);
 
         Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId);
-
-        IQueryable<TEntity> GetAll();
-
-        Task<List<TDTO>> GetAllAsync<TDTO>();
-
-        Task<List<TDTO>> GetAllAsync<TDTO>(bool isDeletedFlag);
     }
 }

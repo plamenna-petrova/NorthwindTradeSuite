@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Domain.Contracts;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using System.Linq.Expressions;
 
@@ -18,7 +19,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         protected DbSet<TEntity> DbSet { get; set; }
 
-        public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false) => asNoTracking ? DbSet.AsNoTracking() : DbSet;
+        public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false) => asNoTracking ? DbSet.AsNoTracking() : DbSet.AsQueryable();
 
         public virtual async Task<List<TEntity>> GetAllAsync(bool asNoTracking = false) => await GetAll(asNoTracking).ToListAsync();
 
@@ -106,17 +107,22 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
         public virtual async Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind)
             => await entities.AnyAsync(e => e == entityToFind);
 
-        public virtual void DetachLocalEntity<TLocalEntity>(TLocalEntity entityToDetach) where TLocalEntity : BaseEntity<string>
+        public virtual void DetachLocalEntity(TEntity entityToDetach)
         {
-            LocalView<TLocalEntity> entitiesLocalView = DbContext.Set<TLocalEntity>().Local;
-            var localEntityToDetach = entitiesLocalView.FirstOrDefault(entry => entry.Id.Equals(entityToDetach.Id));
-
-            if (localEntityToDetach != null)
+            if (entityToDetach is BaseEntity<string> entity)
             {
-                DbContext.Entry(localEntityToDetach).State = EntityState.Detached;
-            }
+                LocalView<TEntity> entitiesLocalView = DbSet.Local;
 
-            DbContext.Entry(localEntityToDetach!).State = EntityState.Modified;
+                var localEntityToDetach = entitiesLocalView
+                    .FirstOrDefault(entry => ((BaseEntity<string>)(object)entry).Id.Equals(entity.Id));
+
+                if (localEntityToDetach != null)
+                {
+                    DbContext.Entry(localEntityToDetach).State = EntityState.Detached;
+                }
+
+                DbContext.Entry(entityToDetach).State = EntityState.Modified;
+            }
         }
 
         public int GetTotalRecords() => DbSet.Count();

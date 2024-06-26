@@ -53,7 +53,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind);
 
-        void DetachLocalEntity<TLocalEntity>(TLocalEntity entityToDetach) where TLocalEntity : BaseEntity<string>;
+        void DetachLocalEntity(TEntity entityToDetach);
 
         int GetTotalRecords();
 

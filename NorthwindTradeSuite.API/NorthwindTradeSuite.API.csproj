@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NorthwindTradeSuite.Infrastructure\NorthwindTradeSuite.Infrastructure.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Persistence\NorthwindTradeSuite.Persistence.csproj" />
+    <ProjectReference Include="..\NorthwindTradeSuite.Services\NorthwindTradeSuite.Services.csproj" />
   </ItemGroup>
 
 </Project>

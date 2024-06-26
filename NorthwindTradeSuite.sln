@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Infrast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.DTOs", "NorthwindTradeSuite.DTOs\NorthwindTradeSuite.DTOs.csproj", "{0BEF2437-F089-46E4-BB55-5A16B0BA0F5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTradeSuite.Services", "NorthwindTradeSuite.Services\NorthwindTradeSuite.Services.csproj", "{12E931EF-F78A-4518-A7FF-9474F42CAB02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Services", "NorthwindTradeSuite.Services\NorthwindTradeSuite.Services.csproj", "{12E931EF-F78A-4518-A7FF-9474F42CAB02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

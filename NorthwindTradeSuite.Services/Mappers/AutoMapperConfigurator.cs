@@ -45,12 +45,22 @@ namespace NorthwindTradeSuite.Services.Mapper
                         map.CreateMap(mapperConfigurationExpression);
                     }
 
-                    foreach (var map in GetEntityTypes(exportedTypesFromAssemblies))
+                    foreach (var map in GetBaseEntityTypes(exportedTypesFromAssemblies))
                     {
                         mapperConfigurationExpression.CreateMap(map.SourceType, map.DestinationType);
                     }
 
                     foreach (var map in GetEntityTypesToBaseEntity(exportedTypesFromAssemblies))
+                    {
+                        mapperConfigurationExpression.CreateMap(map.SourceType, map.DestinationType);
+                    }
+
+                    foreach (var map in GetBaseDeletableEntityTypes(exportedTypesFromAssemblies))
+                    {
+                        mapperConfigurationExpression.CreateMap(map.SourceType, map.DestinationType);
+                    }
+
+                    foreach (var map in GetEntityTypesToBaseDeletableEntity(exportedTypesFromAssemblies))
                     {
                         mapperConfigurationExpression.CreateMap(map.SourceType, map.DestinationType);
                     }
@@ -62,12 +72,12 @@ namespace NorthwindTradeSuite.Services.Mapper
             MapperInstance = new AutoMapper.Mapper(new MapperConfiguration(mapperConfigurationExpression));
         }
 
-        private static IEnumerable<TypesMap> GetEntityTypes(IEnumerable<Type> types)
+        private static IEnumerable<TypesMap> GetBaseEntityTypes(IEnumerable<Type> types)
         {
-            IEnumerable<TypesMap> entityTypes = GetTypesWithBaseEntityType(types)
+            IEnumerable<TypesMap> baseEntityTypes = GetTypesWithBaseEntityType(types)
                 .Select(t => new TypesMap { SourceType = t, DestinationType = t });
 
-            return entityTypes;
+            return baseEntityTypes;
         }
 
         private static IEnumerable<TypesMap> GetEntityTypesToBaseEntity(IEnumerable<Type> types)
@@ -78,6 +88,22 @@ namespace NorthwindTradeSuite.Services.Mapper
             return entityTypesToBaseEntity;
         }
 
+        private static IEnumerable<TypesMap> GetBaseDeletableEntityTypes(IEnumerable<Type> types)
+        {
+            IEnumerable<TypesMap> baseDeletableEntityTypes = GetTypesWithBaseDeletableEntityType(types)
+                .Select(t => new TypesMap { SourceType = t, DestinationType = t });
+
+            return baseDeletableEntityTypes;
+        }
+
+        private static IEnumerable<TypesMap> GetEntityTypesToBaseDeletableEntity(IEnumerable<Type> types)
+        {
+            IEnumerable<TypesMap> entityTypesToBaseDeletableEntity = GetTypesWithBaseDeletableEntityType(types)
+                .Select(t => new TypesMap { SourceType = t, DestinationType = t });
+
+            return entityTypesToBaseDeletableEntity;
+        }
+
         private static IEnumerable<Type> GetTypesWithBaseEntityType(IEnumerable<Type> types)
         {
             IEnumerable<Type> baseEntityTypes = types
@@ -86,6 +112,16 @@ namespace NorthwindTradeSuite.Services.Mapper
                             !t.GetTypeInfo().IsInterface);
 
             return baseEntityTypes;
+        }
+
+        private static IEnumerable<Type> GetTypesWithBaseDeletableEntityType(IEnumerable<Type> types)
+        {
+            IEnumerable<Type> baseDeletableEntityTypes = types
+                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseDeletableEntity<string>) &&
+                            !t.GetTypeInfo().IsAbstract &&
+                            !t.GetTypeInfo().IsInterface);
+
+            return baseDeletableEntityTypes;
         }
 
         private static IEnumerable<TypesMap> GetFromMaps(IEnumerable<Type> types)
