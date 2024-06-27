@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.Services.Database.Abstraction
+namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 {
     public interface IBaseService<TEntity> where TEntity : class
-    {    
+    {
         IQueryable<TEntity> GetAll(bool asNoTracking = false);
 
         Task<List<TDTO>> GetAllAsync<TDTO>(bool asNoTracking = false);
@@ -18,10 +18,6 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
 
         Task<TDTO> UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
 
-        Task<TDTO> HardDeleteAsync<TDTO>(string id);
-
         Task<TDTO> DeleteAsync<TDTO>(string id, string currentUserId);
-
-        Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId);
     }
 }

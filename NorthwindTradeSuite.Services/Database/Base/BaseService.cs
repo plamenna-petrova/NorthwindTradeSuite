@@ -2,9 +2,9 @@
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Mappers;
 using Microsoft.EntityFrameworkCore;
-using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Services.Database.Base.Contracts;
 
-namespace NorthwindTradeSuite.Services.Database.Abstraction
+namespace NorthwindTradeSuite.Services.Database.Base
 {
     public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
@@ -26,18 +26,14 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
 
         public async Task<List<TDTO>> GetAllAsync<TDTO>(bool asNoTracking = false)
         {
-            var collection = await BaseRepository.GetAll(asNoTracking)
-                .To<TDTO>()
-                .ToListAsync();
-
+            var collection = await BaseRepository.GetAll(asNoTracking).To<TDTO>().ToListAsync();
             return collection;
         }
 
         public async Task<TDTO> GetByIdAsync<TDTO>(string id)
         {
-            var retrievedEntity = await GetByIdAsync(id);
-            var mappedDTOById = Mapper.Map<TDTO>(retrievedEntity);
-
+            var retrievedEntityById = await GetByIdAsync(id);
+            var mappedDTOById = Mapper.Map<TDTO>(retrievedEntityById);
             return mappedDTOById;
         }
 
@@ -54,24 +50,32 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return mappedDTOToReturn;
         }
 
-        public Task<TDTO> UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
+        public async Task<TDTO> UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
         {
-            throw new NotImplementedException();
+            var retrievedEntityById = await GetByIdAsync(id);
+
+            BaseRepository.DetachLocalEntity(retrievedEntityById);
+
+            TEntity entityToUpdate = Mapper.Map(updateDTO, retrievedEntityById);
+            entityToUpdate = BaseRepository.ReattachUpdateAndReturnEntityFromEntry(entityToUpdate);
+            await BaseRepository.SaveChangesAsync();
+
+            TDTO mappedDTOToReturn = Mapper.Map<TDTO>(entityToUpdate);
+
+            return mappedDTOToReturn;
         }
 
-        public Task<TDTO> DeleteAsync<TDTO>(string id, string currentUserId)
+        public async Task<TDTO> DeleteAsync<TDTO>(string id, string currentUserId)
         {
-            throw new NotImplementedException();
-        }
+            TEntity retrievedEntityById = await GetByIdAsync<TEntity>(id);
 
-        public Task<TDTO> HardDeleteAsync<TDTO>(string id)
-        {
-            throw new NotImplementedException();
-        }
+            BaseRepository.DetachLocalEntity(retrievedEntityById);
+            TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(retrievedEntityById);
+            await BaseRepository.SaveChangesAsync();
 
-        public Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId)
-        {
-            throw new NotImplementedException();
+            TDTO mappedDTOToReturn = Mapper.Map<TDTO>(deletedEntity);
+
+            return mappedDTOToReturn;
         }
 
         private async Task<TEntity> GetByIdAsync(string id)
