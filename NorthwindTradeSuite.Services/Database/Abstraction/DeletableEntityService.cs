@@ -11,44 +11,36 @@ namespace NorthwindTradeSuite.Services.Database.Base
     public abstract class DeletableEntityService<TEntity> : BaseService<TEntity>, IDeletableEntityService<TEntity>
         where TEntity : BaseDeletableEntity<string>
     {
+        protected readonly new IDeletableEntityRepository<TEntity> BaseRepository;
+
         public DeletableEntityService(IDeletableEntityRepository<TEntity> baseRepository, IMapper mapper)
             : base(baseRepository, mapper)
         {
             BaseRepository = baseRepository;
         }
 
-        protected new IDeletableEntityRepository<TEntity> BaseRepository { get; }
-
         public async Task<List<TDTO>> GetAllWithDeletedAsync<TDTO>(bool asNoTracking = false)
         {
-            var collectionIncludingDeletedEntities = await BaseRepository.GetAllWithDeletedEntities(asNoTracking).To<TDTO>().ToListAsync();
-            return collectionIncludingDeletedEntities;
+            var entities = await BaseRepository.GetAllWithDeletedEntities(asNoTracking).ToListAsync();
+            return Mapper.Map<List<TDTO>>(entities);
         }
 
         public async Task<TDTO> HardDeleteAsync<TDTO>(string id)
         {
-            TEntity retrievedEntityById = await GetByIdAsync<TEntity>(id);
-
-            BaseRepository.DetachLocalEntity(retrievedEntityById);
-            TEntity hardDeletedEntity = BaseRepository.HardDeleteAndReturnEntityFromEntry(retrievedEntityById);
+            var entityToDelete = await GetEntityByIdAsync(id);
+            BaseRepository.DetachLocalEntity(entityToDelete);
+            var hardDeletedEntity = BaseRepository.HardDeleteAndReturnEntityFromEntry(entityToDelete);
             await BaseRepository.SaveChangesAsync();
-
-            TDTO mappedDTOToReturn = Mapper.Map<TDTO>(hardDeletedEntity);
-
-            return mappedDTOToReturn;
+            return Mapper.Map<TDTO>(hardDeletedEntity);
         }
 
         public async Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId)
         {
-            TEntity retrievedEntityById = await GetByIdAsync<TEntity>(id);
-
-            BaseRepository.DetachLocalEntity(retrievedEntityById);
-            TEntity restoredEntity = BaseRepository.RestoreAndReturnEntityFromEntry(retrievedEntityById);
+            var entityToRestore = await GetEntityByIdAsync(id);
+            BaseRepository.DetachLocalEntity(entityToRestore);
+            var restoredEntity = BaseRepository.RestoreAndReturnEntityFromEntry(entityToRestore);
             await BaseRepository.SaveChangesAsync();
-
-            TDTO mappedDTOToReturn = Mapper.Map<TDTO>(restoredEntity);
-
-            return mappedDTOToReturn;
+            return Mapper.Map<TDTO>(restoredEntity);
         }
     }
 }

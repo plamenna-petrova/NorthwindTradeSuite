@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NorthwindTradeSuite.Domain.Abstraction;
-using NorthwindTradeSuite.Domain.Contracts;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using System.Linq.Expressions;
 
