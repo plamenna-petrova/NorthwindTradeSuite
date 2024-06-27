@@ -4,7 +4,7 @@ using NorthwindTradeSuite.Services.Mappers;
 using Microsoft.EntityFrameworkCore;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
 
-namespace NorthwindTradeSuite.Services.Database.Base
+namespace NorthwindTradeSuite.Services.Database.Abstraction
 {
     public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
@@ -32,8 +32,8 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public async Task<TDTO> GetByIdAsync<TDTO>(string id)
         {
-            var retrievedEntityById = await GetByIdAsync(id);
-            var mappedDTOById = Mapper.Map<TDTO>(retrievedEntityById);
+            TEntity retrievedEntityById = await GetByIdAsync<TEntity>(id);
+            TDTO mappedDTOById = Mapper.Map<TDTO>(retrievedEntityById);
             return mappedDTOById;
         }
 
@@ -52,7 +52,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public async Task<TDTO> UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
         {
-            var retrievedEntityById = await GetByIdAsync(id);
+            TEntity retrievedEntityById = await GetByIdAsync<TEntity>(id);
 
             BaseRepository.DetachLocalEntity(retrievedEntityById);
 
@@ -78,7 +78,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             return mappedDTOToReturn;
         }
 
-        private async Task<TEntity> GetByIdAsync(string id)
+        protected async Task<TEntity> GetByIdAsync(string id)
         {
             var entityById = await BaseRepository.GetByIdAsync(id);
 
