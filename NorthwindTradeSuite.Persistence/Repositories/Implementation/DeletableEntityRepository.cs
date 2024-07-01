@@ -22,6 +22,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
             base.ReattachAndUpdate(entityToDelete);
         }
 
+        public override TEntity DeleteAndReturnEntityFromEntry(TEntity entityToDelete)
+        {
+            entityToDelete.IsDeleted = true;
+            entityToDelete.DeletedAt = DateTime.UtcNow;
+            return base.ReattachUpdateAndReturnEntityFromEntry(entityToDelete);
+        }
+
         public IQueryable<TEntity> GetAllWithDeletedEntities(bool asNoTracking = false) => base.GetAll(asNoTracking).IgnoreQueryFilters();
 
         public async Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false, bool asNoTracking = false)

@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 {
@@ -41,28 +40,60 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO?> GetSingleOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
-        void Create<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        void Create<TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 
         TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 
-        Task CreateAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        Task CreateAsync<TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 
         Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 
-        void Update<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs);
+
+        Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs);
+
+        void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
 
         TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
 
-        Task UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
 
         Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
 
-        void Delete<TDTO>(string id, string currentUserId);
+        void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
+
+        Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
+
+        void Delete(string id, string currentUserId);
 
         TDTO DeleteAndReturn<TDTO>(string id, string currentUserId);
 
-        Task DeleteAsync<TDTO>(string id, string currentUserId);
+        Task DeleteAsync(string id, string currentUserId);
 
         Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string currentUserId);
+
+        void DeleteRange<TDeleteDTO>(List<TDeleteDTO> deleteDTOs);
+
+        Task DeleteRangeAsync<TDeleteDTO>(List<TDeleteDTO> deleteDTOs);
+
+        bool Exists(IQueryable<TEntity> entities, TEntity entityToFind);
+
+        bool Exists<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind);
+
+        Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind);
+
+        Task<bool> ExistsAsync<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind);
+
+        int GetTotalRecords();
+
+        Task<int> GetTotalRecordsAsync();
+
+        IQueryable<TEntity> BuildQueryFromRawSql(string queryString, params object[] queryParameters);
+
+        IQueryable<TDTO> BuildQueryFromRawSql<TDTO>(string queryString, params object[] queryParameters);
+
+        int ExecuteSqlRawQuery(string queryString, params object[] queryParameters);
+
+        Task<int> ExecuteSqlRawQueryAsync(string queryString, params object[] queryParameters);
     }
 }

@@ -19,10 +19,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             Mapper = mapper;
         }
 
-        public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false)
-        {
-            return BaseRepository.GetAll(asNoTracking);
-        }
+        public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false) => BaseRepository.GetAll(asNoTracking);
 
         public virtual IQueryable<TDTO> GetAll<TDTO>(bool asNoTracking = false)
         {
@@ -30,10 +27,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return entities.To<TDTO>();
         }
 
-        public virtual async Task<List<TEntity>> GetAllAsync(bool asNoTracking = false)
-        {
-            return await BaseRepository.GetAllAsync(asNoTracking);
-        }
+        public virtual async Task<List<TEntity>> GetAllAsync(bool asNoTracking = false) => await BaseRepository.GetAllAsync(asNoTracking);
 
         public virtual async Task<List<TDTO>> GetAllAsync<TDTO>(bool asNoTracking = false)
         {
@@ -42,9 +36,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return BaseRepository.GetAllByCondition(filterExpression, asNoTracking);
-        }
+            => BaseRepository.GetAllByCondition(filterExpression, asNoTracking);
 
         public virtual IQueryable<TDTO> GetAllByCondition<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -53,9 +45,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual async Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return await BaseRepository.GetAllByConditionAsync(filterExpression, asNoTracking);
-        }
+            => await BaseRepository.GetAllByConditionAsync(filterExpression, asNoTracking);
 
         public virtual async Task<List<TDTO>> GetAllByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -76,9 +66,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual TEntity? GetFirstOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return BaseRepository.GetFirstOrDefaultByCondition(filterExpression, asNoTracking);
-        }
+            => BaseRepository.GetFirstOrDefaultByCondition(filterExpression, asNoTracking);
 
         public virtual TDTO? GetFirstOrDefaultByCondition<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -87,9 +75,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return await BaseRepository.GetFirstOrDefaultByConditionAsync(filterExpression, asNoTracking);
-        }
+            => await BaseRepository.GetFirstOrDefaultByConditionAsync(filterExpression, asNoTracking);
 
         public virtual async Task<TDTO?> GetFirstOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -98,9 +84,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return BaseRepository.GetSingleOrDefaultByCondition(filterExpression, asNoTracking);
-        }
+            => BaseRepository.GetSingleOrDefaultByCondition(filterExpression, asNoTracking);
 
         public virtual TDTO? GetSingleOrDefaultByCondition<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -109,9 +93,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         }
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
-        {
-            return await BaseRepository.GetSingleOrDefaultByConditionAsync(filterExpression, asNoTracking);
-        }
+            => await BaseRepository.GetSingleOrDefaultByConditionAsync(filterExpression, asNoTracking);
 
         public virtual async Task<TDTO?> GetSingleOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
@@ -119,7 +101,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(singleOrDefaultEntity);
         }
 
-        public virtual void Create<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId)
+        public virtual void Create<TCreateDTO>(TCreateDTO createDTO, string currentUserId)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
             BaseRepository.DetachLocalEntity(entityToCreate);
@@ -136,7 +118,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(entityToCreate);
         }
 
-        public virtual async Task CreateAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId)
+        public virtual async Task CreateAsync<TCreateDTO>(TCreateDTO createDTO, string currentUserId)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
             BaseRepository.DeleteAndReturnEntityFromEntry(entityToCreate);
@@ -153,7 +135,21 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(entityToCreate);
         }
 
-        public virtual void Update<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
+        public virtual void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs)
+        {
+            var entitiesToCreate = Mapper.Map<TEntity[]>(createDTOs.ToArray());
+            BaseRepository.AddRange(entitiesToCreate);
+            BaseRepository.SaveChanges();
+        }
+
+        public virtual async Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs)
+        {
+            var entitiesToCreate = Mapper.Map<TEntity[]>(createDTOs.ToArray());
+            await BaseRepository.AddRangeAsync(entitiesToCreate);
+            await BaseRepository.SaveChangesAsync();
+        }
+
+        public virtual void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
         {
             var entityToUpdate = GetById(id);
             BaseRepository.DetachLocalEntity(entityToUpdate);
@@ -171,7 +167,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(entityToUpdate);
         }
 
-        public virtual async Task UpdateAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
+        public virtual async Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId)
         {
             var entityToUpdate = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToUpdate);
@@ -190,7 +186,21 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(entityToUpdate);
         }
 
-        public virtual void Delete<TDTO>(string id, string currentUserId)
+        public virtual void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs)
+        {
+            var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
+            BaseRepository.UpdateRange(entitiesToUpdate);
+            BaseRepository.SaveChanges();
+        }
+
+        public virtual async Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs)
+        {
+            var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
+            BaseRepository.UpdateRange(entitiesToUpdate);
+            await BaseRepository.SaveChangesAsync();
+        }
+
+        public virtual void Delete(string id, string currentUserId)
         {
             var entityToDelete = GetById(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -207,7 +217,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public virtual async Task DeleteAsync<TDTO>(string id, string currentUserId)
+        public virtual async Task DeleteAsync(string id, string currentUserId)
         {
             var entityToDelete = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -224,7 +234,59 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public TEntity GetById(string id)
+        public virtual void DeleteRange<TDeleteDTO>(List<TDeleteDTO> deleteDTOs)
+        {
+            var entitiesToDelete = Mapper.Map<TEntity[]>(deleteDTOs.ToArray());
+            BaseRepository.DeleteRange(entitiesToDelete);
+            BaseRepository.SaveChanges();
+        }
+
+        public virtual async Task DeleteRangeAsync<TDeleteDTO>(List<TDeleteDTO> deleteDTOs)
+        {
+            var entitiesToDelete = Mapper.Map<TEntity[]>(deleteDTOs.ToArray());
+            BaseRepository.DeleteRange(entitiesToDelete);
+            await BaseRepository.SaveChangesAsync();
+        }
+
+        public virtual bool Exists(IQueryable<TEntity> entities, TEntity entityToFind) => BaseRepository.Exists(entities, entityToFind);
+
+        public virtual bool Exists<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind)
+        {
+            var entities = dtosCollection.To<TEntity>();
+            var entityToFind = Mapper.Map<TEntity>(dtoToFind);
+            return BaseRepository.Exists(entities, entityToFind);
+        }
+
+        public virtual async Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind) 
+            => await BaseRepository.ExistsAsync(entities, entityToFind);
+
+        public virtual async Task<bool> ExistsAsync<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind)
+        {
+            var entities = dtosCollection.To<TEntity>();
+            var entityToFind = Mapper.Map<TEntity>(dtoToFind);
+            return await BaseRepository.ExistsAsync(entities, entityToFind);
+        }
+
+        public int GetTotalRecords() => BaseRepository.GetTotalRecords();
+
+        public async Task<int> GetTotalRecordsAsync() => await BaseRepository.GetTotalRecordsAsync();
+
+        public virtual IQueryable<TEntity> BuildQueryFromRawSql(string queryString, params object[] queryParameters)
+            => BaseRepository.BuildQueryFromRawSql(queryString, queryParameters);
+
+        public virtual IQueryable<TDTO> BuildQueryFromRawSql<TDTO>(string queryString, params object[] queryParameters)
+        {
+            var queriedEntities = BaseRepository.BuildQueryFromRawSql(queryString, queryParameters);
+            return queriedEntities.To<TDTO>();
+        }
+
+        public virtual int ExecuteSqlRawQuery(string queryString, params object[] queryParameters) 
+            => BaseRepository.ExecuteSqlRawQuery(queryString, queryParameters);
+
+        public virtual async Task<int> ExecuteSqlRawQueryAsync(string queryString, params object[] queryParameters)
+            => await BaseRepository.ExecuteSqlRawQueryAsync(queryString, queryParameters);
+
+        public virtual TEntity GetById(string id)
         {
             var entityById = BaseRepository.GetById(id);
 
@@ -236,7 +298,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return entityById;
         }
 
-        public async Task<TEntity> GetByIdAsync(string id)
+        public virtual async Task<TEntity> GetByIdAsync(string id)
         {
             var entityById = await BaseRepository.GetByIdAsync(id);
 

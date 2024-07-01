@@ -1,17 +1,46 @@
 ﻿using NorthwindTradeSuite.Domain.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 {
     public interface IDeletableEntityService<TEntity> : IBaseService<TEntity> where TEntity : BaseDeletableEntity<string>
     {
+        IQueryable<TEntity> GetAllWithDeleted(bool asNoTracking = false);
+
+        IQueryable<TDTO> GetAllWithDeleted<TDTO>(bool asNoTracking = false);
+
+        Task<List<TEntity>> GetAllWithDeletedAsync(bool asNoTracking = false);
+
         Task<List<TDTO>> GetAllWithDeletedAsync<TDTO>(bool asNoTracking = false);
 
+        Task<List<TEntity>> GetAllWithOptionalDeletionFlagAsync(bool isDeletedFlag = false, bool asNoTracking = false);
+
+        Task<List<TDTO>> GetAllWithOptionalDeletionFlagAsync<TDTO>(bool isDeletedFlag = false, bool asNoTracking = false);
+
+        IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        IQueryable<TDTO> GetByIdWithOptionalDeletionFlagAsQueryable<TDTO>(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        Task<TDTO?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync<TDTO>(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        Task<TEntity?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        Task<TDTO?> GetSingleOrDefaultByIdWithOptionalDeletionFlagAsync<TDTO>(string id, bool isDeletedFlag, bool asNoTracking = false);
+
+        void HardDelete(string id);
+
+        TDTO HardDelete<TDTO>(string id);
+
+        Task HardDeleteAsync(string id);
+
         Task<TDTO> HardDeleteAsync<TDTO>(string id);
+
+        void Restore(string id, string currentUserId);
+
+        TDTO Restore<TDTO>(string id, string currentUserId);
+
+        Task RestoreAsync(string id, string currentUserId);
 
         Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId);
     }

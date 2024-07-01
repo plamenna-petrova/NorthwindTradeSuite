@@ -1,5 +1,4 @@
-﻿using NorthwindTradeSuite.Domain.Abstraction;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
