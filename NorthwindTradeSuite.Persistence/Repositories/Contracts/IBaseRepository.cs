@@ -27,6 +27,8 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         void Add(TEntity entityToAdd);
 
+        TEntity AddAndReturnEntityFromEntry(TEntity entityToAdd);
+
         Task AddAsync(TEntity entityToAdd);
 
         Task<TEntity> AddAsyncAndReturnEntityFromEntry(TEntity entityToAdd);

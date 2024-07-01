@@ -4,7 +4,6 @@ using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Abstraction;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
-using NorthwindTradeSuite.Services.Mappers;
 
 namespace NorthwindTradeSuite.Services.Database.Base
 {
@@ -27,7 +26,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public async Task<TDTO> HardDeleteAsync<TDTO>(string id)
         {
-            var entityToDelete = await GetEntityByIdAsync(id);
+            var entityToDelete = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
             var hardDeletedEntity = BaseRepository.HardDeleteAndReturnEntityFromEntry(entityToDelete);
             await BaseRepository.SaveChangesAsync();
@@ -36,7 +35,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public async Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId)
         {
-            var entityToRestore = await GetEntityByIdAsync(id);
+            var entityToRestore = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToRestore);
             var restoredEntity = BaseRepository.RestoreAndReturnEntityFromEntry(entityToRestore);
             await BaseRepository.SaveChangesAsync();

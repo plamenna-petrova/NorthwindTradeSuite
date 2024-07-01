@@ -48,6 +48,12 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public virtual void Add(TEntity entityToAdd) => DbSet.Add(entityToAdd);
 
+        public virtual TEntity AddAndReturnEntityFromEntry(TEntity entityToAdd)
+        {
+            EntityEntry<TEntity> addedEntityEntry = DbSet.Add(entityToAdd);
+            return addedEntityEntry.Entity;
+        }
+
         public virtual async Task AddAsync(TEntity entityToAdd) => await DbSet.AddAsync(entityToAdd).AsTask();
 
         public virtual async Task<TEntity> AddAsyncAndReturnEntityFromEntry(TEntity entityToAdd)
