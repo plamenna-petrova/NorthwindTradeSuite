@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using NorthwindTradeSuite.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace NorthwindTradeSuite.Infrastructure.Extensions
 {

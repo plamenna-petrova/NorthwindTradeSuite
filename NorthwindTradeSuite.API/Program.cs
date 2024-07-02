@@ -1,3 +1,4 @@
+using AutoMapper;
 using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.DTOs;
 using NorthwindTradeSuite.Infrastructure.Extensions;
@@ -19,9 +20,6 @@ webApplicationBuilder.Services.AddSwaggerGen();
 
 webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>();
 
-webApplicationBuilder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-webApplicationBuilder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(DeletableEntityRepository<>));
-
 Assembly[] assemblies = new Assembly[]
 {
     Assembly.GetAssembly(typeof(BaseEntity<string>))!,
@@ -29,6 +27,13 @@ Assembly[] assemblies = new Assembly[]
 };
 
 AutoMapperConfigurator.RegisterMappings(assemblies.ToArray());
+
+webApplicationBuilder.Services.AddSingleton<IMapper>(AutoMapperConfigurator.MapperInstance);
+
+webApplicationBuilder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+webApplicationBuilder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(DeletableEntityRepository<>));
+
+webApplicationBuilder.Services.AddServiceLayer();
 
 var webApplication = webApplicationBuilder.Build();
 
