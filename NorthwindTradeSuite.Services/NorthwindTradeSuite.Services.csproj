@@ -12,11 +12,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj" />
+    <ProjectReference Include="..\NorthwindTradeSuite.Mapping\NorthwindTradeSuite.Mapping.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Persistence\NorthwindTradeSuite.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers\Profiles\" />
+    <Folder Include="Identity\" />
   </ItemGroup>
 
 </Project>

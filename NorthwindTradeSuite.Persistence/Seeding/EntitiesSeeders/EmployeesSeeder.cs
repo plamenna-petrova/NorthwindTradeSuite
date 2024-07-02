@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
-using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -32,32 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedEmployeeDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedEmployeeDTO>(DatasetFileName);
 
                 var employeesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedEmployeesForSeeding = employeesForSeeding
-                    .Select(emp => new Employee
-                    {
-                        Id = emp.Id,
-                        LastName = emp.LastName,
-                        FirstName = emp.FirstName,
-                        Title = emp.Title,
-                        TitleOfCourtesy = emp.TitleOfCourtesy,
-                        BirthDate = emp.BirthDate,
-                        HireDate = emp.HireDate,
-                        LocationData = new LocationData
-                        {
-                            Address = emp.SeedLocationDTO.Address,
-                            City = emp.SeedLocationDTO.City,
-                            Region = emp.SeedLocationDTO.Region,
-                            PostalCode = emp.SeedLocationDTO.PostalCode,
-                            Country = emp.SeedLocationDTO.Country
-                        },
-                        HomePhone = emp.HomePhone,
-                        Extension = emp.Extension,
-                        Photo = emp.Photo,
-                        Notes = emp.Notes,
-                        PhotoPath = emp.PhotoPath
-                    })
-                    .ToArray();
+                var mappedEmployeesForSeeding = employeesForSeeding.To<Employee>().ToArray();
 
                 await employeeDeletableRepository.AddRangeAsync(mappedEmployeesForSeeding);
                 await employeeDeletableRepository.SaveChangesAsync();

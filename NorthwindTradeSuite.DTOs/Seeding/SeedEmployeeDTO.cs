@@ -1,10 +1,12 @@
 ﻿using CsvHelper.Configuration.Attributes;
+using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding.SharedSeedingDTOs;
 using NorthwindTradeSuite.DTOs.Seeding.TypeConverters;
+using NorthwindTradeSuite.Mapping.Contracts;
 
 namespace NorthwindTradeSuite.DTOs.Seeding
 {
-    public class SeedEmployeeDTO
+    public class SeedEmployeeDTO: IMapTo<Employee>
     {
         [Name("employeeID")]
         public string Id { get; set; } = null!;

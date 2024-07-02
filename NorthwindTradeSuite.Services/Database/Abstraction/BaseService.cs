@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
-using NorthwindTradeSuite.Services.Mappers;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
 using System.Linq.Expressions;
 using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessages;

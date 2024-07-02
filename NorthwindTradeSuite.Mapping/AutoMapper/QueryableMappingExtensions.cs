@@ -1,8 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
-using NorthwindTradeSuite.Services.Mapper;
 using System.Linq.Expressions;
 
-namespace NorthwindTradeSuite.Services.Mappers
+namespace NorthwindTradeSuite.Mapping.AutoMapper
 {
     public static class QueryableMappingExtensions
     {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -30,22 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedProductDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedProductDTO>(DatasetFileName);
 
                 var productsForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedProductsForSeeding = productsForSeeding
-                    .Select(p => new Product
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        SupplierId = p.SupplierId,
-                        CategoryId = p.CategoryId,
-                        QuantityPerUnit = p.QuantityPerUnit,
-                        UnitPrice = p.UnitPrice,
-                        UnitsInStock = p.UnitsInStock,
-                        UnitsOnOrder = p.UnitsOnOrder,
-                        ReorderLevel = p.ReorderLevel,
-                        Discontinued = p.Discontinued
-                    })
-                    .ToArray();
+                var mappedProductsForSeeding = productsForSeeding.To<Product>().ToArray();
 
                 await deletableProductRepository.AddRangeAsync(mappedProductsForSeeding);
                 await deletableProductRepository.SaveChangesAsync();

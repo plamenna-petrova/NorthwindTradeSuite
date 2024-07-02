@@ -1,8 +1,10 @@
 ﻿using CsvHelper.Configuration.Attributes;
+using NorthwindTradeSuite.Domain.Entities;
+using NorthwindTradeSuite.Mapping.Contracts;
 
 namespace NorthwindTradeSuite.DTOs.Seeding
 {
-    public class SeedCategoryDTO
+    public class SeedCategoryDTO : IMapTo<Category>
     {
         [Name("categoryID")]
         public string Id { get; set; } = null!;

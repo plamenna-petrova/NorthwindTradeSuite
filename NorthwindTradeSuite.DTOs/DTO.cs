@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.Services.Mapper.Contracts
+namespace NorthwindTradeSuite.DTOs
 {
-    public interface IMapFrom<T>
+    public class DTO
     {
 
     }

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Abstraction;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
-using NorthwindTradeSuite.Services.Mappers;
 
 namespace NorthwindTradeSuite.Services.Database.Base
 {

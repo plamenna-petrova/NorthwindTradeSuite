@@ -14,6 +14,6 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
         public string DatasetFileName { get; set; }
 
-        public List<TSeedingDTO> RetrieveDatasetObjectsForSeeding() => datasetFileReaderAdaptee.ReadDataset(DatasetFileName);
+        public IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding() => datasetFileReaderAdaptee.ReadDataset(DatasetFileName);
     }
 }

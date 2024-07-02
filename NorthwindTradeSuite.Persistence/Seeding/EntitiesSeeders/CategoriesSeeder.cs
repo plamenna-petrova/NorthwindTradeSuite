@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -30,16 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedCategoryDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedCategoryDTO>(DatasetFileName);
 
                 var categoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedCategoriesForSeeding = categoriesForSeeding
-                    .Select(cat => new Category
-                    {
-                        Id = cat.Id,
-                        Name = cat.Name,
-                        Description = cat.Description,
-                        Picture = cat.Picture
-                    })
-                    .ToArray();
+                var mappedCategoriesForSeeding = categoriesForSeeding.To<Category>().ToArray();
 
                 await categoryDeletableRepository.AddRangeAsync(mappedCategoriesForSeeding);
                 await categoryDeletableRepository.SaveChangesAsync();

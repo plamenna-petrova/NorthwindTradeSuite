@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.Services.Mapper
+namespace NorthwindTradeSuite.Mapping.AutoMapper
 {
     internal class TypesMap
     {

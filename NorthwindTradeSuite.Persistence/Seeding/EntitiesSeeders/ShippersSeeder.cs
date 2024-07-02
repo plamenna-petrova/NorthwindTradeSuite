@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -30,15 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedShipperDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedShipperDTO>(DatasetFileName);
 
                 var shippersForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedShippersForSeeding = shippersForSeeding
-                    .Select(ship => new Shipper
-                    {
-                        Id = ship.Id,
-                        CompanyName = ship.CompanyName,
-                        Phone = ship.Phone,
-                    })
-                    .ToArray();
+                var mappedShippersForSeeding = shippersForSeeding.To<Shipper>().ToArray();
 
                 await shipperDeletableRepository.AddRangeAsync(mappedShippersForSeeding);
                 await shipperDeletableRepository.SaveChangesAsync();

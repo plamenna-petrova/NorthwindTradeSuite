@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
-using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -31,32 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedSupplierDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedSupplierDTO>(DatasetFileName);
 
                 var suppliersForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedSuppliersForSeeding = suppliersForSeeding
-                    .Select(sup => new Supplier
-                    {
-                        Id = sup.Id,
-                        ProfessionalData = new ProfessionalData
-                        {
-                            CompanyName = sup.SeedProfessionalDataDTO.CompanyName,
-                            ContactName = sup.SeedProfessionalDataDTO.ContactName,
-                            ContactTitle = sup.SeedProfessionalDataDTO.ContactTitle
-                        },
-                        LocationData = new LocationData
-                        {
-                            Address = sup.SeedLocationDataDTO.Address,
-                            City = sup.SeedLocationDataDTO.City,
-                            Region = sup.SeedLocationDataDTO.Region,
-                            PostalCode = sup.SeedLocationDataDTO.PostalCode,
-                            Country = sup.SeedLocationDataDTO.Country
-                        },
-                        PersonalContactData = new PersonalContactData
-                        {
-                            Phone = sup.SeedPersonalContactDataDTO.Phone,
-                            Fax = sup.SeedPersonalContactDataDTO.Fax
-                        }
-                    })
-                    .ToArray();
+                var mappedSuppliersForSeeding = suppliersForSeeding.To<Supplier>().ToArray();
 
                 await supplierDeletableRepository.AddRangeAsync(mappedSuppliersForSeeding);
                 await supplierDeletableRepository.SaveChangesAsync();

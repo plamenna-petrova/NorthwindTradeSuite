@@ -29,6 +29,7 @@
     <ProjectReference Include="..\NorthwindTradeSuite.Common\NorthwindTradeSuite.Common.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.DTOs\NorthwindTradeSuite.DTOs.csproj" />
+    <ProjectReference Include="..\NorthwindTradeSuite.Mapping\NorthwindTradeSuite.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

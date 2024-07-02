@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace NorthwindTradeSuite.Services.Mapper.Contracts
+namespace NorthwindTradeSuite.Mapping.Contracts
 {
     public interface ICustomMap
     {

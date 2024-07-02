@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -31,15 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedTerritoryDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedTerritoryDTO>(DatasetFileName);
 
                 var territoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedTerritoriesForSeeding = territoriesForSeeding
-                    .Select(t => new Territory
-                    {
-                        Id = t.Id,
-                        Description = t.Description,
-                        RegionId = t.RegionId,
-                    })
-                    .ToArray();
+                var mappedTerritoriesForSeeding = territoriesForSeeding.To<Territory>().ToArray();
 
                 await territoryDeletableRepository.AddRangeAsync(mappedTerritoriesForSeeding);
                 await territoryDeletableRepository.SaveChangesAsync();

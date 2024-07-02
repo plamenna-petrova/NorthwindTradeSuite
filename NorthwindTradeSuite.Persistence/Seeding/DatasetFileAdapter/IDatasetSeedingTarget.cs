@@ -5,6 +5,6 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
     public interface IDatasetSeedingTarget<TSeedingDTO> where TSeedingDTO : class
     {
-        List<TSeedingDTO> RetrieveDatasetObjectsForSeeding();
+        IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding();
     }
 }

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
+using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessages;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
@@ -15,7 +16,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
             { DatasetFileType.JSON, JSON_FILES_FOLDER }
         };
 
-        public List<TSeedingDTO> ReadDataset(string datasetFileName)
+        public IQueryable<TSeedingDTO> ReadDataset(string datasetFileName)
         {
             List<TSeedingDTO> readDatasetObjects = null!;
 
@@ -44,7 +45,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
                 }
             }
 
-            return readDatasetObjects;
+            return readDatasetObjects.AsQueryable();
         }
 
         private (string datasetFilePath, DatasetFileType? datasetFileType) GetDatasetFilePathAndType(string datasetFileName)
@@ -54,7 +55,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
             if (!Enum.TryParse(datasetFileExtension, true, out DatasetFileType parsedDatasetFileType))
             {
-                throw new NotSupportedException($"Unsupported dataset file type: {datasetFileExtension}");
+                throw new NotSupportedException(string.Format(UNSUPPORTED_DATASET_FILE_TYPE_NOT_SUPPORTED_EXCEPTION_MESSAGE, datasetFileExtension));
             }
 
             string formattedDatasetsSubfolderPathInAssembly = string.Format(DATASETS_DIRECTORY_RELATIVE_PATH, datasetsFolders[parsedDatasetFileType]);
@@ -89,7 +90,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
                 if (solutionTargetDirectoryFullName == null)
                 {
-                    throw new Exception("Solution directory not found.");
+                    throw new Exception(SOLUTION_DIRECTORY_NOT_FOUND_EXCEPTION_MESSAGE);
                 }
             }
 

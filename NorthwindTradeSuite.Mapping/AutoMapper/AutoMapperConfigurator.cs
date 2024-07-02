@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using NorthwindTradeSuite.Domain.Abstraction;
-using NorthwindTradeSuite.Services.Mapper.Contracts;
+using NorthwindTradeSuite.Mapping.AutoMapper.Profiles;
+using NorthwindTradeSuite.Mapping.Contracts;
 using System.Reflection;
 
-namespace NorthwindTradeSuite.Services.Mapper
+namespace NorthwindTradeSuite.Mapping.AutoMapper
 {
     public static class AutoMapperConfigurator
     {
@@ -67,9 +68,12 @@ namespace NorthwindTradeSuite.Services.Mapper
                 }
             );
 
-            // add profiles
+            mapperConfigurationExpression.AddProfile<CustomerProfile>();
+            mapperConfigurationExpression.AddProfile<EmployeeProfile>();
+            mapperConfigurationExpression.AddProfile<SupplierProfile>();
+            mapperConfigurationExpression.AddProfile<OrderProfile>();
 
-            MapperInstance = new AutoMapper.Mapper(new MapperConfiguration(mapperConfigurationExpression));
+            MapperInstance = new Mapper(new MapperConfiguration(mapperConfigurationExpression));
         }
 
         private static IEnumerable<TypesMap> GetBaseEntityTypes(IEnumerable<Type> types)
@@ -107,8 +111,8 @@ namespace NorthwindTradeSuite.Services.Mapper
         private static IEnumerable<Type> GetTypesWithBaseEntityType(IEnumerable<Type> types)
         {
             IEnumerable<Type> baseEntityTypes = types
-                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseEntity<string>) && 
-                            !t.GetTypeInfo().IsAbstract && 
+                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseEntity<string>) &&
+                            !t.GetTypeInfo().IsAbstract &&
                             !t.GetTypeInfo().IsInterface);
 
             return baseEntityTypes;

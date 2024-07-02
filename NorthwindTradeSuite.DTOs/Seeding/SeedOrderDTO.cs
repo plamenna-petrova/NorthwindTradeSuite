@@ -1,9 +1,11 @@
 ﻿using CsvHelper.Configuration.Attributes;
+using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding.TypeConverters;
+using NorthwindTradeSuite.Mapping.Contracts;
 
 namespace NorthwindTradeSuite.DTOs.Seeding
 {
-    public class SeedOrderDTO
+    public class SeedOrderDTO : IMapTo<Order>
     {
         [Name("orderID")]
         public string Id { get; set; } = null!;

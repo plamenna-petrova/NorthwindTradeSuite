@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
+using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.Abstraction;
 using NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter;
@@ -30,14 +31,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
                 IDatasetSeedingTarget<SeedEmployeeTerritoryDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedEmployeeTerritoryDTO>(DatasetFileName);
 
                 var employeeTerritoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
-
-                var mappedEmployeeTerritoriesForSeeding = employeeTerritoriesForSeeding
-                    .Select(et => new EmployeeTerritory
-                    {
-                        EmployeeId = et.EmployeeId,
-                        TerritoryId = et.TerritoryId
-                    })
-                    .ToArray();
+                var mappedEmployeeTerritoriesForSeeding = employeeTerritoriesForSeeding.To<EmployeeTerritory>().ToArray();
 
                 await employeeTerritoryRepository.AddRangeAsync(mappedEmployeeTerritoriesForSeeding);
                 await employeeTerritoryRepository.SaveChangesAsync();

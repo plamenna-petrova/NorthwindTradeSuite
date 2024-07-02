@@ -1,13 +1,10 @@
 ﻿using CsvHelper.Configuration.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NorthwindTradeSuite.Domain.Entities;
+using NorthwindTradeSuite.Mapping.Contracts;
 
 namespace NorthwindTradeSuite.DTOs.Seeding
 {
-    public class SeedRegionDTO
+    public class SeedRegionDTO : IMapTo<Region>
     {
         [Name("regionID")]
         public string Id { get; set; } = null!;
