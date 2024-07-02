@@ -9,10 +9,13 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.2" />
     <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Categories\" />
+    <Folder Include="Features\Categories\Commands\" />
+    <Folder Include="Features\Categories\Validators\" />
+    <Folder Include="Features\Categories\Queries\" />
   </ItemGroup>
 
 </Project>

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Identity\**" />
+    <EmbeddedResource Remove="Identity\**" />
+    <None Remove="Identity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
@@ -14,10 +20,6 @@
     <ProjectReference Include="..\NorthwindTradeSuite.Domain\NorthwindTradeSuite.Domain.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Mapping\NorthwindTradeSuite.Mapping.csproj" />
     <ProjectReference Include="..\NorthwindTradeSuite.Persistence\NorthwindTradeSuite.Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Identity\" />
   </ItemGroup>
 
 </Project>
