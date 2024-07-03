@@ -1,11 +1,10 @@
-using AutoMapper;
-using NorthwindTradeSuite.Domain.Abstraction;
+using NorthwindTradeSuite.Application.Extensions;
+using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs;
 using NorthwindTradeSuite.Infrastructure.Extensions;
 using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence;
-using NorthwindTradeSuite.Persistence.Repositories.Contracts;
-using NorthwindTradeSuite.Persistence.Repositories.Implementation;
+using NorthwindTradeSuite.Services.Extensions;
 using System.Reflection;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
@@ -22,18 +21,19 @@ webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>();
 
 Assembly[] assemblies = new Assembly[]
 {
-    Assembly.GetAssembly(typeof(BaseEntity<string>))!,
-    Assembly.GetAssembly(typeof(DTO))!
+    Assembly.GetAssembly(typeof(EntityMarker))!,
+    Assembly.GetAssembly(typeof(DTOMarker))!
 };
 
 AutoMapperConfigurator.RegisterMappings(assemblies.ToArray());
 
-webApplicationBuilder.Services.AddSingleton<IMapper>(AutoMapperConfigurator.MapperInstance);
+webApplicationBuilder.Services.AddSingleton(AutoMapperConfigurator.MapperInstance);
 
-webApplicationBuilder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-webApplicationBuilder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(DeletableEntityRepository<>));
+webApplicationBuilder.Services.AddPersistenceLayerServices();
 
-webApplicationBuilder.Services.AddServiceLayer();
+webApplicationBuilder.Services.AddDatabaseServices();
+
+webApplicationBuilder.Services.AddApplicationLayer();
 
 var webApplication = webApplicationBuilder.Build();
 

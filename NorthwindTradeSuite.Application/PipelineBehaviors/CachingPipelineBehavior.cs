@@ -1,41 +1,69 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Application.Contracts;
+using System.Text;
+using System.Text.Json;
 
 namespace NorthwindTradeSuite.Application.PipelineBehaviors
 {
-    public class CachingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IQueryable<TResponse>, ICacheable
+    public class CachingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheable
     {
-        private IMemoryCache _memoryCache = null!;
+        private readonly ILogger<CachingPipelineBehavior<TRequest, TResponse>> _logger;
 
-        private ILogger<CachingPipelineBehavior<TRequest, TResponse>> _logger = null!;
+        private readonly IDistributedCache _distributedCache;
 
-        public CachingPipelineBehavior(IMemoryCache memoryCache, ILogger<CachingPipelineBehavior<TRequest, TResponse>> logger)
+        public CachingPipelineBehavior(ILogger<CachingPipelineBehavior<TRequest, TResponse>> logger, IDistributedCache distributedCache)
         {
-            _memoryCache = memoryCache;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var requestName = typeof(TRequest).Name;
-            var cachedResult = _memoryCache.Get<TResponse>(request.Key);
-
-            if (cachedResult != null) 
+            if (request.BypassCache)
             {
-                _logger.LogInformation($"Cache hit for {requestName}");
-                return cachedResult;
+                return await next();
             }
 
-            _logger.LogInformation($"Cache miss for {requestName}");
+            TResponse response;
 
-            var data = await next();
+            async Task<TResponse> GetResponseAndAddToDistributedCache()
+            {
+                response = await next();
 
-            _memoryCache.Set(request.Key, data, request.Expiration);
+                if (response != null)
+                {
+                    var slidingExpiration = request.SlidingExpirationInMinutes == 0 ? 30 : request.SlidingExpirationInMinutes;
+                    var absoluteExpiration = request.AbsoluteExpirationInMinutes == 0 ? 60 : request.AbsoluteExpirationInMinutes;
 
-            return data;
+                    var distributedCacheEntryOptions = new DistributedCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(slidingExpiration))
+                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(absoluteExpiration));
+
+                    byte[] serializedResponseBytes = Encoding.Default.GetBytes(JsonSerializer.Serialize(response));
+
+                    await _distributedCache.SetAsync(request.CacheKey, serializedResponseBytes, distributedCacheEntryOptions, cancellationToken);
+                }
+
+                return response;
+            }
+
+            byte[]? cachedResponse = await _distributedCache.GetAsync(request.CacheKey, cancellationToken);
+
+            if (cachedResponse != null)
+            {
+                response = JsonSerializer.Deserialize<TResponse>(Encoding.Default.GetString(cachedResponse))!;
+                _logger.LogInformation($"Fetched from cache with key: {request.CacheKey}");
+            }
+            else
+            {
+                response = await GetResponseAndAddToDistributedCache();
+                _logger.LogInformation($"Added to cache with key: {request.CacheKey}");
+            }
+
+            return response;
         }
     }
 }

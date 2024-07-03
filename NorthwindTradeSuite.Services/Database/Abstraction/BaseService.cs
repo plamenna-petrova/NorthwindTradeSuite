@@ -15,8 +15,8 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
 
         protected BaseService(IBaseRepository<TEntity> baseRepository, IMapper mapper)
         {
-            BaseRepository = baseRepository;
-            Mapper = mapper;
+            BaseRepository = baseRepository ?? throw new ArgumentNullException(nameof(BaseRepository));
+            Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public virtual IQueryable<TEntity> GetAll(bool asNoTracking = false) => BaseRepository.GetAll(asNoTracking);

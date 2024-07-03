@@ -1,25 +1,32 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace NorthwindTradeSuite.Application.PipelineBehaviors
 {
     public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest
     {
-        private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger = null!;
+        private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger;
 
         public LoggingPipelineBehavior(ILogger<LoggingPipelineBehavior<TRequest, TResponse>> logger)
         {
-            _logger = logger;        
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));        
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            string requestName = typeof(TRequest).Name;
+            var correlationId = Guid.NewGuid().ToString()[..7];
+            var requestJSON = JsonSerializer.Serialize(request);
 
-            _logger.LogInformation($"Processing request {requestName}");
+            _logger.LogInformation($"Handling request {typeof(TRequest).Name} with correlation ID: {correlationId}, {requestJSON}");
 
-            return await next();
+            var response = await next();
+            var responseJSON = JsonSerializer.Serialize(response);
+
+            _logger.LogInformation($"Response for correlation ID: {correlationId}, {responseJSON}");
+
+            return response;
         }
     }
 }

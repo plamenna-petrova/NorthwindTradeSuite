@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NorthwindTradeSuite.Common.Attributes;
-using NorthwindTradeSuite.Domain.Abstraction;
-using NorthwindTradeSuite.Services.Database.Base.Contracts;
 
-namespace NorthwindTradeSuite.Infrastructure.Extensions
+namespace NorthwindTradeSuite.Services.Extensions
 {
-    public static class ServicesConfiguration
+    public static class DatabaseServicesConfiguration
     {
-        public static IServiceCollection AddServiceLayer(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddDatabaseServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
                 .Scan(scan => scan
-                    .FromAssemblyOf<IBaseService<BaseEntity<string>>>()
+                    .FromAssemblyOf<ServicesAssemblyMarker>()
                     .AddClasses(classes => classes.WithAttribute(typeof(TransientServiceAttribute)))
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());

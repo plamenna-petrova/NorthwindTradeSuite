@@ -8,8 +8,12 @@ namespace NorthwindTradeSuite.Application.Contracts
 {
     public interface ICacheable
     {
-        public string Key { get; }
+        bool BypassCache { get; }
 
-        public DateTimeOffset Expiration { get; }
+        string CacheKey { get; }
+
+        int SlidingExpirationInMinutes { get; }
+
+        int AbsoluteExpirationInMinutes { get; }
     }
 }

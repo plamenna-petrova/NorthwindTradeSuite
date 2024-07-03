@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.DTOs
+namespace NorthwindTradeSuite.Services.Extensions
 {
-    public class DTO
+    public class ServicesAssemblyMarker
     {
 
     }

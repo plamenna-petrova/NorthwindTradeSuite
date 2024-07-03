@@ -7,32 +7,42 @@ namespace NorthwindTradeSuite.Application.PipelineBehaviors
     public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>, IQuery<TResponse>
     {
-        private readonly ICollection<IValidator> _validators = null!;
-
+        private readonly ICollection<IValidator> _validators;
+                                                                                
         public ValidationPipelineBehavior(ICollection<IValidator> validators)
         {
-            _validators = validators;
+            _validators = validators ?? throw new ArgumentNullException(nameof(validators));
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var validationContext = new ValidationContext<TRequest>(request);
-
-            var validationResults = await Task.WhenAll(
-                _validators.Select(v => v.ValidateAsync(validationContext)));
-
-            var validationFailures = validationResults
-                .Where(vr => !vr.IsValid)
-                .SelectMany(vr => vr.Errors)
-                .Select(vr => vr.ErrorMessage);
-
-            if (validationFailures.Any())
+            if (next is null)
             {
-                var joinedValidationErrorsMessage = string.Join("\r\n", validationFailures);
-                throw new Exception(joinedValidationErrorsMessage);
+                throw new ArgumentNullException(nameof(next));
             }
 
-            return await next();
+            if (_validators.Any())
+            {
+                var validationContext = new ValidationContext<TRequest>(request);
+
+                var validationResults = await Task
+                    .WhenAll(_validators.Select(v => v.ValidateAsync(validationContext)))
+                    .ConfigureAwait(false);
+
+                var validationFailures = validationResults
+                    .Where(vr => !vr.IsValid)
+                    .SelectMany(vr => vr.Errors)
+                    .Select(vr => vr.ErrorMessage)
+                    .ToList();
+
+                if (validationFailures.Count > 0)
+                {
+                    var joinedValidationErrorsMessage = string.Join("\r\n", validationFailures);
+                    throw new ValidationException(joinedValidationErrorsMessage);
+                }
+            }
+
+            return await next().ConfigureAwait(false);
         }
     }
 }
