@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindTradeSuite.Common.GlobalConstants
 {
-    public class ExceptionMessages
+    public class ExceptionMessagesConstants
     {
         public const string GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE = "Entity with ID '{0}' not found";
 

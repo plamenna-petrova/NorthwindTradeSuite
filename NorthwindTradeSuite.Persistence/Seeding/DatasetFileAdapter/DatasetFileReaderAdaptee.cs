@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
-using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessages;
+using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessagesConstants;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {

@@ -1,3 +1,5 @@
+using NorthwindTradeSuite.API.Middlewares.Contracts;
+using NorthwindTradeSuite.API.Middlewares;
 using NorthwindTradeSuite.Application.Extensions;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs;
@@ -6,16 +8,9 @@ using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence;
 using NorthwindTradeSuite.Services.Extensions;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-webApplicationBuilder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-webApplicationBuilder.Services.AddEndpointsApiExplorer();
-
-webApplicationBuilder.Services.AddSwaggerGen();
 
 webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>();
 
@@ -34,6 +29,20 @@ webApplicationBuilder.Services.AddPersistenceLayerServices();
 webApplicationBuilder.Services.AddDatabaseServices();
 
 webApplicationBuilder.Services.AddApplicationLayer();
+
+webApplicationBuilder.Services.AddSingleton<IExceptionHandler, FluentValidationExceptionHandler>();
+
+webApplicationBuilder.Services
+    .AddControllers()
+    .AddJsonOptions(jsonOptions =>
+    {
+        jsonOptions.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
+webApplicationBuilder.Services.AddSwaggerGen();
+
+webApplicationBuilder.Services.AddEndpointsApiExplorer();
 
 var webApplication = webApplicationBuilder.Build();
 
@@ -54,6 +63,8 @@ if (webApplication.Environment.IsDevelopment())
 webApplication.UseHttpsRedirection();
 
 webApplication.UseAuthorization();
+
+webApplication.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 webApplication.MapControllers();
 

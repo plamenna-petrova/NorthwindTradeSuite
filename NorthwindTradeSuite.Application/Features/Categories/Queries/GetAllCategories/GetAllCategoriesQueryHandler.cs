@@ -1,0 +1,22 @@
+﻿using NorthwindTradeSuite.Application.Contracts;
+using NorthwindTradeSuite.DTOs.Responses.Categories;
+using NorthwindTradeSuite.Services.Database.Categories;
+
+namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllCategories
+{
+    public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery, List<GetCategoriesResponseDTO>>
+    {
+        private readonly ICategoryService _categoryService;
+
+        public GetAllCategoriesQueryHandler(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
+        public async Task<List<GetCategoriesResponseDTO>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        {
+            var allCategories = await _categoryService.GetAllAsync<GetCategoriesResponseDTO>(asNoTracking: true);
+            return allCategories;
+        }
+    }
+}

@@ -16,7 +16,11 @@
   <ItemGroup>
     <Folder Include="Features\Categories\Commands\" />
     <Folder Include="Features\Categories\Validators\" />
-    <Folder Include="Features\Categories\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NorthwindTradeSuite.DTOs\NorthwindTradeSuite.DTOs.csproj" />
+    <ProjectReference Include="..\NorthwindTradeSuite.Services\NorthwindTradeSuite.Services.csproj" />
   </ItemGroup>
 
 </Project>

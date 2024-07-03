@@ -3,7 +3,7 @@ using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
 using System.Linq.Expressions;
-using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessages;
+using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessagesConstants;
 
 namespace NorthwindTradeSuite.Services.Database.Abstraction
 {
