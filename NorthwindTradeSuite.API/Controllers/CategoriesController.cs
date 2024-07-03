@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllCategories;
+using NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategoryById;
+using NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategoryDetails;
 using NorthwindTradeSuite.DTOs.Responses.Categories;
 using System.Net;
 using static NorthwindTradeSuite.Common.GlobalConstants.HttpConstants;
@@ -16,6 +18,8 @@ namespace NorthwindTradeSuite.API.Controllers
 
         private const string SingleCategoryName = "category";
 
+        private const string CategoryByIdRouteName = "CategoryById";
+
         private const string CategoryDetailsRouteName = "CategoryDetails";
 
         private readonly IMediator _mediator;
@@ -27,17 +31,42 @@ namespace NorthwindTradeSuite.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(List<GetCategoriesResponseDTO>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<GetCategoriesResponseDTO>>> GetAllCategories()
+        [ProducesResponseType(typeof(List<CategoryResponseDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<CategoryResponseDTO>>> GetAllCategories()
         {
-            var allQueriedCategories = await _mediator.Send(new GetAllCategoriesQuery());
+            var getAllCategoriesQuery = new GetAllCategoriesQuery();
+            var allQueriedCategories = await _mediator.Send(getAllCategoriesQuery);
 
-            if (allQueriedCategories != null)
-            {
-                return Ok(allQueriedCategories);
-            }
+            return allQueriedCategories != null 
+                ? Ok(allQueriedCategories) : NotFound(string.Format(EntitiesNotFoundResult, CategoriesName));
+        }
 
-            return NotFound(string.Format(EntitiesNotFoundResult, CategoriesName));
+        [HttpGet("{id}", Name = CategoryByIdRouteName)]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(CategoryResponseDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CategoryResponseDTO>> GetCategoryById(string id)
+        {
+            var getCategoryByIdQuery = new GetCategoryByIdQuery(id);
+            var queriedCategoryById = await _mediator.Send(getCategoryByIdQuery);
+
+            return queriedCategoryById != null 
+                ? Ok(queriedCategoryById) : NotFound(string.Format(EntityByIdNotFoundResult, SingleCategoryName)); 
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("details/{id}", Name = CategoryDetailsRouteName)]
+        [ProducesResponseType(typeof(CategoryDetailsResponseDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CategoryDetailsResponseDTO>> GetAlbumTypeDetails(string id)
+        {
+            var getCategoryDetailsQuery = new GetCategoryDetailsQuery(id);
+            var queriedCategoryDetails = await _mediator.Send(getCategoryDetailsQuery);
+
+            return queriedCategoryDetails != null
+                ? Ok(queriedCategoryDetails) : NotFound(string.Format(EntityByIdNotFoundResult, SingleCategoryName));
         }
     }
 }

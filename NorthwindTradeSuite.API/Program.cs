@@ -62,7 +62,11 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseHttpsRedirection();
 
+webApplication.UseAuthentication();
+
 webApplication.UseAuthorization();
+
+webApplication.UseMiddleware<LoggingMiddleware>();
 
 webApplication.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 

@@ -4,7 +4,7 @@ using NorthwindTradeSuite.Services.Database.Categories;
 
 namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllCategories
 {
-    public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery, List<GetCategoriesResponseDTO>>
+    public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery, List<CategoryResponseDTO>>
     {
         private readonly ICategoryService _categoryService;
 
@@ -13,9 +13,9 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllCate
             _categoryService = categoryService;
         }
 
-        public async Task<List<GetCategoriesResponseDTO>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<List<CategoryResponseDTO>> Handle(GetAllCategoriesQuery getAllCategoriesQuery, CancellationToken cancellationToken)
         {
-            var allCategories = await _categoryService.GetAllAsync<GetCategoriesResponseDTO>(asNoTracking: true);
+            var allCategories = await _categoryService.GetAllAsync<CategoryResponseDTO>(asNoTracking: true);
             return allCategories;
         }
     }
