@@ -1,0 +1,12 @@
+﻿[
+  {
+    "id": "9A1B3C7D-6E8F-4B5A-9C8E-7D6E8F4B5A9C",
+    "name": "Admin",
+    "createdAt": "2024-07-04T00:00:00Z"
+  },
+  {
+    "id": "8E7D6F5A-4C3B-2A1B-9C7D-6E8F4B5A9C7D",
+    "name": "User",
+    "createdAt": "2024-07-04T00:00:00Z"
+  }
+]

@@ -8,6 +8,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 {
     public class CategoryConstants
     {
+        // Database
         public const string CATEGORY_ID_COLUMN = "CategoryID";
 
         public const string CATEGORY_NAME_COLUMN = "CategoryName";
@@ -19,5 +20,14 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
         public const int CATEGORY_NAME_MAX_LENGTH = 50;
 
         public const int CATEGORY_DESCRIPTION_MAX_LENGTH = 300;
+
+        // API
+        public const string CategoriesName = "categories";
+
+        public const string SingleCategoryName = "category";
+
+        public const string CategoryByIdRouteName = "CategoryById";
+
+        public const string CategoryDetailsRouteName = "CategoryDetails";
     }
 }

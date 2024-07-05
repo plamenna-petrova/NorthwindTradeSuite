@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Persistence.Seeders.Contracts;
 using NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders;
+using NorthwindTradeSuite.Persistence.Seeding.IdentitySeeders;
+using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.JSONFileNamesConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.CSVFileNamesConstants;
 
 namespace NorthwindTradeSuite.Persistence.Seeding
@@ -22,6 +24,8 @@ namespace NorthwindTradeSuite.Persistence.Seeding
 
             var seeders = new List<ISeeder>
             {
+                new RolesSeeder(serviceProvider, logger, ROLES_JSON_FILE_NAME),
+                new UsersSeeder(serviceProvider, logger, USERS_JSON_FILE_NAME),
                 new CategoriesSeeder(serviceProvider, logger, CATEGORIES_CSV_FILE_NAME),
                 new CustomersSeeder(serviceProvider, logger, CUSTOMERS_CSV_FILE_NAME),
                 new EmployeesSeeder(serviceProvider, logger, EMPLOYEES_CSV_FILE_NAME),

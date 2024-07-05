@@ -1,0 +1,18 @@
+﻿[
+  {
+    "id": "D9F1A8D7-8A6E-4B75-BD1C-3E5C6011FC32",
+    "userName": "admin@example.com",
+    "email": "admin@example.com",
+    "password": "Xy3#Zz4$Ww",
+    "roles": [ "Admin" ],
+    "createdAt": "2024-07-04T00:00:00Z"
+  },
+  {
+    "id": "7D6E8F5A-4C3B-2A1B-9C7D-6E8F4B5A9C1D",
+    "userName": "user@example.com",
+    "email": "user@example.com",
+    "password": "Xy3#Zz4$Ww",
+    "roles": [ "User" ],
+    "createdAt": "2024-07-04T00:00:00Z"
+  }
+]

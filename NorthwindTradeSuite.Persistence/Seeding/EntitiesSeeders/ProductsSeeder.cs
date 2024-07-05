@@ -30,7 +30,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
             {
                 IDatasetSeedingTarget<SeedProductDTO> datasetSeedingTarget = new DatasetSeedingAdapter<SeedProductDTO>(DatasetFileName);
 
-                var productsForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding();
+                var productsForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding(Logger);
                 var mappedProductsForSeeding = productsForSeeding.To<Product>().ToArray();
 
                 await deletableProductRepository.AddRangeAsync(mappedProductsForSeeding);

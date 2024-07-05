@@ -1,4 +1,5 @@
 ﻿using CsvHelper.Configuration;
+using Microsoft.Extensions.Logging;
 using NorthwindTradeSuite.Domain.Contracts;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
@@ -14,6 +15,6 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 
         public string DatasetFileName { get; set; }
 
-        public IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding() => datasetFileReaderAdaptee.ReadDataset(DatasetFileName);
+        public IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding(ILogger logger) => datasetFileReaderAdaptee.ReadDataset(DatasetFileName, logger);
     }
 }

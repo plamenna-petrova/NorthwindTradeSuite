@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.IdentityModel.Tokens;
 using NorthwindTradeSuite.Application.Contracts;
 
 namespace NorthwindTradeSuite.Application.PipelineBehaviors
 {
-    public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : ICommand<TResponse>, IQuery<TResponse>
+    public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class
     {
-        private readonly ICollection<IValidator> _validators;
+        private readonly IEnumerable<IValidator> _validators;
                                                                                 
-        public ValidationPipelineBehavior(ICollection<IValidator> validators)
+        public ValidationPipelineBehavior(IEnumerable<IValidator> validators)
         {
             _validators = validators ?? throw new ArgumentNullException(nameof(validators));
         }

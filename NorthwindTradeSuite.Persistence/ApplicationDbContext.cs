@@ -139,7 +139,7 @@ namespace NorthwindTradeSuite.Persistence
                         case EntityState.Added:
                             if (string.IsNullOrWhiteSpace(changeTrackerEntityEntry.Entity.Id))
                             {
-                                changeTrackerEntityEntry.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntry).ToString()[..7];
+                                changeTrackerEntityEntry.Entity.Id = sequentialGuidValueGenerator.Next(changeTrackerEntityEntry).ToString()[..8];
                             }
 
                             if (changeTrackerEntityEntry.Entity.CreatedAt == default)

@@ -7,7 +7,7 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
     {
         public ApplicationRole(string name) : base(name)
         {
-            Id = Guid.NewGuid().ToString()[..7];
+            Id = Guid.NewGuid().ToString()[..8];
         }
 
         public ApplicationRole() : this(null!)

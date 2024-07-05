@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindTradeSuite.API.Middlewares.Contracts;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
@@ -11,13 +11,10 @@ namespace NorthwindTradeSuite.API.Middlewares
 
         private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
 
-        private readonly IExceptionHandler _exceptionHandler;
-
-        public GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlingMiddleware> logger, IExceptionHandler exceptionHandler)
+        public GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlingMiddleware> logger)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _exceptionHandler = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -34,9 +31,33 @@ namespace NorthwindTradeSuite.API.Middlewares
             }
             catch (Exception exception)
             {
-                bool isValidationExceptionHandled = await _exceptionHandler.TryHandleAsync(httpContext, exception, CancellationToken.None);
+                if (exception is ValidationException fluentValidationException)
+                {
+                    var fluentValidationProblemDetails = new ProblemDetails
+                    {
+                        Instance = httpContext.Request.Path,
+                        Title = "One or more validation errors occurred.",
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                    };
 
-                if (!isValidationExceptionHandled)
+                    httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                    List<string> fluentValidationErrorsMessages = new();
+
+                    foreach (var fluentValidationError in fluentValidationException.Errors)
+                    {
+                        fluentValidationErrorsMessages.Add(fluentValidationError.ErrorMessage);
+                    }
+
+                    fluentValidationProblemDetails.Extensions.Add("errors", fluentValidationErrorsMessages);
+
+                    fluentValidationProblemDetails.Status = httpContext.Response.StatusCode;
+
+                    _logger.LogError(exception, message: fluentValidationProblemDetails.Title);
+
+                    await httpContext.Response.WriteAsJsonAsync(fluentValidationProblemDetails, CancellationToken.None).ConfigureAwait(false);
+                }
+                else
                 {
                     HttpStatusCode httpStatusCode = exception switch
                     {

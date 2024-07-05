@@ -7,7 +7,7 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
     {
         public ApplicationUser()
         {
-            Id = Guid.NewGuid().ToString()[..7];
+            Id = Guid.NewGuid().ToString()[..8];
             ApplicationUserRoles = new HashSet<ApplicationUserRole>();
             Claims = new HashSet<IdentityUserClaim<string>>();
             Logins = new HashSet<IdentityUserLogin<string>>();
@@ -16,6 +16,10 @@ namespace NorthwindTradeSuite.Domain.Entities.Identity
         public DateTime CreatedAt { get; set; }
 
         public DateTime? ModifiedAt { get; set; }
+
+        public string RefreshToken { get; set; } = null!;
+
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public virtual ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; }
 

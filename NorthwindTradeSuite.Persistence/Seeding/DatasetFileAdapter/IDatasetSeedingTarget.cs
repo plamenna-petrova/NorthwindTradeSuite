@@ -1,10 +1,9 @@
-﻿using NorthwindTradeSuite.Domain.Abstraction;
-using NorthwindTradeSuite.Domain.Contracts;
+﻿using Microsoft.Extensions.Logging;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
     public interface IDatasetSeedingTarget<TSeedingDTO> where TSeedingDTO : class
     {
-        IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding();
+        IQueryable<TSeedingDTO> RetrieveDatasetObjectsForSeeding(ILogger logger);
     }
 }

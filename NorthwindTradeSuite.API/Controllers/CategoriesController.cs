@@ -7,6 +7,7 @@ using NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategoryDet
 using NorthwindTradeSuite.DTOs.Responses.Categories;
 using System.Net;
 using static NorthwindTradeSuite.Common.GlobalConstants.HttpConstants;
+using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstants;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
@@ -14,14 +15,6 @@ namespace NorthwindTradeSuite.API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private const string CategoriesName = "categories";
-
-        private const string SingleCategoryName = "category";
-
-        private const string CategoryByIdRouteName = "CategoryById";
-
-        private const string CategoryDetailsRouteName = "CategoryDetails";
-
         private readonly IMediator _mediator;
 
         public CategoriesController(IMediator mediator)

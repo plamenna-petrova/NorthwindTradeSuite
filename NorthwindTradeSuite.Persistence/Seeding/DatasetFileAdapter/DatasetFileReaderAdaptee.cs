@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Reflection;
 using static NorthwindTradeSuite.Common.GlobalConstants.Seeding.DirectoriesAndFileLocationsConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessagesConstants;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Logging;
 
 namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
 {
@@ -16,7 +18,7 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
             { DatasetFileType.JSON, JSON_FILES_FOLDER }
         };
 
-        public IQueryable<TSeedingDTO> ReadDataset(string datasetFileName)
+        public IQueryable<TSeedingDTO> ReadDataset(string datasetFileName, ILogger logger)
         {
             List<TSeedingDTO> readDatasetObjects = null!;
 
@@ -40,7 +42,22 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
                         break;
                     case DatasetFileType.JSON:
                         string jsonFileContentForSeeding = File.ReadAllText(datasetFilePath);
-                        readDatasetObjects = JsonConvert.DeserializeObject<List<TSeedingDTO>>(jsonFileContentForSeeding)!;
+                        var deserializedSeedingDTOs = JsonConvert.DeserializeObject<List<TSeedingDTO>>(jsonFileContentForSeeding)!;
+
+                        var validSeedingDTOs = new List<TSeedingDTO>();
+
+                        foreach (var deserializedSeedingDTO in deserializedSeedingDTOs)
+                        {
+                            if (!IsSeedingDTOValid(deserializedSeedingDTO))
+                            {
+                                logger.LogError($"Failed to seed entity: {deserializedSeedingDTO.GetType().Name}");
+                                continue;
+                            }
+
+                            validSeedingDTOs.Add(deserializedSeedingDTO);
+                        }
+
+                        readDatasetObjects = validSeedingDTOs;
                         break;
                 }
             }
@@ -98,5 +115,13 @@ namespace NorthwindTradeSuite.Persistence.Seeding.DatasetFileAdapter
         }
 
         private string GetDatasetFileExtension(string datasetFileName) => datasetFileName.Split(".").Last();
+
+        private bool IsSeedingDTOValid(object seedingDTOToValidate)
+        {
+            var validationContext = new ValidationContext(seedingDTOToValidate);
+            var validationResults = new List<ValidationResult>();
+
+            return Validator.TryValidateObject(seedingDTOToValidate, validationContext, validationResults, validateAllProperties: true);
+        }
     }
 }
