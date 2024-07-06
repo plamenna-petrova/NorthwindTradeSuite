@@ -13,11 +13,13 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
 
             RuleFor(x => x.RegisterRequestDTO.Email)
                 .NotEmpty()
+                .WithMessage(REQUIRED_EMAIL_ERROR_MESSAGE)
                 .EmailAddress()
                 .WithMessage(REQUIRED_VALID_EMAIL_ERROR_MESSAGE);
 
             RuleFor(x => x.RegisterRequestDTO.Password)
                 .NotEmpty()
+                .WithMessage(REQUIRED_PASSWORD_ERROR_MESSAGE)
                 .MinimumLength(10)
                 .WithMessage(PASSWORD_MINIMUM_LENGTH_ERROR_MESSAGE)
                 .Matches(COMPLEX_PASSWORD_REGEX)
@@ -25,7 +27,9 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
 
             RuleFor(x => x.RegisterRequestDTO.ConfirmPassword)
                 .NotEmpty()
-                .Equal(x => x.RegisterRequestDTO.Password);
+                .WithMessage(REQUIRED_CONFIRM_PASSWORD_ERROR_MESSAGE)
+                .Equal(x => x.RegisterRequestDTO.Password)
+                .WithMessage(CONFIRM_PASSWORD_MISMATCH_ERROR_MESSAGE);
         }
     }
 }

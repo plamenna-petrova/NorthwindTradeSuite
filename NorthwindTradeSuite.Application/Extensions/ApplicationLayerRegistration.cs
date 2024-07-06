@@ -2,6 +2,8 @@
 using FluentValidation;
 using NorthwindTradeSuite.Application.PipelineBehaviors;
 using NorthwindTradeSuite.Application.Features.Accounts.Commands.Register;
+using MediatR;
+using System.Reflection;
 
 namespace NorthwindTradeSuite.Application.Extensions
 {

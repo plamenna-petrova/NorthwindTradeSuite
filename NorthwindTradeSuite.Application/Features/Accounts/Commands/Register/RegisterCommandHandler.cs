@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using NorthwindTradeSuite.Application.Contracts;
 using NorthwindTradeSuite.Common.Results;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
@@ -8,7 +9,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationUser
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result>
+    public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Result>
     {
         private readonly IValidator<RegisterCommand> _validator;
 

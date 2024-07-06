@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
+using ValidationException = NorthwindTradeSuite.Application.Exceptions.ValidationException;
 
 namespace NorthwindTradeSuite.API.Middlewares
 {
@@ -31,26 +31,18 @@ namespace NorthwindTradeSuite.API.Middlewares
             }
             catch (Exception exception)
             {
-                if (exception is ValidationException fluentValidationException)
+                if (exception is ValidationException validationException)
                 {
                     var fluentValidationProblemDetails = new ProblemDetails
                     {
-                        Instance = httpContext.Request.Path,
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                         Title = "One or more validation errors occurred.",
-                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                        Instance = httpContext.Request.Path
                     };
 
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-                    List<string> fluentValidationErrorsMessages = new();
-
-                    foreach (var fluentValidationError in fluentValidationException.Errors)
-                    {
-                        fluentValidationErrorsMessages.Add(fluentValidationError.ErrorMessage);
-                    }
-
-                    fluentValidationProblemDetails.Extensions.Add("errors", fluentValidationErrorsMessages);
-
+                    fluentValidationProblemDetails.Extensions.Add("errors", validationException.ErrorsDictionary);
                     fluentValidationProblemDetails.Status = httpContext.Response.StatusCode;
 
                     _logger.LogError(exception, message: fluentValidationProblemDetails.Title);
