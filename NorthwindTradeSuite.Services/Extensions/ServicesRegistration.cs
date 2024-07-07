@@ -3,7 +3,7 @@ using NorthwindTradeSuite.Common.Attributes;
 
 namespace NorthwindTradeSuite.Services.Extensions
 {
-    public static class DatabaseServicesConfiguration
+    public static class ServicesRegistration
     {
         public static IServiceCollection AddDatabaseServices(this IServiceCollection serviceCollection)
         {

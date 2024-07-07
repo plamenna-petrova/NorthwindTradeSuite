@@ -58,6 +58,10 @@ namespace NorthwindTradeSuite.Persistence.Seeding.IdentitySeeders
                         Logger.LogError($"Failed to create user: {applicationUserToCreate.UserName}. Errors: {createUserIdentityResultErrorsDescriptions}");
                     }
                 }
+                else
+                {
+                    Logger.LogError($"A user with the username '{userForSeeding.UserName}' already exists");
+                }
             }
         }
     }

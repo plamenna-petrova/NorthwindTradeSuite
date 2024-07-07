@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.Services.Extensions
+namespace NorthwindTradeSuite.Services
 {
     public class ServicesAssemblyMarker
     {

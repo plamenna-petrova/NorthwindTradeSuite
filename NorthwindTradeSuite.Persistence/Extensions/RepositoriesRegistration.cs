@@ -2,9 +2,9 @@
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Persistence.Repositories.Implementation;
 
-namespace NorthwindTradeSuite.Persistence
+namespace NorthwindTradeSuite.Persistence.Extensions
 {
-    public static class PersistenceLayerServicesRegistration
+    public static class RepositoriesRegistration
     {
         public static IServiceCollection AddPersistenceLayerServices(this IServiceCollection serviceCollection)
         {

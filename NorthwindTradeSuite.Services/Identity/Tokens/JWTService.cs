@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NorthwindTradeSuite.Common.Attributes;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using System.Text;
 
 namespace NorthwindTradeSuite.Services.Identity.Tokens
 {
+    [TransientService]
     public class JWTService : IJWTService
     {
         private readonly UserManager<ApplicationUser> _userManager;

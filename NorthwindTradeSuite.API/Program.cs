@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NorthwindTradeSuite.API.Middlewares;
@@ -12,15 +11,14 @@ using NorthwindTradeSuite.DTOs;
 using NorthwindTradeSuite.Infrastructure.Extensions;
 using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence;
+using NorthwindTradeSuite.Persistence.Extensions;
 using NorthwindTradeSuite.Services.Extensions;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
-
-var corsPolicyOptions = webApplicationBuilder.Configuration.GetSection("CorsPolicyOptions");
-var jwtOptions = webApplicationBuilder.Configuration.GetSection("JWT");
 
 webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>();
 
@@ -60,7 +58,7 @@ webApplicationBuilder.Services
 webApplicationBuilder.Services.AddCors(corsOptions =>
 {
     corsOptions.AddPolicy("AllowedOrigins",
-             p => p.WithOrigins(corsPolicyOptions["Hosts"])
+             p => p.WithOrigins(webApplicationBuilder.Configuration["CorsPolicyOptions:Hosts"])
                    .AllowAnyMethod()
                    .AllowAnyHeader());
 });
@@ -75,17 +73,26 @@ webApplicationBuilder.Services
     {
         jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
         {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions["Key"])),
-            ValidateAudience = true,
-            ValidAudience = jwtOptions["Audience"],
             ValidateIssuer = true,
-            ValidIssuer = jwtOptions["Issuer"],
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ClockSkew = TimeSpan.Zero
+            ValidIssuer = webApplicationBuilder.Configuration["JWT:Issuer"],
+            ValidAudience = webApplicationBuilder.Configuration["JWT:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webApplicationBuilder.Configuration["JWT:Key"])),
+            ClockSkew = TimeSpan.Zero,
         };
     }
 );
+
+webApplicationBuilder.Services
+    .AddAuthorization(authorizationOptions =>
+    {
+        authorizationOptions.AddPolicy("UserPolicy", 
+            authorizationPolicyBuilder => authorizationPolicyBuilder.RequireRole(NORMAL_USER, ADMINISTRATOR));
+        authorizationOptions.AddPolicy("AdminPolicy", 
+            authorizationPolicyBuilder => authorizationPolicyBuilder.RequireRole(ADMINISTRATOR));
+    });
 
 webApplicationBuilder.Services
     .AddSwaggerGen(swaggerGenOptions =>
@@ -120,7 +127,6 @@ webApplicationBuilder.Services
     {
         cookieAuthenticationOptions.ExpireTimeSpan = TimeSpan.FromHours(1);
     });
-
 
 var webApplication = webApplicationBuilder.Build();
 

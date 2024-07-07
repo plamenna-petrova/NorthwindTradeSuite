@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using NorthwindTradeSuite.Application.Contracts;
 using NorthwindTradeSuite.Common.Results;
 using NorthwindTradeSuite.Domain.Entities.Identity;
@@ -11,20 +9,15 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
 {
     public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Result>
     {
-        private readonly IValidator<RegisterCommand> _validator;
-
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RegisterCommandHandler(UserManager<ApplicationUser> userManager, IValidator<RegisterCommand> validator)
+        public RegisterCommandHandler(UserManager<ApplicationUser> userManager)
         {
-            _validator = validator;
             _userManager = userManager;
         }
 
         public async Task<Result> Handle(RegisterCommand registerCommand, CancellationToken cancellationToken)
         {
-            _validator.ValidateAndThrow(registerCommand);
-
             var applicationUserToCreate = new ApplicationUser
             {
                 UserName = registerCommand.RegisterRequestDTO.UserName,
@@ -33,15 +26,20 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
                 EmailConfirmed = true
             };
 
-            var createApplicationUserResult = await _userManager.CreateAsync(applicationUserToCreate, registerCommand.RegisterRequestDTO.Password);
-
-            if (createApplicationUserResult.Succeeded)
+            if (_userManager.Users.All(u => u.UserName != applicationUserToCreate.UserName))
             {
-                await _userManager.AddToRoleAsync(applicationUserToCreate, NORMAL_USER);
-                return Result.Success(USER_REGISTRATION_SUCCESS_MESSAGE);
+                var createApplicationUserResult = await _userManager.CreateAsync(applicationUserToCreate, registerCommand.RegisterRequestDTO.Password);
+
+                if (createApplicationUserResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(applicationUserToCreate, NORMAL_USER);
+                    return Result.Success(USER_REGISTRATION_SUCCESS_MESSAGE);
+                }
+
+                return Result.Failure(createApplicationUserResult.Errors.Select(ie => ie.Description).ToArray());
             }
 
-            return Result.Failure(createApplicationUserResult.Errors.Select(ie => ie.Description).ToArray());
+            return Result.Failure(new string[] { $"A user with the username: '{applicationUserToCreate.UserName}' already exists" });
         }
     }
 }

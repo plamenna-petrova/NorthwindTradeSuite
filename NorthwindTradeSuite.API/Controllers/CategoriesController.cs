@@ -23,7 +23,7 @@ namespace NorthwindTradeSuite.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "AdminPolicy")]
         [ProducesResponseType(typeof(List<CategoryResponseDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<CategoryResponseDTO>>> GetAllCategories()

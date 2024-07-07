@@ -8,7 +8,7 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Identity
 {
     public class ApplicationRoleConstants
     {
-        public const string ADMINISTRATOR = "Administrator";
+        public const string ADMINISTRATOR = "Admin";
 
         public const string NORMAL_USER = "User";
     }

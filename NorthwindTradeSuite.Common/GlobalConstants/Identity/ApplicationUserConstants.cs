@@ -37,5 +37,9 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Identity
         public const string CONFIRM_PASSWORD_MISMATCH_ERROR_MESSAGE = "The confirm password must match the password";
 
         public const string USER_REGISTRATION_SUCCESS_MESSAGE = "User registered successfully";
+
+        public const string REQUIRED_ACCESS_TOKEN_ERROR_MESSAGE = "Access token is required";
+
+        public const string REQUIRED_REFRESH_TOKEN_ERROR_MESSAGE = "Refresh token is required";
     }
 }

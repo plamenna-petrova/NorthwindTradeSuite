@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
-using NorthwindTradeSuite.Application.Contracts;
 using ValidationException = NorthwindTradeSuite.Application.Exceptions.ValidationException;
 
 namespace NorthwindTradeSuite.Application.PipelineBehaviors
 {
     public sealed class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-       where TRequest : class, ICommand<TResponse>
+       where TRequest : class, IRequest<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
