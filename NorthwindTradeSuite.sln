@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Application", "NorthwindTradeSuite.Application\NorthwindTradeSuite.Application.csproj", "{D5AEA4AC-1173-4F96-9D58-DDF42026E985}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTradeSuite.Mapping", "NorthwindTradeSuite.Mapping\NorthwindTradeSuite.Mapping.csproj", "{094AE3B0-1A2B-4174-A021-BA257339F4F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Mapping", "NorthwindTradeSuite.Mapping\NorthwindTradeSuite.Mapping.csproj", "{094AE3B0-1A2B-4174-A021-BA257339F4F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTradeSuite.Mapping.Contracts", "NorthwindTradeSuite.Mapping.Contracts\NorthwindTradeSuite.Mapping.Contracts.csproj", "{FFBEBCCC-D2DB-42A0-B2C4-812B0A654BFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTradeSuite.Mapping.Contracts", "NorthwindTradeSuite.Mapping.Contracts\NorthwindTradeSuite.Mapping.Contracts.csproj", "{FFBEBCCC-D2DB-42A0-B2C4-812B0A654BFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
