@@ -33,9 +33,9 @@ AutoMapperConfigurator.RegisterMappings(assemblies.ToArray());
 
 webApplicationBuilder.Services.AddSingleton(AutoMapperConfigurator.MapperInstance);
 
-webApplicationBuilder.Services.AddPersistenceLayerServices();
+webApplicationBuilder.Services.AddRepositories();
 
-webApplicationBuilder.Services.AddDatabaseServices();
+webApplicationBuilder.Services.AddServices();
 
 webApplicationBuilder.Services.AddApplicationLayer();
 

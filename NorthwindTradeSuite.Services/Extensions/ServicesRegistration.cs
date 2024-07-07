@@ -5,7 +5,7 @@ namespace NorthwindTradeSuite.Services.Extensions
 {
     public static class ServicesRegistration
     {
-        public static IServiceCollection AddDatabaseServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
                 .Scan(scan => scan
