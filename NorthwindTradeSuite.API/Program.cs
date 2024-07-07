@@ -16,6 +16,7 @@ using NorthwindTradeSuite.Services.Extensions;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationUserConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
@@ -42,7 +43,9 @@ webApplicationBuilder.Services
     .AddIdentity<ApplicationUser, ApplicationRole>(identityOptions =>
     {
         identityOptions.SignIn.RequireConfirmedAccount = false;
-        identityOptions.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
+        identityOptions.SignIn.RequireConfirmedEmail = false;
+        identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
+        identityOptions.User.AllowedUserNameCharacters = ALLOWED_USERNAME_CHARACTERS;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -57,15 +60,14 @@ webApplicationBuilder.Services
 
 webApplicationBuilder.Services.AddCors(corsOptions =>
 {
-    corsOptions.AddPolicy("AllowedOrigins",
-             p => p.WithOrigins(webApplicationBuilder.Configuration["CorsPolicyOptions:Hosts"])
-                   .AllowAnyMethod()
-                   .AllowAnyHeader());
+    corsOptions.AddPolicy("AllowAll", corsPolicyBuilder =>
+        corsPolicyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
 
 webApplicationBuilder.Services
     .AddAuthentication(authenticationOptions =>
     {
+        authenticationOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         authenticationOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         authenticationOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
@@ -80,28 +82,73 @@ webApplicationBuilder.Services
             ValidIssuer = webApplicationBuilder.Configuration["JWT:Issuer"],
             ValidAudience = webApplicationBuilder.Configuration["JWT:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webApplicationBuilder.Configuration["JWT:Key"])),
-            ClockSkew = TimeSpan.Zero,
+            ClockSkew = TimeSpan.FromMinutes(5)
         };
-    }
-);
+
+        jwtBearerOptions.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = authenticationFailedContext =>
+            {
+                authenticationFailedContext.Response.OnStarting(() =>
+                {
+                    var logger = authenticationFailedContext.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogError($"Authentication failed: {authenticationFailedContext.Exception.Message}");
+                    return Task.CompletedTask;
+                });
+                
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = tokenValidatedContext =>
+            {
+                var logger = tokenValidatedContext.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogInformation($"Token validated for user: {tokenValidatedContext.Principal!.Identity!.Name}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = jwtBearerChallengeContext =>
+            {
+                jwtBearerChallengeContext.Response.OnStarting(() =>
+                {
+                    var logger = jwtBearerChallengeContext.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogError($"OnChallenge error: {jwtBearerChallengeContext.ErrorDescription}");
+                    return Task.CompletedTask;
+                });
+
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 webApplicationBuilder.Services
     .AddAuthorization(authorizationOptions =>
     {
-        authorizationOptions.AddPolicy("UserPolicy", 
-            authorizationPolicyBuilder => authorizationPolicyBuilder.RequireRole(NORMAL_USER, ADMINISTRATOR));
-        authorizationOptions.AddPolicy("AdminPolicy", 
-            authorizationPolicyBuilder => authorizationPolicyBuilder.RequireRole(ADMINISTRATOR));
+        authorizationOptions.AddPolicy(USER_POLICY, authorizationPolicyBuilder =>
+        {
+            authorizationPolicyBuilder.RequireRole(NORMAL_USER, ADMINISTRATOR);
+        });
+
+        authorizationOptions.AddPolicy(ADMINISTRATOR_POLICY, authorizationPolicyBuilder =>
+        {
+            authorizationPolicyBuilder.RequireRole(ADMINISTRATOR);
+        });
     });
 
 webApplicationBuilder.Services
     .AddSwaggerGen(swaggerGenOptions =>
     {
+        swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Title = "Northwind_Trade_Suite_API",
+            Version = "v1",
+        });
+
         swaggerGenOptions.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
         {
-            In = ParameterLocation.Header,
             Name = "Authorization",
-            Type = SecuritySchemeType.ApiKey
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter the JWT token with format: Bearer[space] token"
         });
 
         swaggerGenOptions.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -111,8 +158,8 @@ webApplicationBuilder.Services
                 {
                     Reference = new OpenApiReference
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = JwtBearerDefaults.AuthenticationScheme
+                        Id = "Bearer",
+                        Type = ReferenceType.SecurityScheme
                     }
                 },
                 Array.Empty<string>()
@@ -144,6 +191,10 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
+
+webApplication.UseRouting();
+
+webApplication.UseCors("AllowAll");
 
 webApplication.UseAuthentication();
 
