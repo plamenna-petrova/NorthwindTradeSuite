@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NorthwindTradeSuite.Common.Enums;
 using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
@@ -53,6 +54,17 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<List<TDTO>>(entities);
         }
 
+        public async Task<List<TEntity>> GetAllFilteredAsync(
+            Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteredSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!)
+                => await BaseRepository.GetAllFilteredAsync(filterExpression, filteredSource, asNoTracking, includeProperties);
+
+        public async Task<List<TDTO>> GetAllFilteredAsync<TDTO>(
+            Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteredSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!)
+        {
+            var filteredEntities = await BaseRepository.GetAllFilteredAsync(filterExpression, filteredSource, asNoTracking, includeProperties);
+            return Mapper.Map<List<TDTO>>(filteredEntities);
+        }
+
         public virtual TDTO GetById<TDTO>(string id)
         {
             var retrievedEntity = GetById(id);
@@ -83,6 +95,17 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(firstOrDefaultEntity);
         }
 
+        public async Task<TEntity?> GetFirstOrDefaultIncludingAsync(
+            Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+                => await BaseRepository.GetFirstOrDefaultIncludingAsync(filterExpression, asNoTracking, includeProperties);
+
+        public async Task<TDTO?> GetFirstOrDefaultIncludingAsync<TDTO>(
+            Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var firstOrDefaultEntity = await BaseRepository.GetFirstOrDefaultIncludingAsync(filterExpression, asNoTracking, includeProperties);
+            return Mapper.Map<TDTO>(firstOrDefaultEntity);
+        }
+
         public virtual TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => BaseRepository.GetSingleOrDefaultByCondition(filterExpression, asNoTracking);
 
@@ -98,6 +121,17 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
         public virtual async Task<TDTO?> GetSingleOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
         {
             var singleOrDefaultEntity = await BaseRepository.GetSingleOrDefaultByConditionAsync(filterExpression, asNoTracking);
+            return Mapper.Map<TDTO>(singleOrDefaultEntity);
+        }
+
+        public async Task<TEntity?> GetSingleOrDefaultIncludingAsync(
+            Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+                => await BaseRepository.GetFirstOrDefaultIncludingAsync(filterExpression, asNoTracking, includeProperties);
+
+        public async Task<TDTO?> GetSingleOrDefaultIncludingAsync<TDTO>(
+            Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var singleOrDefaultEntity = await BaseRepository.GetFirstOrDefaultIncludingAsync(filterExpression, asNoTracking, includeProperties);
             return Mapper.Map<TDTO>(singleOrDefaultEntity);
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using NorthwindTradeSuite.Common.Enums;
+using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 {
@@ -14,7 +15,15 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
+        IQueryable<TDTO> GetAllByCondition<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
         Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
+        Task<List<TDTO>> GetAllByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
+        Task<List<TEntity>> GetAllFilteredAsync(Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteringSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!);
+
+        Task<List<TDTO>> GetAllFilteredAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteringSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!);
 
         TEntity GetById(string id);
 
@@ -32,6 +41,10 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO?> GetFirstOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
+        Task<TEntity?> GetFirstOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
+
+        Task<TDTO?> GetFirstOrDefaultIncludingAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
+
         TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         TDTO? GetSingleOrDefaultByCondition<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
@@ -39,6 +52,10 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
         Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         Task<TDTO?> GetSingleOrDefaultByConditionAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
+        Task<TEntity?> GetSingleOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
+
+        Task<TDTO?> GetSingleOrDefaultIncludingAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
 
         void Create<TCreateDTO>(TCreateDTO createDTO, string currentUserId);
 

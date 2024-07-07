@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using Castle.Core.Resource;
+using NorthwindTradeSuite.Common.Enums;
+using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 {
@@ -12,6 +14,8 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
+        Task<List<TEntity>> GetAllFilteredAsync(Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteringSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!);
+
         TEntity? GetById(string id);
 
         Task<TEntity?> GetByIdAsync(string id);
@@ -20,9 +24,13 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
+        Task<TEntity?> GetFirstOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
+
         TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
+        Task<TEntity?> GetSingleOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
 
         void Add(TEntity entityToAdd);
 

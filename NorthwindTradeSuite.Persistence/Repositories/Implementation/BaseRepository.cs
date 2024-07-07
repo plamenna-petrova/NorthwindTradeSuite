@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using NorthwindTradeSuite.Common.Enums;
 using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using System.Linq.Expressions;
@@ -30,6 +31,24 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
             => asNoTracking ? await GetAll().AsQueryable().Where(filterExpression).AsNoTracking().ToListAsync()
                             : await GetAll().AsQueryable().Where(filterExpression).ToListAsync();
 
+        public virtual async Task<List<TEntity>> GetAllFilteredAsync(
+            Expression<Func<TEntity, bool>> filterExpression, FilteringSource filteredSource, bool asNoTracking = false, Expression<Func<TEntity, object>>[] includeProperties = null!)
+        {
+            IQueryable<TEntity> filteredEntities = null!;
+
+            switch (filteredSource)
+            {
+                case FilteringSource.All:
+                    filteredEntities = GetAll(asNoTracking).Where(filterExpression);
+                    break;
+                case FilteringSource.GetAllIncluding:
+                    filteredEntities = GetAllIncluding(asNoTracking, includeProperties).Where(filterExpression);
+                    break;
+            }
+
+            return await filteredEntities.ToListAsync();
+        }
+
         public virtual TEntity? GetById(string id) => DbSet.Find(id);
 
         public virtual async Task<TEntity?> GetByIdAsync(string id) => await DbSet.FindAsync(id).AsTask();
@@ -40,11 +59,23 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
         public virtual async Task<TEntity?> GetFirstOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => await GetAll(asNoTracking).FirstOrDefaultAsync(filterExpression);
 
+        public virtual async Task<TEntity?> GetFirstOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> entitiesIncluding = GetAllIncluding(asNoTracking, includeProperties);
+            return await entitiesIncluding.FirstOrDefaultAsync(filterExpression);
+        }
+
         public virtual TEntity? GetSingleOrDefaultByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => GetAll(asNoTracking).SingleOrDefault(filterExpression);
 
         public virtual async Task<TEntity?> GetSingleOrDefaultByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
             => await GetAll(asNoTracking).SingleOrDefaultAsync(filterExpression);
+
+        public virtual async Task<TEntity?> GetSingleOrDefaultIncludingAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> entitiesIncluding = GetAllIncluding(asNoTracking, includeProperties);
+            return await entitiesIncluding.SingleOrDefaultAsync(filterExpression);
+        }
 
         public virtual void Add(TEntity entityToAdd) => DbSet.Add(entityToAdd);
 
@@ -160,5 +191,8 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
                 DbContext?.Dispose();
             }
         }
+
+        private IQueryable<TEntity> GetAllIncluding(bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties) =>
+            includeProperties.Aggregate(GetAll(asNoTracking), (currentEntity, includeProperty) => currentEntity.Include(includeProperty));
     }
 }
