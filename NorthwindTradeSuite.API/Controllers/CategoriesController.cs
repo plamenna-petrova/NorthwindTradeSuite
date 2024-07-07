@@ -11,7 +11,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstan
 
 namespace NorthwindTradeSuite.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {

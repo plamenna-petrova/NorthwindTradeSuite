@@ -16,12 +16,12 @@ namespace NorthwindTradeSuite.Application.Extensions
             serviceCollection.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblies(typeof(ApplicationLayerRegistration).Assembly);
-                cfg.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
                 cfg.AddOpenBehavior(typeof(LoggingPipelineBehavior<,>));
+                cfg.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
                 cfg.AddOpenBehavior(typeof(CachingPipelineBehavior<,>));
             });
 
-            serviceCollection.AddDistributedMemoryCache();
+            serviceCollection.AddMemoryCache();
 
             return serviceCollection;
         }
