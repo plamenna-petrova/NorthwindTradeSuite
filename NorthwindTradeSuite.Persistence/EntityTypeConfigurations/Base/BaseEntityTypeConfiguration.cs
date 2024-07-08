@@ -26,6 +26,18 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
                 .Property(e => e.ModifiedAt)
                 .IsRequired(false);
 
+            entityTypeBuilder
+                .Property(e => e.CreatedBy)
+                .IsRequired();
+
+            entityTypeBuilder
+                .Property(e => e.ModifiedBy)
+                .IsRequired(false);
+
+            entityTypeBuilder
+                .Property(e => e.DeletedBy)
+                .IsRequired(false);
+
             entityTypeBuilder.HasCheckConstraint(
                 string.Format(CHECK_CONSTRAINT_TEMPLATE, 
                 GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt))),

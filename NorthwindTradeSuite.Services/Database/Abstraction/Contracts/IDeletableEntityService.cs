@@ -36,12 +36,12 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO> HardDeleteAsync<TDTO>(string id);
 
-        void Restore(string id, string currentUserId);
+        void Restore(string id);
 
-        TDTO Restore<TDTO>(string id, string currentUserId);
+        TDTO Restore<TDTO>(string id);
 
-        Task RestoreAsync(string id, string currentUserId);
+        Task RestoreAsync(string id);
 
-        Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId);
+        Task<TDTO> RestoreAsync<TDTO>(string id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NorthwindTradeSuite.Common.GlobalConstants.Identity;
 using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.DTOs.Seeding;
 using NorthwindTradeSuite.Mapping.AutoMapper;
@@ -32,6 +33,11 @@ namespace NorthwindTradeSuite.Persistence.Seeding.EntitiesSeeders
 
                 var categoriesForSeeding = datasetSeedingTarget.RetrieveDatasetObjectsForSeeding(Logger);
                 var mappedCategoriesForSeeding = categoriesForSeeding.To<Category>().ToArray();
+
+                foreach (var mappedCategoryForSeeding in mappedCategoriesForSeeding)
+                {
+                    mappedCategoryForSeeding.CreatedBy = ApplicationUserConstants.SEEDED_ADMINISTRATOR_ID;
+                }
 
                 await categoryDeletableRepository.AddRangeAsync(mappedCategoriesForSeeding);
                 await categoryDeletableRepository.SaveChangesAsync();

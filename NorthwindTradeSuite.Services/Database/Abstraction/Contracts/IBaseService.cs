@@ -57,37 +57,37 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO?> GetSingleOrDefaultIncludingAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
 
-        void Create<TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        void Create<TCreateDTO>(TCreateDTO createDTO);
 
-        TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO);
 
-        Task CreateAsync<TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        Task CreateAsync<TCreateDTO>(TCreateDTO createDTO);
 
-        Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string currentUserId);
+        Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO);
 
         void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs);
 
         Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs);
 
-        void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO);
 
-        TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO);
 
-        Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO);
 
-        Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string currentUserId);
+        Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO);
 
         void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
 
         Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
 
-        void Delete(string id, string currentUserId);
+        void Delete(string id);
 
-        TDTO DeleteAndReturn<TDTO>(string id, string currentUserId);
+        TDTO DeleteAndReturn<TDTO>(string id);
 
-        Task DeleteAsync(string id, string currentUserId);
+        Task DeleteAsync(string id);
 
-        Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string currentUserId);
+        Task<TDTO> DeleteAndReturnAsync<TDTO>(string id);
 
         void DeleteRange<TDeleteDTO>(List<TDeleteDTO> deleteDTOs);
 
@@ -97,9 +97,13 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         bool Exists<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind);
 
+        bool ExistsBy(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
         Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind);
 
         Task<bool> ExistsAsync<TDTO>(IQueryable<TDTO> dtosCollection, TDTO dtoToFind);
+
+        Task<bool> ExistsByAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         int GetTotalRecords();
 

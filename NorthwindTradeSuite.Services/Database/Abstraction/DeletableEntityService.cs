@@ -21,14 +21,14 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public override IQueryable<TEntity> GetAll(bool asNoTracking = false) => BaseRepository.GetAll(asNoTracking);
 
-        public override void Delete(string id, string currentUserId)
+        public override void Delete(string id)
         {
             var entityToDelete = base.GetById(id);
             BaseRepository.Delete(entityToDelete);
             BaseRepository.SaveChanges();
         }
 
-        public override TDTO DeleteAndReturn<TDTO>(string id, string currentUserId)
+        public override TDTO DeleteAndReturn<TDTO>(string id)
         {
             var entityToDelete = base.GetById(id);
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
@@ -36,14 +36,14 @@ namespace NorthwindTradeSuite.Services.Database.Base
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public override async Task DeleteAsync(string id, string currentUserId)
+        public override async Task DeleteAsync(string id)
         {
             var entityToDelete = await base.GetByIdAsync(id);
             BaseRepository.Delete(entityToDelete);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public override async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string currentUserId)
+        public override async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id)
         {
             var entityToDelete = await base.GetByIdAsync(id);
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
@@ -128,7 +128,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             return Mapper.Map<TDTO>(hardDeletedEntity);
         }
 
-        public void Restore(string id, string currentUserId)
+        public void Restore(string id)
         {
             var entityToRestore = base.GetById(id);
             BaseRepository.DetachLocalEntity(entityToRestore);
@@ -136,7 +136,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             BaseRepository.SaveChanges();
         }
 
-        public TDTO Restore<TDTO>(string id, string currentUserId)
+        public TDTO Restore<TDTO>(string id)
         {
             var entityToRestore = base.GetById(id);
             BaseRepository.DetachLocalEntity(entityToRestore);
@@ -145,7 +145,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             return Mapper.Map<TDTO>(restoredEntity);
         }
 
-        public async Task RestoreAsync(string id, string currentUserId)
+        public async Task RestoreAsync(string id)
         {
             var entityToRestore = await base.GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToRestore);
@@ -153,7 +153,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             await BaseRepository.SaveChangesAsync();
         }
 
-        public async Task<TDTO> RestoreAsync<TDTO>(string id, string currentUserId)
+        public async Task<TDTO> RestoreAsync<TDTO>(string id)
         {
             var entityToRestore = await base.GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToRestore);

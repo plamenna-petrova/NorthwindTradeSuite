@@ -21,6 +21,15 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
 
         public const int CATEGORY_DESCRIPTION_MAX_LENGTH = 300;
 
+        // Validation
+        public const string REQUIRED_CATEGORY_NAME_ERROR_MESSAGE = "The category name is required";
+
+        public const string REQUIRED_CATEGORY_DESCRIPTION_ERROR_MESSAGE = "The category description is required";
+
+        public const string REQUIRED_CATEGORY_PICTURE_ERROR_MESSAGE = "The category picture is required";
+
+        public const string REQUIRED_CATEGORY_CREATED_BY_ERROR_MESSAGE = "The category created by user id is required";
+
         // API
         public const string CategoriesName = "categories";
 

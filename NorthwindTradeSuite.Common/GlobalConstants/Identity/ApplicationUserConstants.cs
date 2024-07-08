@@ -13,6 +13,9 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Identity
 
         public const string REFRESH_TOKEN_EXPIRY_TIME_COLUMN = "RefreshTokenExpiryTime";
 
+        // Seed
+        public const string SEEDED_ADMINISTRATOR_ID = "D9F1A8D7-8A6E-4B75-BD1C-3E5C6011FC32";
+
         // Validation
         public const string REQUIRED_USERNAME_ERROR_MESSAGE = "The username is required";
 

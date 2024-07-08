@@ -60,7 +60,11 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Contracts
 
         bool Exists(IQueryable<TEntity> entities, TEntity entityToFind);
 
+        bool ExistsBy(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
+
         Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind);
+
+        Task<bool> ExistsByAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false);
 
         void DetachLocalEntity(TEntity entityToDetach);
 

@@ -140,8 +140,14 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
         public virtual bool Exists(IQueryable<TEntity> entities, TEntity entityToFind) 
             => entities.Any(e => e == entityToFind);
 
+        public virtual bool ExistsBy(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => GetAll(asNoTracking).Any(filterExpression);
+
         public virtual async Task<bool> ExistsAsync(IQueryable<TEntity> entities, TEntity entityToFind)
             => await entities.AnyAsync(e => e == entityToFind);
+
+        public virtual async Task<bool> ExistsByAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => await GetAll(asNoTracking).AnyAsync(filterExpression);
 
         public virtual void DetachLocalEntity(TEntity entityToDetach)
         {
