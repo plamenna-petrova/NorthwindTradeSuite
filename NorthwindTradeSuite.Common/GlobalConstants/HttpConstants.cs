@@ -49,5 +49,11 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
         public const string CREATE_ACTION = "creation";
 
         public const string UPDATE_ACTION = "update";
+
+        public const string FAILED_UPDATE = "Failed to update {0}: ";
+
+        public const string FAILED_DELETE = "Failed to delete {0}: ";
+
+        public const string FAILED_DELETE_CONFIRMATION = "Failed to confirm deletion for {0}: ";
     }
 }

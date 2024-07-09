@@ -42,5 +42,13 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
         public const string CATEGORY_BY_ID_ROUTE_NAME = "CategoryById";
 
         public const string CATEGORY_DETAILS_ROUTE_NAME = "CategoryDetails";
+
+        public const string UPDATED_CATEGORY_SUCCESS_MESSAGE = "Successfully updated category";
+
+        public const string DELETED_CATEGORY_SUCCESS_MESSAGE = "Successfully deleted category";
+
+        public const string CONFIRMED_CATEGORY_DELETION_SUCCESS_MESSAGE = "Successfully confirmed category deletion";
+
+        public const string RESTORED_CATEGORY_SUCCESS_MESSAGE = "Successfully restored category";
     }
 }

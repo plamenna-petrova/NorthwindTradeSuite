@@ -296,7 +296,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(entityToUpdate);
         }
 
-        public virtual void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId)
+        public virtual void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId = null)
         {
             var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
 
@@ -312,7 +312,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             BaseRepository.SaveChanges();
         }
 
-        public virtual async Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId)
+        public virtual async Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId = null)
         {
             var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
 
@@ -328,7 +328,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             await BaseRepository.SaveChangesAsync();
         }
 
-        public virtual void Delete(string id)
+        public virtual void Delete(string id, string? currentUserId = null)
         {
             var entityToDelete = GetById(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -336,7 +336,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             BaseRepository.SaveChanges();
         }
 
-        public virtual TDTO DeleteAndReturn<TDTO>(string id)
+        public virtual TDTO DeleteAndReturn<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = GetById(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -345,7 +345,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public virtual async Task DeleteAsync(string id)
+        public virtual async Task DeleteAsync(string id, string? currentUserId = null)
         {
             var entityToDelete = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -353,7 +353,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             await BaseRepository.SaveChangesAsync();
         }
 
-        public virtual async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id)
+        public virtual async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = await GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToDelete);
@@ -362,14 +362,14 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public virtual void DeleteRange<TDeleteDTO>(List<TDeleteDTO> deleteDTOs)
+        public virtual void DeleteRange<TDeleteDTO>(List<TDeleteDTO> deleteDTOs, string? currentUserId = null)
         {
             var entitiesToDelete = Mapper.Map<TEntity[]>(deleteDTOs.ToArray());
             BaseRepository.DeleteRange(entitiesToDelete);
             BaseRepository.SaveChanges();
         }
 
-        public virtual async Task DeleteRangeAsync<TDeleteDTO>(List<TDeleteDTO> deleteDTOs)
+        public virtual async Task DeleteRangeAsync<TDeleteDTO>(List<TDeleteDTO> deleteDTOs, string? currentUserId = null)
         {
             var entitiesToDelete = Mapper.Map<TEntity[]>(deleteDTOs.ToArray());
             BaseRepository.DeleteRange(entitiesToDelete);
@@ -426,7 +426,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
 
             if (entityById == null)
             {
-                throw new KeyNotFoundException(string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
+                throw new KeyNotFoundException(typeof(TEntity).Name + " " + string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
             }
 
             return entityById;

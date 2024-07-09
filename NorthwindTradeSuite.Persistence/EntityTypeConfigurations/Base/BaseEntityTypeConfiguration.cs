@@ -41,12 +41,6 @@ namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
                 GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IAuditInfo.ModifiedAt))),
                 $"{nameof(IAuditInfo.ModifiedAt)} >= {nameof(IAuditInfo.CreatedAt)}"
             );
-
-            entityTypeBuilder.HasCheckConstraint(
-                string.Format(CHECK_CONSTRAINT_TEMPLATE, 
-                GetCheckConstraintTableColumn(typeof(TEntity).Name, nameof(IDeletableEntity.DeletedAt))),
-                $"{nameof(IDeletableEntity.DeletedAt)} >= {nameof(IAuditInfo.ModifiedAt)}"
-            );
         }
 
         protected virtual string GetCheckConstraintTableColumn(params object[] checkConstraintTokens) =>

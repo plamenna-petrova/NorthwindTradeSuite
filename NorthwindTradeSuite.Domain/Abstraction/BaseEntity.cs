@@ -17,6 +17,6 @@ namespace NorthwindTradeSuite.Domain.Abstraction
 
         public DateTime? ModifiedAt { get; set; }
 
-        public string ModifiedBy { get; set; } = null!;
+        public string? ModifiedBy { get; set; } = null!;
     }
 }

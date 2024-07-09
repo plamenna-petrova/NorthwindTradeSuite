@@ -5,6 +5,7 @@ using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Abstraction;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
+using static NorthwindTradeSuite.Common.GlobalConstants.ExceptionMessagesConstants;
 
 namespace NorthwindTradeSuite.Services.Database.Base
 {
@@ -21,31 +22,35 @@ namespace NorthwindTradeSuite.Services.Database.Base
 
         public override IQueryable<TEntity> GetAll(bool asNoTracking = false) => BaseRepository.GetAll(asNoTracking);
 
-        public override void Delete(string id)
+        public override void Delete(string id, string? currentUserId = null)
         {
             var entityToDelete = base.GetById(id);
+            entityToDelete.DeletedBy = currentUserId;
             BaseRepository.Delete(entityToDelete);
             BaseRepository.SaveChanges();
         }
 
-        public override TDTO DeleteAndReturn<TDTO>(string id)
+        public override TDTO DeleteAndReturn<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = base.GetById(id);
+            entityToDelete.DeletedBy = currentUserId;
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
             BaseRepository.SaveChanges();
             return Mapper.Map<TDTO>(deletedEntity);
         }
 
-        public override async Task DeleteAsync(string id)
+        public override async Task DeleteAsync(string id, string? currentUserId = null)
         {
             var entityToDelete = await base.GetByIdAsync(id);
+            entityToDelete.DeletedBy = currentUserId;
             BaseRepository.Delete(entityToDelete);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public override async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id)
+        public override async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = await base.GetByIdAsync(id);
+            entityToDelete.DeletedBy = currentUserId;
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
             await BaseRepository.SaveChangesAsync();
             return Mapper.Map<TDTO>(deletedEntity);
@@ -102,7 +107,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             BaseRepository.SaveChanges();
         }
 
-        public TDTO HardDelete<TDTO>(string id)
+        public TDTO HardDeleteAndReturn<TDTO>(string id)
         {
             var entityToHardDelete = base.GetById(id);
             BaseRepository.DetachLocalEntity(entityToHardDelete);
@@ -119,7 +124,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
             await BaseRepository.SaveChangesAsync();
         }
 
-        public async Task<TDTO> HardDeleteAsync<TDTO>(string id)
+        public async Task<TDTO> HardDeleteAndReturnAsync<TDTO>(string id)
         {
             var entityToHardDelete = await base.GetByIdAsync(id);
             BaseRepository.DetachLocalEntity(entityToHardDelete);
@@ -128,38 +133,66 @@ namespace NorthwindTradeSuite.Services.Database.Base
             return Mapper.Map<TDTO>(hardDeletedEntity);
         }
 
-        public void Restore(string id)
+        public void Restore(string id, string? currentUserId = null)
         {
-            var entityToRestore = base.GetById(id);
+            var entityToRestore = GetByEntityToRestore(id);
+            entityToRestore.ModifiedBy = currentUserId;
             BaseRepository.DetachLocalEntity(entityToRestore);
             BaseRepository.Restore(entityToRestore);
             BaseRepository.SaveChanges();
         }
 
-        public TDTO Restore<TDTO>(string id)
+        public TDTO RestoreAndReturn<TDTO>(string id, string? currentUserId = null)
         {
-            var entityToRestore = base.GetById(id);
+            var entityToRestore = GetByEntityToRestore(id);
+            entityToRestore.ModifiedBy = currentUserId;
             BaseRepository.DetachLocalEntity(entityToRestore);
             var restoredEntity = BaseRepository.RestoreAndReturnEntityFromEntry(entityToRestore);
             BaseRepository.SaveChanges();
             return Mapper.Map<TDTO>(restoredEntity);
         }
 
-        public async Task RestoreAsync(string id)
+        public async Task RestoreAsync(string id, string? currentUserId = null)
         {
-            var entityToRestore = await base.GetByIdAsync(id);
+            var entityToRestore = await GetEntityToRestore(id);
+            entityToRestore.ModifiedBy = currentUserId;
             BaseRepository.DetachLocalEntity(entityToRestore);
             BaseRepository.Restore(entityToRestore);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public async Task<TDTO> RestoreAsync<TDTO>(string id)
+        public async Task<TDTO> RestoreAndReturnAsync<TDTO>(string id, string? currentUserId = null)
         {
-            var entityToRestore = await base.GetByIdAsync(id);
+            var entityToRestore = await GetEntityToRestore(id);
+            entityToRestore.ModifiedBy = currentUserId;
             BaseRepository.DetachLocalEntity(entityToRestore);
             var restoredEntity = BaseRepository.RestoreAndReturnEntityFromEntry(entityToRestore);
             await BaseRepository.SaveChangesAsync();
             return Mapper.Map<TDTO>(restoredEntity);
+        }
+
+        private TEntity GetByEntityToRestore(string id)
+        {
+            var entityToRestoreById = GetByIdWithOptionalDeletionFlagAsQueryable(id, isDeletedFlag: true, asNoTracking: true).FirstOrDefault();
+
+            if (entityToRestoreById == null)
+            {
+                throw new KeyNotFoundException(typeof(TEntity).Name + " " + string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
+            }
+
+            return entityToRestoreById;
+        }
+
+        public async Task<TEntity> GetEntityToRestore(string id)
+        {
+            var entityToRestoreById = await GetByIdWithOptionalDeletionFlagAsQueryable(id, isDeletedFlag: true, asNoTracking: true).FirstOrDefaultAsync();
+
+            if (entityToRestoreById == null)
+            {
+                throw new KeyNotFoundException(typeof(TEntity).Name + " " + string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
+            }
+
+            return entityToRestoreById;
         }
     }
 }

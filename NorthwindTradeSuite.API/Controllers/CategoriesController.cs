@@ -6,14 +6,17 @@ using NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategoryByI
 using NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategoryDetails;
 using NorthwindTradeSuite.DTOs.Responses.Categories;
 using System.Net;
-using static NorthwindTradeSuite.Common.GlobalConstants.HttpConstants;
-using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstants;
 using NorthwindTradeSuite.Common.Results;
 using NorthwindTradeSuite.DTOs.Requests.Categories;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.CreateCategory;
-using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
 using NorthwindTradeSuite.API.Extensions;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.UpdateCategory;
+using NorthwindTradeSuite.Application.Features.Categories.Commands.DeleteCategory;
+using static NorthwindTradeSuite.Common.GlobalConstants.HttpConstants;
+using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstants;
+using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
+using NorthwindTradeSuite.Application.Features.Categories.Commands.HardDeleteCategory;
+using NorthwindTradeSuite.Application.Features.Categories.Commands.RestoreCategory;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
@@ -95,21 +98,43 @@ namespace NorthwindTradeSuite.API.Controllers
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
         public async Task<ActionResult<Result<CategoryResponseDTO>>> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDTO updateCategoryRequestDTO)
         {
-            if (updateCategoryRequestDTO == null)
-            {
-                return BadRequest(string.Format(BAD_REQUEST_MESSAGE, SINGLE_CATEGORY_NAME, UPDATE_ACTION));
-            }
-
             var currentUserId = User.GetCurrentUserId();
             var updateCategoryCommand = new UpdateCategoryCommand(id, updateCategoryRequestDTO, currentUserId);
-            var updatedCategoryResullt = await _mediator.Send(updateCategoryCommand);
+            var updatedCategory = await _mediator.Send(updateCategoryCommand);
 
-            if (!updatedCategoryResullt.IsSuccess)
-            {
-                return BadRequest(new { Message = updatedCategoryResullt.Errors.FirstOrDefault() });
-            }
+            return Ok(new { Message = UPDATED_CATEGORY_SUCCESS_MESSAGE, updatedCategory });
+        }
 
-            return Ok(updatedCategoryResullt.Value);
+        [HttpDelete("delete/{id}")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        public async Task<ActionResult<CategoryDetailsResponseDTO>> DeleteCategory(string id)
+        {
+            var currentUserId = User.GetCurrentUserId();
+            var deleteCategoryCommand = new DeleteCategoryCommand(id, currentUserId);
+            var deletedCategoryDetails = await _mediator.Send(deleteCategoryCommand);
+
+            return Ok(new { Message = DELETED_CATEGORY_SUCCESS_MESSAGE, deletedCategoryDetails });
+        }
+
+        [HttpDelete("confirm-deletion/{id}")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        public async Task<ActionResult<CategoryConciseInformationResponseDTO>> HardDeleteCategory(string id)
+        {
+            var hardDeleteCategoryCommand = new HardDeleteCategoryCommand(id);
+            var hardDeletedCateogoryConciseInformation = await _mediator.Send(hardDeleteCategoryCommand);
+
+            return Ok(new { Message = CONFIRMED_CATEGORY_DELETION_SUCCESS_MESSAGE, hardDeletedCateogoryConciseInformation });
+        }
+
+        [HttpPost("restore/{id}")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        public async Task<ActionResult<CategoryDetailsResponseDTO>> RestoreCategory(string id)
+        {
+            var currentUserId = User.GetCurrentUserId();
+            var restoreCategoryCommand = new RestoreCategoryCommand(id, currentUserId);
+            var restoredCategoryDetails = await _mediator.Send(restoreCategoryCommand);
+
+            return Ok(new { Message = RESTORED_CATEGORY_SUCCESS_MESSAGE, restoredCategoryDetails }); 
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
+using System.Linq.Expressions;
 
 namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 {
@@ -14,6 +15,14 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
         }
 
         public override IQueryable<TEntity> GetAll(bool asNoTracking) => base.GetAll(asNoTracking).Where(e => !e.IsDeleted);
+
+        public override IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => asNoTracking ? GetAllWithDeletedEntities().AsQueryable().Where(filterExpression).AsNoTracking()
+                    : GetAllWithDeletedEntities().AsQueryable().Where(filterExpression);
+
+        public override async Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false)
+            => asNoTracking ? await GetAllWithDeletedEntities().AsQueryable().Where(filterExpression).AsNoTracking().ToListAsync()
+                            : await GetAllWithDeletedEntities().AsQueryable().Where(filterExpression).ToListAsync();
 
         public override void Delete(TEntity entityToDelete)
         {
@@ -35,7 +44,7 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
             => await base.GetAllByConditionAsync(e => e.IsDeleted == isDeletedFlag, asNoTracking);
 
         public IQueryable<TEntity> GetByIdWithOptionalDeletionFlagAsQueryable(string id, bool isDeletedFlag = false, bool asNoTracking = false)
-            => base.GetAllByCondition(e => e.Id == id && e.IsDeleted == isDeletedFlag, asNoTracking);
+            => GetAllByCondition(e => e.Id == id && e.IsDeleted == isDeletedFlag, asNoTracking);
 
         public async Task<TEntity?> GetFirstOrDefaultByIdWithOptionalDeletionFlagAsync(string id, bool isDeletedFlag = false, bool asNoTracking = false)
             => await base.GetAllByCondition(e => e.IsDeleted == isDeletedFlag, asNoTracking).FirstOrDefaultAsync(e => e.Id == id);
