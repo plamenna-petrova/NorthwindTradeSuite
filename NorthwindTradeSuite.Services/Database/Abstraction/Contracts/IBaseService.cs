@@ -57,13 +57,13 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO?> GetSingleOrDefaultIncludingAsync<TDTO>(Expression<Func<TEntity, bool>> filterExpression, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
 
-        void Create<TCreateDTO>(TCreateDTO createDTO);
+        void Create<TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null);
 
-        TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO);
+        TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null);
 
-        Task CreateAsync<TCreateDTO>(TCreateDTO createDTO);
+        Task CreateAsync<TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null);
 
-        Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO);
+        Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null);
 
         void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs);
 

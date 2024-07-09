@@ -8,7 +8,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public sealed class SupplierEntityTypeConfiguration : BaseEntityTypeConfiguration<Supplier, string>
+    public sealed class SupplierEntityTypeConfiguration : BaseEntityTypeConfiguration<Supplier>
     {
         private static readonly string[] SupplierProfessionalDataColumns =
         {

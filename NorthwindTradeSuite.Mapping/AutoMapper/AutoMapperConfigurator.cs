@@ -87,7 +87,7 @@ namespace NorthwindTradeSuite.Mapping.AutoMapper
         private static IEnumerable<TypesMap> GetEntityTypesToBaseEntity(IEnumerable<Type> types)
         {
             IEnumerable<TypesMap> entityTypesToBaseEntity = GetTypesWithBaseEntityType(types)
-                .Select(t => new TypesMap { SourceType = t, DestinationType = typeof(BaseEntity<string>) });
+                .Select(t => new TypesMap { SourceType = t, DestinationType = typeof(BaseEntity) });
 
             return entityTypesToBaseEntity;
         }
@@ -111,7 +111,7 @@ namespace NorthwindTradeSuite.Mapping.AutoMapper
         private static IEnumerable<Type> GetTypesWithBaseEntityType(IEnumerable<Type> types)
         {
             IEnumerable<Type> baseEntityTypes = types
-                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseEntity<string>) &&
+                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseEntity) &&
                             !t.GetTypeInfo().IsAbstract &&
                             !t.GetTypeInfo().IsInterface);
 
@@ -121,7 +121,7 @@ namespace NorthwindTradeSuite.Mapping.AutoMapper
         private static IEnumerable<Type> GetTypesWithBaseDeletableEntityType(IEnumerable<Type> types)
         {
             IEnumerable<Type> baseDeletableEntityTypes = types
-                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseDeletableEntity<string>) &&
+                .Where(t => t.GetTypeInfo().BaseType == typeof(BaseDeletableEntity) &&
                             !t.GetTypeInfo().IsAbstract &&
                             !t.GetTypeInfo().IsInterface);
 

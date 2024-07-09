@@ -6,7 +6,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.ShipperConstant
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public sealed class ShipperEntityTypeConfiguration : BaseEntityTypeConfiguration<Shipper, string>
+    public sealed class ShipperEntityTypeConfiguration : BaseEntityTypeConfiguration<Shipper>
     {
         public override void Configure(EntityTypeBuilder<Shipper> entityTypeBuilder)
         {

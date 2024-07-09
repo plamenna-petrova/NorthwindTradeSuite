@@ -23,10 +23,6 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Commands.CreateCat
             RuleFor(x => x.CreateCategoryRequestDTO.Picture)
                 .NotEmpty()
                 .WithMessage(REQUIRED_CATEGORY_PICTURE_ERROR_MESSAGE);
-
-            RuleFor(x => x.CreateCategoryRequestDTO.CreatedBy)
-                .NotEmpty()
-                .WithMessage(REQUIRED_CATEGORY_CREATED_BY_ERROR_MESSAGE);
         }
     }
 }

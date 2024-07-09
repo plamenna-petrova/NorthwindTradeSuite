@@ -151,12 +151,12 @@ namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 
         public virtual void DetachLocalEntity(TEntity entityToDetach)
         {
-            if (entityToDetach is BaseEntity<string> entity)
+            if (entityToDetach is BaseEntity entity)
             {
                 LocalView<TEntity> entitiesLocalView = DbSet.Local;
 
                 var localEntityToDetach = entitiesLocalView
-                    .FirstOrDefault(entry => ((BaseEntity<string>)(object)entry).Id.Equals(entity.Id));
+                    .FirstOrDefault(entry => ((BaseEntity)(object)entry).Id.Equals(entity.Id));
 
                 if (localEntityToDetach != null)
                 {

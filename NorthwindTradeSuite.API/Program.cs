@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NorthwindTradeSuite.API.Middlewares;
 using NorthwindTradeSuite.Application.Extensions;
-using NorthwindTradeSuite.Domain.Entities;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using NorthwindTradeSuite.DTOs;
 using NorthwindTradeSuite.Infrastructure.Extensions;
@@ -18,6 +17,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationUserConstants;
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
+using NorthwindTradeSuite.Domain;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +25,8 @@ webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>();
 
 Assembly[] assemblies = new Assembly[]
 {
-    Assembly.GetAssembly(typeof(EntityMarker))!,
-    Assembly.GetAssembly(typeof(DTOMarker))!
+    Assembly.GetAssembly(typeof(DomainAssemblyMarker))!,
+    Assembly.GetAssembly(typeof(DTOsAssemblyMarker))!
 };
 
 AutoMapperConfigurator.RegisterMappings(assemblies.ToArray());

@@ -7,9 +7,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations.Base
 {
-    public class BaseEntityTypeConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
-        where TEntity : BaseDeletableEntity<TKey>
-        where TKey : IEquatable<TKey>
+    public class BaseEntityTypeConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseDeletableEntity
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> entityTypeBuilder)
         {

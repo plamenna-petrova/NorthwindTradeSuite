@@ -9,7 +9,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public sealed class EmployeeEntityTypeConfiguration : BaseEntityTypeConfiguration<Employee, string>
+    public sealed class EmployeeEntityTypeConfiguration : BaseEntityTypeConfiguration<Employee>
     {
         private static readonly string[] EmployeeLocationDataColumns =
         {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NorthwindTradeSuite.Common.Enums;
+using NorthwindTradeSuite.Domain.Abstraction;
 using NorthwindTradeSuite.Mapping.AutoMapper;
 using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 using NorthwindTradeSuite.Services.Database.Base.Contracts;
@@ -135,34 +136,58 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             return Mapper.Map<TDTO>(singleOrDefaultEntity);
         }
 
-        public virtual void Create<TCreateDTO>(TCreateDTO createDTO)
+        public virtual void Create<TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
+
+            if (entityToCreate is BaseEntity baseEntity)
+            {
+                baseEntity.CreatedBy = currentUserId!;
+            }
+
             BaseRepository.DetachLocalEntity(entityToCreate);
             BaseRepository.Add(entityToCreate);
             BaseRepository.SaveChanges();
         }
 
-        public virtual TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO)
+        public virtual TDTO CreateAndReturn<TDTO, TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
+
+            if (entityToCreate is BaseEntity baseEntity)
+            {
+                baseEntity.CreatedBy = currentUserId!;
+            }
+
             BaseRepository.DetachLocalEntity(entityToCreate);
             entityToCreate = BaseRepository.AddAndReturnEntityFromEntry(entityToCreate);
             BaseRepository.SaveChanges();
             return Mapper.Map<TDTO>(entityToCreate);
         }
 
-        public virtual async Task CreateAsync<TCreateDTO>(TCreateDTO createDTO)
+        public virtual async Task CreateAsync<TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
+
+            if (entityToCreate is BaseEntity baseEntity)
+            {
+                baseEntity.CreatedBy = currentUserId!;
+            }
+
             BaseRepository.DeleteAndReturnEntityFromEntry(entityToCreate);
             await BaseRepository.AddAsyncAndReturnEntityFromEntry(entityToCreate);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public virtual async Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO)
+        public virtual async Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null)
         {
             var entityToCreate = Mapper.Map<TEntity>(createDTO);
+
+            if (entityToCreate is BaseEntity baseEntity)
+            {
+                baseEntity.CreatedBy = currentUserId!;
+            }
+
             BaseRepository.DetachLocalEntity(entityToCreate);
             entityToCreate = await BaseRepository.AddAsyncAndReturnEntityFromEntry(entityToCreate);
             await BaseRepository.SaveChangesAsync();

@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Domain.Abstraction
 {
-    public abstract class BaseDeletableEntity<TKey> : BaseEntity<TKey>, IDeletableEntity where TKey : IEquatable<TKey>
+    public abstract class BaseDeletableEntity : BaseEntity, IDeletableEntity
     {
         public bool IsDeleted { get; set; }
 

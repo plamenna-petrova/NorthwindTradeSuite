@@ -8,7 +8,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.SQLConstants;
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public sealed class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order, string>
+    public sealed class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order>
     {
         private static readonly string[] OrderShipLocationDataColumns =
         {

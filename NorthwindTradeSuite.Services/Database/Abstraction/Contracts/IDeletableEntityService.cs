@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 {
-    public interface IDeletableEntityService<TEntity> : IBaseService<TEntity> where TEntity : BaseDeletableEntity<string>
+    public interface IDeletableEntityService<TEntity> : IBaseService<TEntity> where TEntity : BaseDeletableEntity
     {
         IQueryable<TEntity> GetAllWithDeleted(bool asNoTracking = false);
 

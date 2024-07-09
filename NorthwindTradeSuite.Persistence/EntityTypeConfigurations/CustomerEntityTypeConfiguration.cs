@@ -7,7 +7,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CustomerConstan
 
 namespace NorthwindTradeSuite.Persistence.EntityTypeConfigurations
 {
-    public sealed class CustomerEntityTypeConfiguration : BaseEntityTypeConfiguration<Customer, string>
+    public sealed class CustomerEntityTypeConfiguration : BaseEntityTypeConfiguration<Customer>
     {
         private static readonly string[] CustomerProfessionalDataColumns = 
         { 

@@ -124,7 +124,7 @@ namespace NorthwindTradeSuite.Persistence
 
         private void ApplyEntityChanges()
         {
-            List<EntityEntry<BaseDeletableEntity<string>>> changeTrackerEntityEntries = ChangeTracker.Entries<BaseDeletableEntity<string>>()
+            List<EntityEntry<BaseDeletableEntity>> changeTrackerEntityEntries = ChangeTracker.Entries<BaseDeletableEntity>()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
                 .ToList();
 

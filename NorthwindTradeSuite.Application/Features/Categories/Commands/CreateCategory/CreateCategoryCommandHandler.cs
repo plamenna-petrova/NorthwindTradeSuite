@@ -22,9 +22,9 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Commands.CreateCat
                 return Result<CategoryResponseDTO>.Failure($"A category with the name: {createCategoryCommand.CreateCategoryRequestDTO.Name} already exists.");
             }
 
-            var createdCategory = await _categoryService.CreateAndReturnAsync<CategoryResponseDTO, CreateCategoryRequestDTO>(createCategoryCommand.CreateCategoryRequestDTO);
+            var createdCategoryResponseDTO = await _categoryService.CreateAndReturnAsync<CategoryResponseDTO, CreateCategoryRequestDTO>(createCategoryCommand.CreateCategoryRequestDTO, createCategoryCommand.CurrentUserId);
 
-            return Result<CategoryResponseDTO>.Success(createdCategory);
+            return Result<CategoryResponseDTO>.Success(createdCategoryResponseDTO);
         }
     }
 }

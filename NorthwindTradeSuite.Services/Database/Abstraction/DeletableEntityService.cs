@@ -9,7 +9,7 @@ using NorthwindTradeSuite.Services.Database.Base.Contracts;
 namespace NorthwindTradeSuite.Services.Database.Base
 {
     public abstract class DeletableEntityService<TEntity> : BaseService<TEntity>, IDeletableEntityService<TEntity>
-        where TEntity : BaseDeletableEntity<string>
+        where TEntity : BaseDeletableEntity
     {
         protected readonly new IDeletableEntityRepository<TEntity> BaseRepository;
 

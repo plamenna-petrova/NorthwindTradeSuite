@@ -2,7 +2,7 @@
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Category : BaseDeletableEntity<string>
+    public class Category : BaseDeletableEntity
     {
         public Category()
         {

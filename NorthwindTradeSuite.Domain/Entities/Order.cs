@@ -3,7 +3,7 @@ using NorthwindTradeSuite.Domain.Entities.OwnedEntities;
 
 namespace NorthwindTradeSuite.Domain.Entities
 {
-    public class Order : BaseDeletableEntity<string>
+    public class Order : BaseDeletableEntity
     {
         public Order()
         {

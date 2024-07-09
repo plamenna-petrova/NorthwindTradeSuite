@@ -5,5 +5,5 @@ using NorthwindTradeSuite.DTOs.Responses.Categories;
 
 namespace NorthwindTradeSuite.Application.Features.Categories.Commands.CreateCategory
 {
-    public sealed record CreateCategoryCommand(CreateCategoryRequestDTO CreateCategoryRequestDTO) : ICommand<Result<CategoryResponseDTO>>;
+    public sealed record CreateCategoryCommand(CreateCategoryRequestDTO CreateCategoryRequestDTO, string? CurrentUserId) : ICommand<Result<CategoryResponseDTO>>;
 }

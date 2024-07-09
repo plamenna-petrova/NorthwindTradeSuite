@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindTradeSuite.DTOs
+namespace NorthwindTradeSuite.Domain
 {
-    public class DTOMarker
+    public class DomainAssemblyMarker
     {
 
     }

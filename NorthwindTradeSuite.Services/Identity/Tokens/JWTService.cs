@@ -29,6 +29,7 @@ namespace NorthwindTradeSuite.Services.Identity.Tokens
 
             List<Claim> authClaims = new()
             {
+                new Claim(ClaimTypes.NameIdentifier, applicationUser.Id),
                 new Claim(ClaimTypes.Name, applicationUser.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

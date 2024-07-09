@@ -5,7 +5,7 @@ using NorthwindTradeSuite.Persistence.Repositories.Contracts;
 namespace NorthwindTradeSuite.Persistence.Repositories.Implementation
 {
     public class DeletableEntityRepository<TEntity> : BaseRepository<TEntity>, IDeletableEntityRepository<TEntity>
-        where TEntity : BaseDeletableEntity<string>
+        where TEntity : BaseDeletableEntity
     {
         public DeletableEntityRepository(ApplicationDbContext applicationDbContext) 
             : base(applicationDbContext)
