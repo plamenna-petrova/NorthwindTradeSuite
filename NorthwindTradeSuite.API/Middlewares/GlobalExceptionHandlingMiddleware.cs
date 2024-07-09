@@ -56,6 +56,7 @@ namespace NorthwindTradeSuite.API.Middlewares
                         ArgumentNullException => HttpStatusCode.BadRequest,
                         UnauthorizedAccessException => HttpStatusCode.Unauthorized,
                         HttpRequestException => HttpStatusCode.BadRequest,
+                        KeyNotFoundException => HttpStatusCode.NotFound,
                         _ => HttpStatusCode.InternalServerError,
                     };
 

@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using NorthwindTradeSuite.Application.Contracts;
 using NorthwindTradeSuite.Common.Results;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using NorthwindTradeSuite.DTOs.Responses.Accounts;
@@ -7,7 +7,7 @@ using NorthwindTradeSuite.Services.Identity.Tokens;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponseDTO>>
+    public class LoginCommandHandler : ICommandHandler<LoginCommand, Result<LoginResponseDTO>>
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
 

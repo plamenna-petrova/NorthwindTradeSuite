@@ -24,19 +24,23 @@ namespace NorthwindTradeSuite.Common.GlobalConstants.Entities
         // Validation
         public const string REQUIRED_CATEGORY_NAME_ERROR_MESSAGE = "The category name is required";
 
+        public const string CATEGORY_NAME_LENGTH_ERROR_MESSAGE = "The category name must be between 4 and 50 characters long";
+
         public const string REQUIRED_CATEGORY_DESCRIPTION_ERROR_MESSAGE = "The category description is required";
+
+        public const string CATEGORY_DESCRIPTION_LENGTH_ERROR_MESSAGE = "The category description must be between 10 and 100 characters long";
 
         public const string REQUIRED_CATEGORY_PICTURE_ERROR_MESSAGE = "The category picture is required";
 
         public const string REQUIRED_CATEGORY_CREATED_BY_ERROR_MESSAGE = "The category created by user id is required";
 
         // API
-        public const string CategoriesName = "categories";
+        public const string CATEGORIES_NAME = "categories";
 
-        public const string SingleCategoryName = "category";
+        public const string SINGLE_CATEGORY_NAME = "category";
 
-        public const string CategoryByIdRouteName = "CategoryById";
+        public const string CATEGORY_BY_ID_ROUTE_NAME = "CategoryById";
 
-        public const string CategoryDetailsRouteName = "CategoryDetails";
+        public const string CATEGORY_DETAILS_ROUTE_NAME = "CategoryDetails";
     }
 }

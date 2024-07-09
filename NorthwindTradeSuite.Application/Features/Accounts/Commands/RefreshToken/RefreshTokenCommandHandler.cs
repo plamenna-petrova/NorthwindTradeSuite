@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using NorthwindTradeSuite.Application.Contracts;
 using NorthwindTradeSuite.Common.Results;
 using NorthwindTradeSuite.Domain.Entities.Identity;
 using NorthwindTradeSuite.DTOs.Responses.Accounts;
@@ -7,7 +7,7 @@ using NorthwindTradeSuite.Services.Identity.Tokens;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.RefreshToken
 {
-    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, Result<RefreshTokenResponseDTO>>
+    public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Result<RefreshTokenResponseDTO>>
     {
         private readonly IJWTService _jwtService;
 

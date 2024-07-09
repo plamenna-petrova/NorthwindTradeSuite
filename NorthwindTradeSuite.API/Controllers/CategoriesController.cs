@@ -13,6 +13,7 @@ using NorthwindTradeSuite.DTOs.Requests.Categories;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.CreateCategory;
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
 using NorthwindTradeSuite.API.Extensions;
+using NorthwindTradeSuite.Application.Features.Categories.Commands.UpdateCategory;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
@@ -36,11 +37,15 @@ namespace NorthwindTradeSuite.API.Controllers
             var getAllCategoriesQuery = new GetAllCategoriesQuery();
             var allQueriedCategories = await _mediator.Send(getAllCategoriesQuery);
 
-            return allQueriedCategories != null 
-                ? Ok(allQueriedCategories) : NotFound(string.Format(EntitiesNotFoundResult, CategoriesName));
+            if (allQueriedCategories == null)
+            {
+                return NotFound(string.Format(ENTITTIES_NOT_FOUND_RESULT, CATEGORIES_NAME));
+            }
+
+            return Ok(allQueriedCategories);
         }
 
-        [HttpGet("{id}", Name = CategoryByIdRouteName)]
+        [HttpGet("{id}", Name = CATEGORY_BY_ID_ROUTE_NAME)]
         [AllowAnonymous]
         [ProducesResponseType(typeof(CategoryResponseDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,13 +54,12 @@ namespace NorthwindTradeSuite.API.Controllers
             var getCategoryByIdQuery = new GetCategoryByIdQuery(id);
             var queriedCategoryById = await _mediator.Send(getCategoryByIdQuery);
 
-            return queriedCategoryById != null 
-                ? Ok(queriedCategoryById) : NotFound(string.Format(EntityByIdNotFoundResult, SingleCategoryName)); 
+            return queriedCategoryById;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("details/{id}", Name = CategoryDetailsRouteName)]
+        [Route("details/{id}", Name = CATEGORY_DETAILS_ROUTE_NAME)]
         [ProducesResponseType(typeof(CategoryDetailsResponseDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryDetailsResponseDTO>> GetCategoryDetails(string id)
@@ -63,8 +67,7 @@ namespace NorthwindTradeSuite.API.Controllers
             var getCategoryDetailsQuery = new GetCategoryDetailsQuery(id);
             var queriedCategoryDetails = await _mediator.Send(getCategoryDetailsQuery);
 
-            return queriedCategoryDetails != null
-                ? Ok(queriedCategoryDetails) : NotFound(string.Format(EntityByIdNotFoundResult, SingleCategoryName));
+            return Ok(queriedCategoryDetails);
         }
 
         [HttpPost("create")]
@@ -73,14 +76,40 @@ namespace NorthwindTradeSuite.API.Controllers
         { 
             if (createCategoryRequestDTO == null)
             {
-                return BadRequest(string.Format(BadRequestMessage, SingleCategoryName, "creation"));
+                return BadRequest(string.Format(BAD_REQUEST_MESSAGE, SINGLE_CATEGORY_NAME, CREATE_ACTION));
             }
 
             var currentUserId = User.GetCurrentUserId();
             var createCategoryCommand = new CreateCategoryCommand(createCategoryRequestDTO, currentUserId);
             var createdCategoryResult = await _mediator.Send(createCategoryCommand);
 
-            return CreatedAtRoute(CategoryByIdRouteName, new { createdCategoryResult.Value!.Id }, createdCategoryResult.Value!);
+            if (!createdCategoryResult.IsSuccess)
+            {
+                return BadRequest(new { Message = createdCategoryResult.Errors.FirstOrDefault() });
+            }
+
+            return CreatedAtRoute(CATEGORY_BY_ID_ROUTE_NAME, new { createdCategoryResult.Value!.Id }, createdCategoryResult.Value!);
+        }
+
+        [HttpPut("update/{id}")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        public async Task<ActionResult<Result<CategoryResponseDTO>>> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDTO updateCategoryRequestDTO)
+        {
+            if (updateCategoryRequestDTO == null)
+            {
+                return BadRequest(string.Format(BAD_REQUEST_MESSAGE, SINGLE_CATEGORY_NAME, UPDATE_ACTION));
+            }
+
+            var currentUserId = User.GetCurrentUserId();
+            var updateCategoryCommand = new UpdateCategoryCommand(id, updateCategoryRequestDTO, currentUserId);
+            var updatedCategoryResullt = await _mediator.Send(updateCategoryCommand);
+
+            if (!updatedCategoryResullt.IsSuccess)
+            {
+                return BadRequest(new { Message = updatedCategoryResullt.Errors.FirstOrDefault() });
+            }
+
+            return Ok(updatedCategoryResullt.Value);
         }
     }
 }

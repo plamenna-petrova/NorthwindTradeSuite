@@ -65,21 +65,21 @@ namespace NorthwindTradeSuite.Services.Database.Base.Contracts
 
         Task<TDTO> CreateAndReturnAsync<TDTO, TCreateDTO>(TCreateDTO createDTO, string? currentUserId = null);
 
-        void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs);
+        void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs, string? currentUserId = null);
 
-        Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs);
+        Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs, string? currentUserId = null);
 
-        void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO);
+        void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null);
 
-        TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO);
+        TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null);
 
-        Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO);
+        Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId);
 
-        Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO);
+        Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId);
 
-        void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
+        void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId);
 
-        Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs);
+        Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId);
 
         void Delete(string id);
 

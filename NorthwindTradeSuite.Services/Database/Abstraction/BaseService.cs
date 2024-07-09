@@ -162,6 +162,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             BaseRepository.DetachLocalEntity(entityToCreate);
             entityToCreate = BaseRepository.AddAndReturnEntityFromEntry(entityToCreate);
             BaseRepository.SaveChanges();
+
             return Mapper.Map<TDTO>(entityToCreate);
         }
 
@@ -191,70 +192,138 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
             BaseRepository.DetachLocalEntity(entityToCreate);
             entityToCreate = await BaseRepository.AddAsyncAndReturnEntityFromEntry(entityToCreate);
             await BaseRepository.SaveChangesAsync();
+
             return Mapper.Map<TDTO>(entityToCreate);
         }
 
-        public virtual void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs)
+        public virtual void CreateMultiple<TCreateDTO>(List<TCreateDTO> createDTOs, string? currentUserId = null)
         {
             var entitiesToCreate = Mapper.Map<TEntity[]>(createDTOs.ToArray());
+
+            if (entitiesToCreate is BaseEntity[] baseEntities)
+            {
+                foreach (var baseEntity in baseEntities)
+                {
+                    baseEntity.CreatedBy = currentUserId!;
+                }
+            }
+
             BaseRepository.AddRange(entitiesToCreate);
             BaseRepository.SaveChanges();
         }
 
-        public virtual async Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs)
+        public virtual async Task CreateMultipleAsync<TCreateDTO>(List<TCreateDTO> createDTOs, string? currentUserId = null)
         {
             var entitiesToCreate = Mapper.Map<TEntity[]>(createDTOs.ToArray());
+
+            if (entitiesToCreate is BaseEntity[] baseEntities)
+            {
+                foreach (var baseEntity in baseEntities)
+                {
+                    baseEntity.CreatedBy = currentUserId!;
+                }
+            }
+
             await BaseRepository.AddRangeAsync(entitiesToCreate);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public virtual void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO)
+        public virtual void Update<TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null)
         {
-            var entityToUpdate = GetById(id);
-            BaseRepository.DetachLocalEntity(entityToUpdate);
-            Mapper.Map(updateDTO, entityToUpdate);
+            var entityToFind = GetById(id);
+
+            BaseRepository.DetachLocalEntity(entityToFind);
+            TEntity entityToUpdate = Mapper.Map(updateDTO, entityToFind);
+
+            if (entityToUpdate is BaseEntity baseEntity)
+            {
+                baseEntity.ModifiedBy = currentUserId!;
+            }
+
             BaseRepository.Update(entityToUpdate);
             BaseRepository.SaveChanges();
         }
 
-        public virtual TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO)
+        public virtual TDTO UpdateAndReturn<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null)
         {
-            var entityToUpdate = GetById(id);
-            BaseRepository.DetachLocalEntity(entityToUpdate);
+            var entityToFind = GetById(id);
+
+            BaseRepository.DetachLocalEntity(entityToFind);
+            TEntity entityToUpdate = Mapper.Map(updateDTO, entityToFind);
+
+            if (entityToUpdate is BaseEntity baseEntity)
+            {
+                baseEntity.ModifiedBy = currentUserId!;
+            }
+
             entityToUpdate = BaseRepository.ReattachUpdateAndReturnEntityFromEntry(entityToUpdate);
             BaseRepository.SaveChanges();
+
             return Mapper.Map<TDTO>(entityToUpdate);
         }
 
-        public virtual async Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO)
+        public virtual async Task UpdateAsync<TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null)
         {
-            var entityToUpdate = await GetByIdAsync(id);
-            BaseRepository.DetachLocalEntity(entityToUpdate);
-            Mapper.Map(updateDTO, entityToUpdate);
+            var entityToFind = await GetByIdAsync(id);
+
+            BaseRepository.DetachLocalEntity(entityToFind);
+            TEntity entityToUpdate = Mapper.Map(updateDTO, entityToFind);
+
+            if (entityToUpdate is BaseEntity baseEntity)
+            {
+                baseEntity.ModifiedBy = currentUserId!;
+            }
+
             BaseRepository.Update(entityToUpdate);
             await BaseRepository.SaveChangesAsync();
         }
 
-        public virtual async Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO)
+        public virtual async Task<TDTO> UpdateAndReturnAsync<TDTO, TUpdateDTO>(string id, TUpdateDTO updateDTO, string? currentUserId = null)
         {
-            var entityToUpdate = await GetByIdAsync(id);
-            BaseRepository.DetachLocalEntity(entityToUpdate);
-            Mapper.Map(updateDTO, entityToUpdate);
+            var entityToFind = await GetByIdAsync(id);
+
+            BaseRepository.DetachLocalEntity(entityToFind);
+            TEntity entityToUpdate = Mapper.Map(updateDTO, entityToFind);
+
+            if (entityToUpdate is BaseEntity baseEntity)
+            {
+                baseEntity.ModifiedBy = currentUserId!;
+            }
+
             entityToUpdate = BaseRepository.ReattachUpdateAndReturnEntityFromEntry(entityToUpdate);
             await BaseRepository.SaveChangesAsync();
+
             return Mapper.Map<TDTO>(entityToUpdate);
         }
 
-        public virtual void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs)
+        public virtual void UpdateMultiple<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId)
         {
             var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
+
+            if (entitiesToUpdate is BaseEntity[] baseEntities)
+            {
+                foreach (var baseEntity in baseEntities)
+                {
+                    baseEntity.ModifiedBy = currentUserId!;
+                }
+            }
+
             BaseRepository.UpdateRange(entitiesToUpdate);
             BaseRepository.SaveChanges();
         }
 
-        public virtual async Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs)
+        public virtual async Task UpdateMultipleAsync<TUpdateDTO>(List<TUpdateDTO> updateDTOs, string? currentUserId)
         {
             var entitiesToUpdate = Mapper.Map<TEntity[]>(updateDTOs.ToArray());
+
+            if (entitiesToUpdate is BaseEntity[] baseEntities)
+            {
+                foreach (var baseEntity in baseEntities)
+                {
+                    baseEntity.ModifiedBy = currentUserId!;
+                }
+            }
+
             BaseRepository.UpdateRange(entitiesToUpdate);
             await BaseRepository.SaveChangesAsync();
         }
@@ -369,7 +438,7 @@ namespace NorthwindTradeSuite.Services.Database.Abstraction
 
             if (entityById == null)
             {
-                throw new KeyNotFoundException(string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
+                throw new KeyNotFoundException(typeof(TEntity).Name + " " + string.Format(GET_ENTITY_BY_ID_KEY_NOT_FOUND_EXCEPTION_MESSAGE, id));
             }
 
             return entityById;
