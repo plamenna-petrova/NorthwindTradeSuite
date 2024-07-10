@@ -17,6 +17,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Entities.CategoryConstan
 using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRoleConstants;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.HardDeleteCategory;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.RestoreCategory;
+using NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllDeletedCategories;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace NorthwindTradeSuite.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(List<CategoryResponseDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +47,23 @@ namespace NorthwindTradeSuite.API.Controllers
             }
 
             return Ok(allQueriedCategories);
+        }
+
+        [HttpGet("all-deleted")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(typeof(List<CategoryResponseDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<CategoryResponseDTO>>> GetAllDeletedCategories()
+        {
+            var getAllDeletedCategoriesQuery = new GetAllDeletedCategoriesQuery();
+            var allDeletedQueriesCategories = await _mediator.Send(getAllDeletedCategoriesQuery);
+
+            if (allDeletedQueriesCategories == null)
+            {
+                return NotFound(string.Format(ENTITTIES_NOT_FOUND_RESULT, CATEGORIES_NAME));
+            }
+
+            return Ok(allDeletedQueriesCategories);
         }
 
         [HttpGet("{id}", Name = CATEGORY_BY_ID_ROUTE_NAME)]
@@ -75,6 +93,7 @@ namespace NorthwindTradeSuite.API.Controllers
 
         [HttpPost("create")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Result<CategoryResponseDTO>>> CreateCategory([FromBody] CreateCategoryRequestDTO createCategoryRequestDTO) 
         { 
             if (createCategoryRequestDTO == null)
@@ -96,17 +115,19 @@ namespace NorthwindTradeSuite.API.Controllers
 
         [HttpPut("update/{id}")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Result<CategoryResponseDTO>>> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDTO updateCategoryRequestDTO)
         {
             var currentUserId = User.GetCurrentUserId();
             var updateCategoryCommand = new UpdateCategoryCommand(id, updateCategoryRequestDTO, currentUserId);
             var updatedCategory = await _mediator.Send(updateCategoryCommand);
 
-            return Ok(new { Message = UPDATED_CATEGORY_SUCCESS_MESSAGE, updatedCategory });
+            return Ok(new { Message = UPDATED_CATEGORY_SUCCESS_MESSAGE, Details = updatedCategory });
         }
 
         [HttpDelete("delete/{id}")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryDetailsResponseDTO>> DeleteCategory(string id)
         {
             var currentUserId = User.GetCurrentUserId();
@@ -118,23 +139,25 @@ namespace NorthwindTradeSuite.API.Controllers
 
         [HttpDelete("confirm-deletion/{id}")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryConciseInformationResponseDTO>> HardDeleteCategory(string id)
         {
             var hardDeleteCategoryCommand = new HardDeleteCategoryCommand(id);
-            var hardDeletedCateogoryConciseInformation = await _mediator.Send(hardDeleteCategoryCommand);
+            var hardDeletedCategoryConciseInformation = await _mediator.Send(hardDeleteCategoryCommand);
 
-            return Ok(new { Message = CONFIRMED_CATEGORY_DELETION_SUCCESS_MESSAGE, hardDeletedCateogoryConciseInformation });
+            return Ok(new { Message = CONFIRMED_CATEGORY_DELETION_SUCCESS_MESSAGE, Details = hardDeletedCategoryConciseInformation });
         }
 
         [HttpPost("restore/{id}")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryDetailsResponseDTO>> RestoreCategory(string id)
         {
             var currentUserId = User.GetCurrentUserId();
             var restoreCategoryCommand = new RestoreCategoryCommand(id, currentUserId);
             var restoredCategoryDetails = await _mediator.Send(restoreCategoryCommand);
 
-            return Ok(new { Message = RESTORED_CATEGORY_SUCCESS_MESSAGE, restoredCategoryDetails }); 
+            return Ok(new { Message = RESTORED_CATEGORY_SUCCESS_MESSAGE, Details = restoredCategoryDetails }); 
         }
     }
 }
