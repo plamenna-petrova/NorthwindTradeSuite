@@ -18,6 +18,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationRole
 using NorthwindTradeSuite.Application.Features.Categories.Commands.HardDeleteCategory;
 using NorthwindTradeSuite.Application.Features.Categories.Commands.RestoreCategory;
 using NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllDeletedCategories;
+using NorthwindTradeSuite.Application.Features.Categories.Queries.GetDeletedCategoryById;
 
 namespace NorthwindTradeSuite.API.Controllers
 {
@@ -78,6 +79,18 @@ namespace NorthwindTradeSuite.API.Controllers
             return queriedCategoryById;
         }
 
+        [HttpGet("deleted/{id}")]
+        [Authorize(Policy = ADMINISTRATOR_POLICY)]
+        [ProducesResponseType(typeof(CategoryDetailsResponseDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CategoryDetailsResponseDTO>> GetDeletedCategoryById(string id)
+        {
+            var getDeletedCategoryByIdQuery = new GetDeletedCategoryByIdQuery(id);
+            var queriedDeletedCategoryById = await _mediator.Send(getDeletedCategoryByIdQuery);
+
+            return queriedDeletedCategoryById;
+        }
+
         [HttpGet]
         [AllowAnonymous]
         [Route("details/{id}", Name = CATEGORY_DETAILS_ROUTE_NAME)]
@@ -94,7 +107,7 @@ namespace NorthwindTradeSuite.API.Controllers
         [HttpPost("create")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Result<CategoryResponseDTO>>> CreateCategory([FromBody] CreateCategoryRequestDTO createCategoryRequestDTO) 
+        public async Task<ActionResult<RequestResult<CategoryResponseDTO>>> CreateCategory([FromBody] CreateCategoryRequestDTO createCategoryRequestDTO) 
         { 
             if (createCategoryRequestDTO == null)
             {
@@ -103,26 +116,31 @@ namespace NorthwindTradeSuite.API.Controllers
 
             var currentUserId = User.GetCurrentUserId();
             var createCategoryCommand = new CreateCategoryCommand(createCategoryRequestDTO, currentUserId);
-            var createdCategoryResult = await _mediator.Send(createCategoryCommand);
+            var createdCategoryRequestResult = await _mediator.Send(createCategoryCommand);
 
-            if (!createdCategoryResult.IsSuccess)
+            if (!createdCategoryRequestResult.IsSuccess)
             {
-                return BadRequest(new { Message = createdCategoryResult.Errors.FirstOrDefault() });
+                return BadRequest(new { Message = createdCategoryRequestResult.Errors.FirstOrDefault() });
             }
 
-            return CreatedAtRoute(CATEGORY_BY_ID_ROUTE_NAME, new { createdCategoryResult.Value!.Id }, createdCategoryResult.Value!);
+            string createdCategorySuccessMessage = string.Format(CREATED_ENTITY_SUCCESS_MESSAGE, SINGLE_CATEGORY_NAME);
+            var createdCategoryCommandResult = new CommandResult<CategoryResponseDTO>(createdCategorySuccessMessage, createdCategoryRequestResult.Value!);
+
+            return CreatedAtRoute(CATEGORY_BY_ID_ROUTE_NAME, new { createdCategoryCommandResult.Details!.Id }, createdCategoryCommandResult);
         }
 
         [HttpPut("update/{id}")]
         [Authorize(Policy = ADMINISTRATOR_POLICY)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Result<CategoryResponseDTO>>> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDTO updateCategoryRequestDTO)
+        public async Task<ActionResult<RequestResult<CategoryResponseDTO>>> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDTO updateCategoryRequestDTO)
         {
             var currentUserId = User.GetCurrentUserId();
             var updateCategoryCommand = new UpdateCategoryCommand(id, updateCategoryRequestDTO, currentUserId);
             var updatedCategory = await _mediator.Send(updateCategoryCommand);
+            string updatedCategorySuccessMessage = string.Format(UPDATED_ENTITY_SUCCESS_MESSAGE, SINGLE_CATEGORY_NAME);
+            var updatedCategoryCommandResult = new CommandResult<CategoryResponseDTO>(updatedCategorySuccessMessage, updatedCategory);
 
-            return Ok(new { Message = UPDATED_CATEGORY_SUCCESS_MESSAGE, Details = updatedCategory });
+            return Ok(updatedCategoryCommandResult);
         }
 
         [HttpDelete("delete/{id}")]
@@ -133,8 +151,10 @@ namespace NorthwindTradeSuite.API.Controllers
             var currentUserId = User.GetCurrentUserId();
             var deleteCategoryCommand = new DeleteCategoryCommand(id, currentUserId);
             var deletedCategoryDetails = await _mediator.Send(deleteCategoryCommand);
+            string deletedCategorySuccessMessage = string.Format(DELETED_ENTITY_SUCCESS_MESSAGE, SINGLE_CATEGORY_NAME);
+            var deletedCategoryCommandResult = new CommandResult<CategoryDetailsResponseDTO>(deletedCategorySuccessMessage, deletedCategoryDetails);
 
-            return Ok(new { Message = DELETED_CATEGORY_SUCCESS_MESSAGE, deletedCategoryDetails });
+            return Ok(deletedCategoryCommandResult);
         }
 
         [HttpDelete("confirm-deletion/{id}")]
@@ -144,8 +164,10 @@ namespace NorthwindTradeSuite.API.Controllers
         {
             var hardDeleteCategoryCommand = new HardDeleteCategoryCommand(id);
             var hardDeletedCategoryConciseInformation = await _mediator.Send(hardDeleteCategoryCommand);
+            string confirmedCategoryDeletionSuccessMessage = string.Format(CONFIRMED_ENTITY_DELETION_SUCCESS_MESSAGE, SINGLE_CATEGORY_NAME); ;
+            var confirmedCategoryDeletionCommandResult = new CommandResult<CategoryConciseInformationResponseDTO>(confirmedCategoryDeletionSuccessMessage, hardDeletedCategoryConciseInformation);
 
-            return Ok(new { Message = CONFIRMED_CATEGORY_DELETION_SUCCESS_MESSAGE, Details = hardDeletedCategoryConciseInformation });
+            return Ok(confirmedCategoryDeletionCommandResult);
         }
 
         [HttpPost("restore/{id}")]
@@ -156,8 +178,10 @@ namespace NorthwindTradeSuite.API.Controllers
             var currentUserId = User.GetCurrentUserId();
             var restoreCategoryCommand = new RestoreCategoryCommand(id, currentUserId);
             var restoredCategoryDetails = await _mediator.Send(restoreCategoryCommand);
+            string restoredCategorySuccessMessage = string.Format(RESTORED_ENTITY_SUCCESS_MESSAGE, SINGLE_CATEGORY_NAME);
+            var restoredCategoryCommandResult = new CommandResult<CategoryDetailsResponseDTO>(restoredCategorySuccessMessage, restoredCategoryDetails);
 
-            return Ok(new { Message = RESTORED_CATEGORY_SUCCESS_MESSAGE, Details = restoredCategoryDetails }); 
+            return Ok(restoredCategoryCommandResult);
         }
     }
 }

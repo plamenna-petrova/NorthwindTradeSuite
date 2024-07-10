@@ -4,7 +4,7 @@ using NorthwindTradeSuite.Services.Database.Categories;
 
 namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllDeletedCategories
 {
-    public class GetAllDeletedCategoriesQueryHandler : IQueryHandler<GetAllDeletedCategoriesQuery, List<CategoryResponseDTO>>
+    public class GetAllDeletedCategoriesQueryHandler : IQueryHandler<GetAllDeletedCategoriesQuery, List<CategoryDetailsResponseDTO>>
     {
         private readonly ICategoryService _categoryService;
 
@@ -13,10 +13,10 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllDele
             _categoryService = categoryService;        
         }
 
-        public Task<List<CategoryResponseDTO>> Handle(GetAllDeletedCategoriesQuery getAllDeletedCategoriesQuery, CancellationToken cancellationToken)
+        public Task<List<CategoryDetailsResponseDTO>> Handle(GetAllDeletedCategoriesQuery getAllDeletedCategoriesQuery, CancellationToken cancellationToken)
         {
-            var deletedCategories = _categoryService.GetAllWithOptionalDeletionFlagAsync<CategoryResponseDTO>(isDeletedFlag: true, asNoTracking: true);
-            return deletedCategories;
+            var deletedCategoriesResponse = _categoryService.GetAllWithOptionalDeletionFlagAsync<CategoryDetailsResponseDTO>(isDeletedFlag: true, asNoTracking: true);
+            return deletedCategoriesResponse;
         }
     }
 }

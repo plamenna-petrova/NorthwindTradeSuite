@@ -15,8 +15,8 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetAllCate
 
         public async Task<List<CategoryResponseDTO>> Handle(GetAllCategoriesQuery getAllCategoriesQuery, CancellationToken cancellationToken)
         {
-            var allCategories = await _categoryService.GetAllAsync<CategoryResponseDTO>(asNoTracking: true);
-            return allCategories;
+            var allCategoriesResponse = await _categoryService.GetAllAsync<CategoryResponseDTO>(asNoTracking: true);
+            return allCategoriesResponse;
         }
     }
 }

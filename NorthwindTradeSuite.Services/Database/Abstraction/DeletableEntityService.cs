@@ -25,6 +25,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
         public override void Delete(string id, string? currentUserId = null)
         {
             var entityToDelete = base.GetById(id);
+            entityToDelete.ModifiedBy = currentUserId;
             entityToDelete.DeletedBy = currentUserId;
             BaseRepository.Delete(entityToDelete);
             BaseRepository.SaveChanges();
@@ -33,6 +34,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
         public override TDTO DeleteAndReturn<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = base.GetById(id);
+            entityToDelete.ModifiedBy = currentUserId;
             entityToDelete.DeletedBy = currentUserId;
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
             BaseRepository.SaveChanges();
@@ -42,6 +44,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
         public override async Task DeleteAsync(string id, string? currentUserId = null)
         {
             var entityToDelete = await base.GetByIdAsync(id);
+            entityToDelete.ModifiedBy = currentUserId;
             entityToDelete.DeletedBy = currentUserId;
             BaseRepository.Delete(entityToDelete);
             await BaseRepository.SaveChangesAsync();
@@ -50,6 +53,7 @@ namespace NorthwindTradeSuite.Services.Database.Base
         public override async Task<TDTO> DeleteAndReturnAsync<TDTO>(string id, string? currentUserId = null)
         {
             var entityToDelete = await base.GetByIdAsync(id);
+            entityToDelete.ModifiedBy = currentUserId;
             entityToDelete.DeletedBy = currentUserId;
             TEntity deletedEntity = BaseRepository.DeleteAndReturnEntityFromEntry(entityToDelete);
             await BaseRepository.SaveChangesAsync();

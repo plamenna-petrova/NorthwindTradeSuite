@@ -7,7 +7,7 @@ using NorthwindTradeSuite.Services.Identity.Tokens;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Login
 {
-    public class LoginCommandHandler : ICommandHandler<LoginCommand, Result<LoginResponseDTO>>
+    public class LoginCommandHandler : ICommandHandler<LoginCommand, RequestResult<LoginResponseDTO>>
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -22,7 +22,7 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Login
             _userManager = userManager;
         }
 
-        public async Task<Result<LoginResponseDTO>> Handle(LoginCommand loginCommand, CancellationToken cancellationToken)
+        public async Task<RequestResult<LoginResponseDTO>> Handle(LoginCommand loginCommand, CancellationToken cancellationToken)
         {
             var passwordSignInResult = await _signInManager.PasswordSignInAsync(loginCommand.LoginRequestDTO.UserName, loginCommand.LoginRequestDTO.Password, false, lockoutOnFailure: false);
 
@@ -33,14 +33,14 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Login
                 var accessToken = await _jwtService.GenerateAccessTokenAsync(userToLogin);
                 var refreshToken = await _jwtService.GenerateRefreshTokenAsync(userToLogin);
 
-                return Result<LoginResponseDTO>.Success(new LoginResponseDTO
+                return RequestResult<LoginResponseDTO>.Success(new LoginResponseDTO
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken
                 });
             }
 
-            return Result<LoginResponseDTO>.Failure("Invalid credentials");
+            return RequestResult<LoginResponseDTO>.Failure("Invalid credentials");
         }
     }
 }

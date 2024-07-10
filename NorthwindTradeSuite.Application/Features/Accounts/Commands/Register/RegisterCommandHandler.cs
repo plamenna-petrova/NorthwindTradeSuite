@@ -7,7 +7,7 @@ using static NorthwindTradeSuite.Common.GlobalConstants.Identity.ApplicationUser
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
 {
-    public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Result>
+    public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RequestResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -16,7 +16,7 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
             _userManager = userManager;
         }
 
-        public async Task<Result> Handle(RegisterCommand registerCommand, CancellationToken cancellationToken)
+        public async Task<RequestResult> Handle(RegisterCommand registerCommand, CancellationToken cancellationToken)
         {
             var applicationUserToCreate = new ApplicationUser
             {
@@ -33,13 +33,13 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Register
                 if (createApplicationUserResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(applicationUserToCreate, NORMAL_USER);
-                    return Result.Success(USER_REGISTRATION_SUCCESS_MESSAGE);
+                    return RequestResult.Success(USER_REGISTRATION_SUCCESS_MESSAGE);
                 }
 
-                return Result.Failure(createApplicationUserResult.Errors.Select(ie => ie.Description).ToArray());
+                return RequestResult.Failure(createApplicationUserResult.Errors.Select(ie => ie.Description).ToArray());
             }
 
-            return Result.Failure(new string[] { $"A user with the username: '{applicationUserToCreate.UserName}' already exists" });
+            return RequestResult.Failure(new string[] { $"A user with the username: '{applicationUserToCreate.UserName}' already exists" });
         }
     }
 }

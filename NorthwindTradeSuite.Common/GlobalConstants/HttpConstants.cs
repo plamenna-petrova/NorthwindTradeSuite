@@ -55,5 +55,15 @@ namespace NorthwindTradeSuite.Common.GlobalConstants
         public const string FAILED_DELETE = "Failed to delete {0}: ";
 
         public const string FAILED_DELETE_CONFIRMATION = "Failed to confirm deletion for {0}: ";
+
+        public const string CREATED_ENTITY_SUCCESS_MESSAGE = "Successfully created {0}";
+
+        public const string UPDATED_ENTITY_SUCCESS_MESSAGE = "Successfully updated {0}";
+
+        public const string DELETED_ENTITY_SUCCESS_MESSAGE = "Successfully deleted {0}";
+
+        public const string CONFIRMED_ENTITY_DELETION_SUCCESS_MESSAGE = "Successfully confirmed {0} deletion";
+
+        public const string RESTORED_ENTITY_SUCCESS_MESSAGE = "Successfully restored {0}";
     }
 }

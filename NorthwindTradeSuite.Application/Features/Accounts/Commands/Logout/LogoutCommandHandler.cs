@@ -5,7 +5,7 @@ using NorthwindTradeSuite.Domain.Entities.Identity;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Logout
 {
-    public class LogoutCommandHandler : ICommandHandler<LogoutCommand, Result>
+    public class LogoutCommandHandler : ICommandHandler<LogoutCommand, RequestResult>
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -14,10 +14,10 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Logout
             _signInManager = signInManager;
         }
 
-        public async Task<Result> Handle(LogoutCommand logoutCommand, CancellationToken cancellationToken)
+        public async Task<RequestResult> Handle(LogoutCommand logoutCommand, CancellationToken cancellationToken)
         {
             await _signInManager.SignOutAsync();
-            return Result.Success("Logged out successfully");
+            return RequestResult.Success("Logged out successfully");
         }
     }
 }

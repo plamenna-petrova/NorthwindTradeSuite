@@ -7,7 +7,7 @@ using NorthwindTradeSuite.Services.Identity.Tokens;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.RefreshToken
 {
-    public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Result<RefreshTokenResponseDTO>>
+    public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, RequestResult<RefreshTokenResponseDTO>>
     {
         private readonly IJWTService _jwtService;
 
@@ -19,7 +19,7 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.RefreshToke
             _userManager = userManager;
         }
         
-        public async Task<Result<RefreshTokenResponseDTO>> Handle(RefreshTokenCommand refreshTokenCommand, CancellationToken cancellationToken)
+        public async Task<RequestResult<RefreshTokenResponseDTO>> Handle(RefreshTokenCommand refreshTokenCommand, CancellationToken cancellationToken)
         {
             var claimsPrincipalFromExpiredAccessToken = _jwtService.GetClaimsPrincipalFromExpiredToken(refreshTokenCommand.RefreshTokenRequestDTO.AccessToken);
             var userName = claimsPrincipalFromExpiredAccessToken.Identity!.Name;
@@ -28,13 +28,13 @@ namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.RefreshToke
 
             if (userToFindByName == null || userToFindByName.RefreshToken != refreshTokenCommand.RefreshTokenRequestDTO.RefreshToken || userToFindByName.RefreshTokenExpiryTime <= DateTime.Now)
             {
-                return Result<RefreshTokenResponseDTO>.Failure("Invalid token");
+                return RequestResult<RefreshTokenResponseDTO>.Failure("Invalid token");
             }
 
             var newAccessToken = await _jwtService.GenerateAccessTokenAsync(userToFindByName);
             var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(userToFindByName);
 
-            return Result<RefreshTokenResponseDTO>.Success(new RefreshTokenResponseDTO
+            return RequestResult<RefreshTokenResponseDTO>.Success(new RefreshTokenResponseDTO
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken

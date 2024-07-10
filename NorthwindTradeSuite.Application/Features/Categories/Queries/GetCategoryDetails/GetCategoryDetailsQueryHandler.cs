@@ -15,8 +15,8 @@ namespace NorthwindTradeSuite.Application.Features.Categories.Queries.GetCategor
 
         public async Task<CategoryDetailsResponseDTO> Handle(GetCategoryDetailsQuery getCategoryDetailsQuery, CancellationToken cancellationToken)
         {
-            var categoryDetails = await _categoryService.GetByIdAsync<CategoryDetailsResponseDTO>(getCategoryDetailsQuery.Id);
-            return categoryDetails;
+            var categoryDetailsResponseDTO = await _categoryService.GetByIdAsync<CategoryDetailsResponseDTO>(getCategoryDetailsQuery.Id);
+            return categoryDetailsResponseDTO;
         }
     }
 }

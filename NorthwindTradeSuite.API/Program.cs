@@ -137,7 +137,7 @@ webApplicationBuilder.Services
     {
         swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo
         {
-            Title = "Northwind_Trade_Suite_API",
+            Title = "Northwind Trade Suite API",
             Version = "v1",
         });
 

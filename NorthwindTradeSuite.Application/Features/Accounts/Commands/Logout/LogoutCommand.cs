@@ -3,5 +3,5 @@ using NorthwindTradeSuite.Common.Results;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Logout
 {
-    public sealed record LogoutCommand() : ICommand<Result>;
+    public sealed record LogoutCommand() : ICommand<RequestResult>;
 }

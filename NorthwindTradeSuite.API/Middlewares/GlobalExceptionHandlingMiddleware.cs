@@ -22,12 +22,6 @@ namespace NorthwindTradeSuite.API.Middlewares
             try
             {
                 await _next(httpContext);
-
-                if (httpContext.Response.StatusCode == StatusCodes.Status404NotFound)
-                {
-                    var detail = "Request path was not found";
-                    await HandleExceptionAsync(httpContext, HttpStatusCode.NotFound, detail);
-                }
             }
             catch (Exception exception)
             {

@@ -5,5 +5,5 @@ using NorthwindTradeSuite.DTOs.Responses.Accounts;
 
 namespace NorthwindTradeSuite.Application.Features.Accounts.Commands.Login
 {
-    public sealed record LoginCommand(LoginRequestDTO LoginRequestDTO) : ICommand<Result<LoginResponseDTO>>;
+    public sealed record LoginCommand(LoginRequestDTO LoginRequestDTO) : ICommand<RequestResult<LoginResponseDTO>>;
 }
